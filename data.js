@@ -559,3 +559,44 @@ export const tickets = {
         ],
     },
 };
+
+export const quickLinks = [
+    {
+        icon: '/assets/icon/sidebar-canvas/notification.svg',
+        title: 'Thông báo',
+        description: '2 thông báo mới',
+        link: '#',
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/bookmarks.svg',
+        title: 'Đã lưu',
+        description: '7 sự kiện',
+        link: '#',
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/file.svg',
+        title: 'Vé đã đặt',
+        description: '3 sự kiện',
+        link: '#',
+        status: 'resolved',
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/discount.svg',
+        title: 'Sự kiện của tôi',
+        description: 'Trong hôm nay',
+        link: '#',
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/friends.svg',
+        title: 'Cài đặt',
+        description: 'Tài khoản của bạn',
+        link: '#',
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/file.svg',
+        title: 'Chưa biết',
+        description: '3 sự kiện',
+        link: '#',
+        status: 'resolved',
+    }
+];

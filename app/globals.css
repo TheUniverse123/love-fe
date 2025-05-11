@@ -56,6 +56,10 @@ input[type="radio"] {
     width: 60% !important;
 }
 
+.w-80 {
+    width: 80% !important;
+}
+
 .mr-22 {
     margin-right: 22px !important;
 }
@@ -154,7 +158,14 @@ input[type="radio"] {
 #calendar-events th.prev,
 #calendar-events th.next,
 #calendar-events th.datepicker-switch {
-    display: none !important;
+    visibility: hidden !important;
+}
+
+
+.calendar-events-custom #calendar-events th.prev,
+.calendar-events-custom #calendar-events th.next,
+.calendar-events-custom #calendar-events th.datepicker-switch {
+    visibility: initial !important;
 }
 
 #calendar-events th.dow,
@@ -275,6 +286,18 @@ input[type="radio"] {
 
 .border-1px {
     border: 1px solid var(--bg-border-color) !important;
+}
+
+.border-1px-2 {
+    border: 1px solid var(--bg-border-color-2) !important;
+}
+
+.border-1px-3 {
+    border: 1px solid var(--bg-border-color-3) !important;
+}
+
+.border-1px-4 {
+    border: 1px solid var(--bg-border-color-4) !important;
 }
 
 .border-1px-color5 {
@@ -616,5 +639,9 @@ button.btn.btn-default.secondary-background.mr-15 {
 }
 
 a#scrollUp {
+    display: none !important;
+}
+
+.datepicker.datepicker-inline .datepicker.datepicker-inline {
     display: none !important;
 }

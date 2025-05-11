@@ -6,7 +6,6 @@ import TicketIcon from '@/public/assets/icon/TicketIcon';
 export default function DashboardSidebar() {
     const [activeItem, setActiveItem] = useState("ticket");
 
-    // Lấy trạng thái activeItem từ localStorage khi component load
     useEffect(() => {
         const savedActiveItem = localStorage.getItem("activeItem");
         if (savedActiveItem) {
@@ -14,7 +13,6 @@ export default function DashboardSidebar() {
         }
     }, []);
 
-    // Lưu trạng thái activeItem vào localStorage khi người dùng chọn
     const handleItemClick = (item) => {
         setActiveItem(item); // Cập nhật state
         localStorage.setItem("activeItem", item); // Lưu trạng thái vào localStorage
