@@ -128,7 +128,7 @@ export default function Chatbot() {
                     <div className="d-flex flex-center">
                         <img className={`${styles.logoAI} mr-10`} src="/assets/icon/chatbot/logo-ai.svg" />
                         <div className={styles.chatbotHeaderInfo}>
-                            <p className={`${styles.chatbotHeaderTitle} white-color text-xl-bold`}>Trợ lý Ai - LOVÉ</p>
+                            <p className={`${styles.chatbotHeaderTitle} white-color text-lg-bold`}>Trợ lý Ai - LOVÉ</p>
                             <div className={`flex-start ${styles.infoWrapper}`}>
                                 <div className={styles.statusIcon} />
                                 <span className={`${styles.statusText} `}>Online</span>
@@ -235,7 +235,7 @@ export default function Chatbot() {
                 </div>
             </div>
             <div className={styles.chatbotIcon} onClick={handleChatbotToggle}>
-                <img className={styles.avatarAI} src="/assets/icon/chatbot/logo-ai.svg" />
+                <img className={styles.avatarAIIcon} src="/assets/icon/chatbot/logo-ai.svg" />
             </div>
         </>
     )

@@ -1,7 +1,7 @@
 .chatbotContainer {
     position: fixed;
-    width: 400px;
-    height: 750px;
+    width: 320px;
+    height: 70vh;
     background-color: #fff;
     border-radius: 20px;
     bottom: 30px;
@@ -12,6 +12,10 @@
     transition: all 0.2s ease-in-out;
     transform-origin: bottom right;
     pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
 }
 
 .chatbotContainer.show {
@@ -33,6 +37,7 @@
 
 .chatbotHeaderTitle {
     line-height: 1;
+    font-size: 18px;
 }
 
 .statusIcon {
@@ -45,14 +50,14 @@
 
 .statusText {
     color: #43EE7D;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .chatbotBody {
     padding: 10px 23px;
     background-color: #F8F9FA;
     max-width: 100%;
-    height: 546px;
+    flex: 4;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #7F8AFF transparent;
@@ -83,7 +88,7 @@
 
 .messageAIContent {
     background-color: #7F8AFF;
-    padding: 16px 16px 32px 20px;
+    padding: 12px 12px 16px 16px;
     border-radius: 10px;
     position: relative;
     margin-bottom: 10px;
@@ -102,7 +107,7 @@
 
 .messageUserContent {
     background-color: #DEE2E6;
-    padding: 16px 16px 32px 20px;
+    padding: 12px 12px 16px 16px;
     border-radius: 10px;
     position: relative;
     margin-left: auto;
@@ -177,7 +182,21 @@
     border-left: 30px solid #7F8AFF;
 }
 
+.logoAI {
+    width: 35px;
+    height: 35px;
+}
+
 .avatarAI {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4C5EFF;
+    z-index: 99999;
+    padding: 7px;
+}
+
+.avatarAIIcon {
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -187,8 +206,8 @@
 }
 
 .avatarUser {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: #C4C4C4;
     z-index: 99999;
@@ -226,13 +245,15 @@
 }
 
 .chatbotFooter {
-    position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 15px;
+    padding: 10px 15px;
+    flex: 1;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-
-
 
 .chatbotInputGroup {
     border-radius: 15px;
@@ -279,6 +300,8 @@
 }
 
 .closeIcon {
+    width: 22px;
+    height: 22px;
     cursor: pointer;
 }
 
