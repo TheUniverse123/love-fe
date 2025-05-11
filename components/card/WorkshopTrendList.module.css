@@ -29,3 +29,14 @@
 .swiperButtonNext svg {
     stroke: white;
 }
+
+.sectionStyle1 {
+    background: linear-gradient(to right, #313131 0%, #191919 63%) !important;
+    padding-top: 0px !important;
+}
+
+.sectionStyle2 {
+    background: linear-gradient(to right, #313131 0%, #191919 63%) !important;
+    padding-bottom: 100px !important;
+    padding-top: 0px !important
+}

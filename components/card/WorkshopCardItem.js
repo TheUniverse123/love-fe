@@ -12,15 +12,9 @@ export default function WorkshopCardItem({ item = {
         backgroundClass = "secondary-background"
     }
 
-    let borderRatingStyles = {
-        border: "1px solid #313131!important",
-        backgroundColor: "#171717!important"
-    }
+    let borderRatingStyles = `${styles.borderRating} ${styles.backgroundDefault}`
     if (backgroundColor === "secondary") {
-        borderRatingStyles = {
-            border: "1px solid #313131!important",
-            backgroundColor: "var(--bg-secondary-color)!important"
-        }
+        borderRatingStyles = `${styles.borderRating} ${styles.backgroundSecondary}`
     }
 
     return (
@@ -46,14 +40,13 @@ export default function WorkshopCardItem({ item = {
                             className={`card-right`}
                         >
                             <span
-                                style={borderRatingStyles}
-                                className="text-white rating">{item.avgRating} <span className="text-sm-medium neutral-500">
+                                className={`white-color rating ${borderRatingStyles}`}>{item.avgRating} <span className="text-sm-medium neutral-500">
                                     ({item.reviews} đánh giá)
                                 </span>
                             </span>
                         </div>
                     </div>
-                    <div className="card-title"> <a className="heading-6 text-white" href="rental-detail.html">{item.title}</a></div>
+                    <div className="card-title"> <a className="heading-6 white-color" href="rental-detail.html">{item.title}</a></div>
                     <div className="card-program">
                         <div className={`card-location ${styles.cardLocation}`}>
                             <img src="/assets/icon/ClockIcon.svg" alt="Clock Icon" />
@@ -62,7 +55,7 @@ export default function WorkshopCardItem({ item = {
 
                         <div className="endtime">
                             <div className="card-price">
-                                <h6 className="heading-6 text-white">{item.price}</h6>
+                                <h6 className="heading-6 white-color">{item.price}</h6>
                             </div>
                             <div className="card-button white-color">
                                 <a className={`btn btn-gray ${styles.button} ${styles.whiteColor} ${styles.whiteText}`} href="/user/explore/1">

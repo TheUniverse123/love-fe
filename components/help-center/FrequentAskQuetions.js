@@ -1,6 +1,6 @@
 export default function FrequentAskQuetions() {
     return (
-        <section className="section-box box-faqs-help main-background" style={{ borderTop: "0!important", paddingTop: "0!important" }}>
+        <section className="section-box box-faqs-help main-background pt-0 border-0px">
             <div className="container">
                 <div className="box-faqs-inner">
                     <div className="box-title-contact-form">

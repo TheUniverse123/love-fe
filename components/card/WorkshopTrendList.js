@@ -1,9 +1,18 @@
 import WorkshopCardItem from "./WorkshopCardItem"
 import styles from "./WorkshopTrendList.module.css"
 
-export default function WorkshopTrendList({ items, title, background = "black", ...props }) {
+export default function WorkshopTrendList({ sectionType = "default", items, title, background = "black", ...props }) {
+    let sectionStyle = ''
+    if (sectionType === "default") {
+        sectionStyle = ''
+    } else if (sectionType === "style1") {
+        sectionStyle = styles.sectionStyle1
+    } else if (sectionType === "style2") {
+        sectionStyle = styles.sectionStyle2
+    }
+
     return (
-        <section {...props} className={`section-box box-recent-lauched-car ${styles.sectionTrendList}`}>
+        <section className={`section-box box-recent-lauched-car ${sectionStyle} ${styles.sectionTrendList}`}>
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-md-9">

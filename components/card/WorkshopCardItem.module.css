@@ -5,7 +5,7 @@
 
 .imageWorkshop {
     object-fit: cover;
-    width: 405px!important;
+    width: 405px !important;
 }
 
 .cardLocation {
@@ -19,7 +19,7 @@
 }
 
 .button.whiteColor.whiteText {
-    color: #AFAFAF!important;
+    color: #AFAFAF !important;
 }
 
 .button:hover {
@@ -30,4 +30,16 @@
 .cardInfo:hover {
     box-shadow: none !important;
     border: none !important;
+}
+
+.borderRating {
+    border: 1px solid #313131 !important;
+}
+
+.backgroundDefault {
+    background-color: #171717 !important;
+}
+
+.backgroundSecondary {
+    background-color: var(--bg-secondary-color) !important;
 }
