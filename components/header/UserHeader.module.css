@@ -1,0 +1,13 @@
+.header {
+    padding: 14.5px 58px !important;
+    background-color: var(--bg-secondary-color)!important;
+    border-bottom: none !important;
+}
+
+.backgroundSecondary {
+    background-color: var(--bg-secondary-color);
+}
+
+.primaryBackground {
+    background-color: var(--bg-primary-color)!important;
+}

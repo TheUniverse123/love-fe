@@ -1,0 +1,171 @@
+.calendarContainer {
+    color: white;
+    border-radius: 10px;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px 16px;
+}
+
+.inputField {
+    width: 100%;
+    border: none;
+    background-color: var(--bg-main-fourth-color);
+    color: white;
+    padding-left: 0;
+    height: auto;
+}
+
+.inputField:focus {
+    outline: none;
+    border: none;
+}
+
+.dropdownButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.calendar {
+    background-color: var(--bg-main-fourth-color);
+    padding: 20px;
+    border-radius: 25px;
+    width: 74%;
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.calendarHeader button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.calendarDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    font-weight: bold;
+}
+
+.calendarDay {
+    text-align: center;
+    color: #555555 !important;
+    font-size: 16px;
+}
+
+.calendarDates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.calendarDate {
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.calendarDate.empty {
+    background-color: transparent;
+}
+
+.calendarDate:hover {
+    background-color: #555;
+}
+
+.selected {
+    background-color: var(--bg-primary-color);
+}
+
+.timePicker {
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.timeColumn {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.scrollableList {
+    max-height: 456px;
+    overflow-y: auto;
+    width: 100%;
+    background-color: var(--bg-main-fourth-color);
+    border-radius: 10px;
+}
+
+.scrollableList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollableList::-webkit-scrollbar-thumb {
+    background-color: var(--bg-secondary-color);
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.scrollableList::-webkit-scrollbar-track {
+    background-color: #444;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.scrollableList::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bg-secondary-color);
+}
+
+.timeItem {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.selectedTime {
+    background-color: var(--bg-secondary-color);
+}
+
+.timeLabel {
+    margin-top: 10px;
+    color: white;
+}
+
+.saveButton {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+}
+
+.saveBtn {
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--bg-primary-color);
+    color: #E4E6E8;
+    margin-right: 20px;
+}

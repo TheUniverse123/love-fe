@@ -1,0 +1,29 @@
+.cardImage {
+    width: 405px !important;
+    height: 205px !important;
+}
+
+.imageWorkshop {
+    object-fit: cover;
+    width: 405px!important;
+}
+
+.cardLocation {
+    justify-content: start !important;
+    margin-bottom: 12px !important;
+}
+
+.button {
+    background: #222222 !important;
+    border: 1px solid #313131 !important;
+}
+
+.button:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.cardInfo:hover {
+    box-shadow: none !important;
+    border: none !important;
+}

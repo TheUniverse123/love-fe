@@ -1,0 +1,39 @@
+.boxEmail {
+    display: flex;
+    align-items: center;
+    max-width: 480px;
+}
+
+.inputEmail {
+    width: 412px !important;
+    border-radius: 90px !important;
+    padding-left: 40px !important;
+    padding-top: 15px !important;
+    padding-left: 47px !important;
+    background-image: url('/assets/lib/dashboard/imgs/template/icons/email-w-ip.svg');
+    background-position: left 24px center;
+    background-repeat: no-repeat;
+    border: 1px solid #737373 !important;
+    background-color: transparent !important;
+    margin-right: 56px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #8E8E8E !important;
+}
+
+.inputEmail:focus {
+    background-color: transparent !important;
+    background-image: url('/assets/lib/dashboard/imgs/template/icons/email-w-ip.svg') !important;
+    background-position: left 24px center;
+    background-repeat: no-repeat;
+    border-color: #737373 !important;
+    outline: none;
+    color: #8E8E8E !important;
+}
+
+.inputEmail::-moz-placeholder {
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 28px;
+    color: #8E8E8E !important;
+}

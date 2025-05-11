@@ -1,0 +1,21 @@
+.titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.swiperButtonPrev,
+.swiperButtonNext {
+    background-color: var(--bg-button-slider-color) !important;
+    cursor: pointer;
+}
+
+.swiperButtonPrev:hover,
+.swiperButtonNext:hover {
+    background-color: #000 !important;
+}
+
+.swiperButtonPrev svg,
+.swiperButtonNext svg {
+    stroke: white;
+}

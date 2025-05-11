@@ -1,0 +1,7 @@
+.cardButton {
+    background-color: var(--bg-button-slider-color) !important
+}
+
+.cardButton:hover {
+    background-color: #000 !important;
+}

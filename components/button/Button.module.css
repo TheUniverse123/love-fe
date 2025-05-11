@@ -1,0 +1,31 @@
+.button {
+    border: none !important;
+}
+
+.btnNormal {
+    padding: 11px 27px !important;
+}
+
+.colorPrimary {
+    background-color: var(--bg-primary-color) !important;
+}
+
+.colorGrey {
+    background-color: var(--bg-grey-color) !important;
+}
+
+.colorDark {
+    background-color: #000 !important;
+}
+
+.colorSecondary {
+    background-color: var(--bg-secondary-color) !important;
+}
+
+.textColorDark {
+    color: #000 !important;
+}
+
+.textWhite {
+    color: #EDEDED !important;
+}
