@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function HelpCenterWelcome() {
     return (
-        <section className="box-section box-location-shop box-location-shop-2 main-background" style={{ paddingTop: "100px!important", backgroundImage: "none!important" }}>
+        <section className="box-section box-location-shop box-location-shop-2 main-background background-image-none pt-100 border-0px">
             <div className="container">
                 <div className="row align-items-end">
                     <div className="col-lg-7 wow fadeInUp">

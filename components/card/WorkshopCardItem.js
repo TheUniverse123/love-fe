@@ -24,13 +24,11 @@ export default function WorkshopCardItem({ item = {
     }
 
     return (
-        <div className="swiper-slide"
+        <div className="swiper-slide border-0px"
             style={{
-                border: "none!important",
                 maxWidth: "405px",
             }}>
-            <div className="card-journey-small" style={{
-                border: "none!important",
+            <div className="card-journey-small border-0px" style={{
                 boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
             }}>
                 <div className={`card-image ${styles.cardImage}`}>
@@ -66,8 +64,8 @@ export default function WorkshopCardItem({ item = {
                             <div className="card-price">
                                 <h6 className="heading-6 text-white">{item.price}</h6>
                             </div>
-                            <div className="card-button">
-                                <a style={{ color: "#AFAFAF!important" }} className={`btn btn-gray ${styles.button}`} href="/user/explore/1">
+                            <div className="card-button white-color">
+                                <a className={`btn btn-gray ${styles.button} ${styles.whiteColor} ${styles.whiteText}`} href="/user/explore/1">
                                     Tìm hiểu thêm
                                 </a>
                             </div>

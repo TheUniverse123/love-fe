@@ -3,8 +3,8 @@ import styles from "./PopupSignin.module.css"
 export default function PopupSignin() {
     return (
         <div className="popup-signin transparent-background">
-            <div className="popup-container border-none">
-                <div className="main-secondary-background" style={{borderRadius: "16px"}}>
+            <div className="popup-container border-0px">
+                <div className="main-secondary-background" style={{ borderRadius: "16px" }}>
                     <div className={`popup-content pb-20 primary-background ${styles.popupHeader}`}>
                         <a className="close-popup-signin border-background" />
                         <div className="d-flex gap-2 align-items-center">

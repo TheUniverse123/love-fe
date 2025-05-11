@@ -18,6 +18,10 @@
     border: 1px solid #313131 !important;
 }
 
+.button.whiteColor.whiteText {
+    color: #AFAFAF!important;
+}
+
 .button:hover {
     background-color: #000 !important;
     color: #fff !important;

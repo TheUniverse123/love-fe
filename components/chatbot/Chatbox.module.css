@@ -143,6 +143,7 @@
 }
 
 @keyframes dotPulse {
+
     0%,
     44% {
         transform: translateY(0);
@@ -245,6 +246,36 @@
     padding-left: 25px;
     border: none;
     overflow-y: auto;
+}
+
+.inputMessage::placeholder {
+    color: #000 !important;
+}
+
+.inputMessage:focus::placeholder {
+    color: #000 !important;
+}
+
+.inputMessage::placeholder {
+    color: #000;
+}
+
+.inputMessage::-webkit-input-placeholder {
+    color: #000;
+}
+
+.inputMessage:-moz-placeholder {
+    color: #000;
+    opacity: 1;
+}
+
+.inputMessage::-moz-placeholder {
+    color: #000;
+    opacity: 1;
+}
+
+input:-ms-input-placeholder {
+    color: #000;
 }
 
 .closeIcon {
