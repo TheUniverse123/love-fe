@@ -274,7 +274,7 @@
     opacity: 1;
 }
 
-input:-ms-input-placeholder {
+.inputMessage:-ms-input-placeholder {
     color: #000;
 }
 
