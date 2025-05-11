@@ -5,7 +5,7 @@ import { Carousel } from 'react-bootstrap';
 
 export default function ExploreBanner() {
     return (
-        <div className='container' style={{ paddingTop: '50px!important' }}>
+        <div className='container pt-50'>
             <Carousel controls={false} indicators={false} 
                 interval={2000} pause="hover">
                 <Carousel.Item>

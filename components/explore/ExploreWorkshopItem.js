@@ -6,7 +6,7 @@ const ExploreWorkshopItem = ({ label, imgSrc, rating, title, date, price, link }
             <div className="card-journey-small main-background border-1px" >
                 <div className="card-image">
                     {label && <a className={`label danger-background white-color ${label.toLowerCase().replace(' ', '-')}`} href="#">{label}</a>}
-                    <img style={{objectFit: "cover"}} src={imgSrc} alt="image workshop" />
+                    <img style={{ objectFit: "cover" }} src={imgSrc} alt="image workshop" />
                 </div>
                 <div className="card-info main-background">
                     <div className="card-rating">
@@ -30,7 +30,7 @@ const ExploreWorkshopItem = ({ label, imgSrc, rating, title, date, price, link }
                                 <h6 className="heading-6 text-white">{price}</h6>
                             </div>
                             <div className="card-button">
-                                <a style={{ color: "#EDEDED!important" }} className={`btn btn-gray ${styles.button}`} href={link}>
+                                <a className={`btn btn-gray white-color ${styles.button} ${styles.whiteColor} ${styles.whiteText} ${styles.style2}`} href={link}>
                                     Đặt ngay
                                 </a>
                             </div>

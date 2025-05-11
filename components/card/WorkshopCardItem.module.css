@@ -22,6 +22,10 @@
     color: #AFAFAF !important;
 }
 
+.button.whiteColor.whiteText.style2 {
+    color: #fff !important;
+}
+
 .button:hover {
     background-color: #000 !important;
     color: #fff !important;
