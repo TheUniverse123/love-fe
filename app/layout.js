@@ -1,3 +1,6 @@
+import { Geist, Geist_Mono } from "next/font/google";
+import Chatbot from "@/components/chatbot/Chatbot";
+import ClientLoader from "@/components/ClientLoader";
 import Footer from "@/components/footer/Footer";
 import UserHeader from "@/components/header/UserHeader";
 import InjectCSS from "@/components/lib-loader/InjectCSS";
@@ -7,8 +10,17 @@ import PopupSignup from "@/components/popup/PopupSignup";
 import Head from "next/head";
 import Script from "next/script";
 import "./globals.css";
-import Chatbot from "@/components/chatbot/Chatbot";
-import ClientLoader from "@/components/ClientLoader";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
 export const metadata = {
   title: "Lové - Nền tảng đặt workshop chất lượng",
   description: "Love, nơi tụ họp của những workshop chất lượng và đặt vé siêu đơn giản",
@@ -33,7 +45,7 @@ export default async function RootLayout({ children }) {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
       </Head>
-      <body >
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <div id="loader" className="loader"></div>
 
         <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
