@@ -4,22 +4,11 @@ import InjectCSS from "@/components/lib-loader/InjectCSS";
 import MenuHeader from "@/components/menu-header/MenuHeader";
 import PopupSignin from "@/components/popup/PopupSignin";
 import PopupSignup from "@/components/popup/PopupSignup";
-import { Geist, Geist_Mono } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
 import "./globals.css";
 import Chatbot from "@/components/chatbot/Chatbot";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+import ClientLoader from "@/components/ClientLoader";
 export const metadata = {
   title: "Lové - Nền tảng đặt workshop chất lượng",
   description: "Love, nơi tụ họp của những workshop chất lượng và đặt vé siêu đơn giản",
@@ -43,10 +32,11 @@ export default async function RootLayout({ children }) {
         <meta name="author" content="" />
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
-
       </Head>
+      <body >
+        <div id="loader" className="loader"></div>
 
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
         <MenuHeader />
         <UserHeader />
         {children}
@@ -56,8 +46,7 @@ export default async function RootLayout({ children }) {
         <PopupSignup />
         <Chatbot />
 
-        <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
-
+        <ClientLoader />
         <Script
           src="/assets/lib/user/js/vendor/jquery-3.7.1.min.js"
           strategy="beforeInteractive"
@@ -70,7 +59,6 @@ export default async function RootLayout({ children }) {
           src="/assets/lib/user/js/vendor/bootstrap.bundle.min.js"
           strategy="beforeInteractive"
         />
-
         <Script
           src="/assets/lib/user/js/plugins/magnific-popup.js"
           strategy="afterInteractive"
@@ -119,7 +107,6 @@ export default async function RootLayout({ children }) {
           src="/assets/lib/user/js/plugins/dark.js"
           strategy="afterInteractive"
         />
-
         <Script
           src="/assets/lib/user/js/vendor/jquery.countdown.min.js"
           strategy="afterInteractive"
@@ -132,12 +119,11 @@ export default async function RootLayout({ children }) {
           src="/assets/lib/user/js/plugins/slider.js"
           strategy="afterInteractive"
         />
-
         <Script
           src="/assets/lib/user/js/main.js?v=1.0.0"
           strategy="afterInteractive"
         />
       </body>
-    </html>
+    </html >
   );
 }

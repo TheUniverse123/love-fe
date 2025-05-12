@@ -31,8 +31,8 @@ export default function Footer() {
                                 {contactInfo.map(item =>
                                 (
                                     <div className="box-wrapper">
-                                        <h6 className="text-linear-3 neutral1000-color"
-                                            style={{ marginBottom: "0px !important" }}>{item.text}
+                                        <h6 className="text-linear-3 neutral1000-color mb-0">
+                                            {item.text}
                                         </h6>
                                         <p className="text-white">{item.description}</p>
                                     </div>
@@ -43,37 +43,37 @@ export default function Footer() {
                     </div>
                     <div className={`col-md-4 col-sm-12 ${styles.footerWrapper}`}>
                         <div className="mb-2">
-                            <h6 className="text-linear-3 neutral1000-color">Chính sách và điều khoản</h6>
+                            <h6 className="text-linear-3 neutral1000-color font-17">Chính sách và điều khoản</h6>
                             <ul className="menu-footer">
-                                <li style={{ marginBottom: "10px" }}><a href="#">Chính sách bảo mật thông tin</a></li>
+                                <li className="mb-10"><a href="#">Chính sách bảo mật thông tin</a></li>
                                 <li><a href="#">Chính sách bảo mật thanh toán</a></li>
                             </ul>
                         </div>
 
                         <div className="mb-2">
-                            <h6 className="text-linear-3 neutral1000-color">Dành cho Ban tổ chức</h6>
+                            <h6 className="text-linear-3 neutral1000-color font-17">Dành cho Ban tổ chức</h6>
                             <ul className="menu-footer">
-                                <li style={{ marginBottom: "10px" }}><a href="#">Điều khoản sử dụng cho ban tổ chức</a></li>
+                                <li className="mb-10"><a href="#">Điều khoản sử dụng cho ban tổ chức</a></li>
                             </ul>
                         </div>
 
                         <div className="mb-2">
-                            <h6 className="text-linear-3 neutral1000-color">Dành cho Khách hàng</h6>
+                            <h6 className="text-linear-3 neutral1000-color font-17">Dành cho Khách hàng</h6>
                             <ul className="menu-footer">
-                                <li style={{ marginBottom: "10px" }}><a href="#">Điều khoản sử dụng cho Khách hàng</a></li>
+                                <li className="mb-10"><a href="#">Điều khoản sử dụng cho Khách hàng</a></li>
                             </ul>
                         </div>
                     </div>
                     <div className={`col-md-4 col-sm-12 ${styles.footerWrapper}`}>
                         <div className="mb-2">
-                            <h6 className="text-linear-3 neutral1000-color">Hỗ trợ</h6>
+                            <h6 className="text-linear-3 neutral1000-color font-17">Hỗ trợ</h6>
                             <ul className="menu-footer">
-                                <li style={{ marginBottom: "10px" }}><a href="#">Hướng dẫn đặt vé</a></li>
+                                <li className="mb-10"><a href="#">Hướng dẫn đặt vé</a></li>
                                 <li><a href="#">Trung tâm trợ giúp</a></li>
                             </ul>
                         </div>
                         <div className="mb-2">
-                            <h6 className="text-linear-3 neutral1000-color">Đăng ký nhận email về các sự kiện hot nhất</h6>
+                            <h6 className="text-linear-3 neutral1000-color font-17">Đăng ký nhận email về các sự kiện hot nhất</h6>
                             <InputSendEmail />
                             <Button text="Đăng ký" style={{ marginTop: "15px" }} />
                         </div>

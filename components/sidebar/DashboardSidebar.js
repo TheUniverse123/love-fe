@@ -26,10 +26,15 @@ export default function DashboardSidebar() {
                     <span className={styles.userName}>Tên người dùng</span>
                 </div>
                 <div className='pb-15 w-100 flex-center border-1px-bottom'>
-                    <div className="btn btn-default flex-space grey-button-background mt-15"
-                        style={{ padding: "10px 20px!important", width: "70%!important" }}>50.000 <span className="flex-center ml-5">
-                            <img src='/assets/icon/star-dashboard.svg' alt='' />
-                        </span></div>
+                    <div className="btn btn-default grey-button-background mt-15"
+                        style={{ padding: "10px 20px!important", width: "70%!important" }}>
+                        <a href='/dashboard/point-accumulate' className='flex-space white-color'>
+                            <span>50.000</span>
+                            <span className="flex-center ml-5">
+                                <img src='/assets/icon/star-dashboard.svg' alt='' />
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
