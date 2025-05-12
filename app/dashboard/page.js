@@ -1,5 +1,6 @@
 'use client'
 
+import styles from "./BookedTicketPage.module.css"
 import React, { useState } from "react";
 import MyTicket from "@/components/dashboard/MyTicket";
 import InputSearch from "@/components/search/InputSearch";
@@ -9,19 +10,18 @@ export default function BookedTicketPage() {
   const [selectedTabTop, setSelectedTabTop] = useState("all");
   const [selectedTabBottom, setSelectedTabBottom] = useState("upcoming");
   return (
-    <div style={{ marginRight: "300px", paddingLeft: "35px", paddingTop: "20px" }}>
+    <div className={styles.myEvent}>
       <div className="flex-space pb-20 border-1px-bottom">
         <h4 className="white-color">Vé đã đặt</h4>
         <InputSearch />
       </div>
 
-      <div className="flex-space" style={{ marginTop: "22px" }}>
+      <div className="flex-space mt-20">
         {["all", "success", "processing", "canceled"].map((tab) => (
           <div key={tab} className="col-lg-3 col-md-4 col-sm-6">
             <div
               className={`${selectedTabTop === tab ? "primary-background" : "main-background"
-                } mr-15`}
-              style={{ cursor: "pointer", padding: "20px 0", borderRadius: "8px" }}
+                } mr-15 ${styles.statusText}`}
               onClick={() => setSelectedTabTop(tab)}
             >
               <p className="white-color text-lg-bold text-center">
@@ -40,22 +40,22 @@ export default function BookedTicketPage() {
 
       <div className="mt-25">
         <button
-          className={`btn btn-default ${selectedTabBottom === "upcoming"
+          className={`btn btn-default ${styles.subTabItem} ${selectedTabBottom === "upcoming"
             ? "primary-background border-1px-primary mr-15"
             : "secondary-background mr-15"
             }`}
-          style={{ padding: "11px 27px!important" }}
+          
           onClick={() => setSelectedTabBottom("upcoming")}
         >
           Sắp diễn ra
         </button>
 
         <button
-          className={`btn btn-default ${selectedTabBottom === "completed"
+          className={`btn btn-default ${styles.subTabItem} ${selectedTabBottom === "completed"
             ? "primary-background border-1px-primary mr-15"
             : "secondary-background mr-15"
             }`}
-          style={{ padding: "11px 27px!important" }}
+          
           onClick={() => setSelectedTabBottom("completed")}
         >
           Đã kết thúc
@@ -87,7 +87,7 @@ export default function BookedTicketPage() {
               >
                 <span aria-hidden="true">
                   <svg
-                    style={{ stroke: "var(--bg-white-color-4) !important" }}
+                    className={styles.whiteTextsvg}
                     width={12}
                     height={12}
                     viewBox="0 0 12 12"
@@ -137,7 +137,7 @@ export default function BookedTicketPage() {
               >
                 <span aria-hidden="true">
                   <svg
-                    style={{ stroke: "var(--bg-white-color-4) !important" }}
+                    className={styles.whiteTextsvg}
                     width={12}
                     height={12}
                     viewBox="0 0 12 12"

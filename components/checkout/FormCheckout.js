@@ -1,3 +1,5 @@
+import styles from "./FormCheckout.module.css"
+
 export default function FormCheckout() {
     return (
         <section className="main-background box-section pt-20">
@@ -8,19 +10,19 @@ export default function FormCheckout() {
                 <div className="row mt-25">
                     <div className="col-md-12 mb-20">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="Nhập tên của bạn" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="Nhập tên của bạn" />
                         </div>
                     </div>
 
                     <div className="col-md-6">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="email" placeholder="Email" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="email" placeholder="Email" />
                         </div>
                     </div>
 
                     <div className="col-md-6">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="Số điện thoại" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="Số điện thoại" />
                         </div>
                     </div>
                 </div>
@@ -33,7 +35,7 @@ export default function FormCheckout() {
                 <div className="row mt-25">
                     <div className="col-md-12 mb-20">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="NHẬP MÃ GIẢM GIÁ" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="NHẬP MÃ GIẢM GIÁ" />
                         </div>
                     </div>
                 </div>
@@ -44,53 +46,37 @@ export default function FormCheckout() {
                     <h5 className="white-color">Phương thức thanh toán</h5>
                 </div>
 
-                <div style={{ padding: "20px 25px" }}>
+                <div className={styles.paymentWrapper}>
                     <div className="row">
-                        <div className="col-md-6" style={{ display: 'flex', alignItems: 'center' }}>
-                            <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="col-md-6 flex-center-align">
+                            <div className="item-payment-method flex-center-align">
                                 <input
                                     type="radio"
                                     id="event-payment"
                                     name="payment-method"
-                                    style={{
-                                        width: '23px',
-                                        height: '23px',
-                                        backgroundColor: '#fff',
-                                        borderRadius: '50%',
-                                        marginRight: '10px',
-                                        accentColor: '#fff',
-                                        border: '1px solid #fff'
-                                    }}
+                                    className={styles.paymentInput}
                                 />
                                 <label
                                     htmlFor="event-payment"
-                                    className="item-payment-method-text"
-                                    style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
+                                    className={`item-payment-method-text ${styles.paymentTitle}`}
+
                                 >
                                     Thanh toán tại sự kiện
                                 </label>
                             </div>
                         </div>
-                        <div className="col-md-6" style={{ display: 'flex', alignItems: 'center' }}>
-                            <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="col-md-6 flex-center-align">
+                            <div className="item-payment-method flex-center-align">
                                 <input
                                     type="radio"
                                     id="credit-card-payment"
                                     name="payment-method"
-                                    style={{
-                                        width: '23px',
-                                        height: '23px',
-                                        backgroundColor: '#fff',
-                                        borderRadius: '50%',
-                                        marginRight: '10px',
-                                        accentColor: '#fff',
-                                        border: '1px solid #fff'
-                                    }}
+                                    className={styles.paymentInput}
                                 />
                                 <label
                                     htmlFor="credit-card-payment"
-                                    className="item-payment-method-text"
-                                    style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
+                                    className={`item-payment-method-text ${styles.paymentTitle}`}
+
                                 >
                                     Thẻ tín dụng / Thẻ ghi nợ
                                 </label>
@@ -103,44 +89,25 @@ export default function FormCheckout() {
                 <div className="row">
                     <div className="col-md-12 mb-20">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="Tên chủ thẻ" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="Tên chủ thẻ" />
                         </div>
                     </div>
 
                     <div className="col-md-12 mb-20">
-                        <div className="form-group" style={{ position: "relative" }}>
+                        <div className="form-group position-relative">
                             <input
-                                style={{ padding: "16px 25px", width: "100%" }}
-                                className="form-control form-input-background border-none border-radius-31"
+                                className={`w-100 form-control form-input-background border-none border-radius-31 ${styles.formInput}`}
                                 type="text"
                                 placeholder="Số thẻ"
                             />
                             <div
-                                style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    right: "10px",
-                                    display: "flex",
-                                    transform: "translateY(-50%)",
-                                }}
+                                className={styles.inputNumber}
                             >
                                 <div
-                                    style={{
-                                        width: "31px",
-                                        height: "31px",
-                                        backgroundColor: "#404040",
-                                        borderRadius: "50%",
-                                        marginRight: "-5px",
-                                    }}
+                                    className={styles.inputNumberLeft}
                                 ></div>
                                 <div
-                                    style={{
-                                        width: "31px",
-                                        height: "31px",
-                                        backgroundColor: "#fff",
-                                        borderRadius: "50%",
-                                        marginRight: "5px",
-                                    }}
+                                    className={styles.inputNumberRight}
                                 ></div>
                             </div>
                         </div>
@@ -149,30 +116,30 @@ export default function FormCheckout() {
 
                     <div className="col-md-4 mb-20">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="Ngày hết hạn" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="Ngày hết hạn" />
                         </div>
                     </div>
 
                     <div className="col-md-4 mb-20">
                         <div className="form-group">
-                            <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="CVC/CVV" />
+                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="CVC/CVV" />
                         </div>
                     </div>
 
                     <div className="col-md-12">
                         <div className="form-group">
                             <div className="remeber-me">
-                                <label className="text-sm-medium neutral-500" style={{ display: "flex", alignItems: "center" }}>
-                                    <input className="cb-remember" type="checkbox" style={{ width: "20px!important", height: "20px!important", marginTop: "0!important", marginLeft: "25px" }} />
+                                <label className="text-sm-medium neutral-500 flex-center-align">
+                                    <input className="cb-remember inputCheck" type="checkbox" />
                                     Đồng ý với
                                     <a
-                                        style={{ margin: "0 5px" }}
-                                        className="text-sm-bold white-color" href="term.html">
+
+                                        className={`text-sm-bold white-color ${styles.inputLink}`} href="term.html">
                                         Chính sách </a>
                                     và
                                     <a
-                                        style={{ margin: "0 5px" }}
-                                        className="text-sm-bold white-color" href="privacy.html">
+
+                                        className={`text-sm-bold white-color ${styles.inputLink}`} href="privacy.html">
                                         Điều khoản </a> của chúng tôi
                                 </label>
                             </div>

@@ -58,7 +58,7 @@ export default function SidebarCanvas() {
                                 </div>
                             ))}
                         </div>
-                    </div>v
+                    </div>
                     <div className="box-eventsdate calendar-events-custom">
                         <h6 className="title-eventsdate white-color">Ngày sự kiện</h6>
                         <div class="box-calendar-events">

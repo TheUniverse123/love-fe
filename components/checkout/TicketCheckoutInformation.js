@@ -1,3 +1,5 @@
+import styles from "./TicketCheckoutInformation.module.css"
+
 export default function TicketCheckoutInformation() {
     return (
         <section className="main-background box-section pt-20">
@@ -16,20 +18,20 @@ export default function TicketCheckoutInformation() {
                         <img src="/assets/icon/ticket.svg" alt="icon ticket" />
                         <p className="primary-color">x1</p>
                     </div>
-                    <p className="white-color text-md-bold" style={{ fontSize: "20px!important" }}>100.000 đ</p>
+                    <p className="white-color text-md-bold font-20">100.000 đ</p>
                 </div>
                 <div className="row mt-25 pb-20 border-1px-white-2-bottom">
                     <div className="flex-space mb-5">
-                        <p className="white-color" style={{ fontSize: "16px!important" }}>Tạm tính</p>
-                        <p className="white-color" style={{ fontSize: "16px!important" }}>100.000 đ</p>
+                        <p className="white-color font-16">Tạm tính</p>
+                        <p className="white-color font-16">100.000 đ</p>
                     </div>
                     <div className="flex-space mb-5">
-                        <p className="white-color" style={{ fontSize: "16px!important" }}>Giảm giá</p>
-                        <p className="white-color" style={{ fontSize: "16px!important" }}>0 đ</p>
+                        <p className="white-color font-16">Giảm giá</p>
+                        <p className="white-color font-16">0 đ</p>
                     </div>
                     <div className="flex-space">
-                        <p className="white-color" style={{ fontSize: "16px!important" }}>Dịch vụ bổ sung</p>
-                        <p className="white-color" style={{ fontSize: "16px!important" }}>0 đ</p>
+                        <p className="white-color font-16">Dịch vụ bổ sung</p>
+                        <p className="white-color font-16">0 đ</p>
                     </div>
                 </div>
 
@@ -39,8 +41,12 @@ export default function TicketCheckoutInformation() {
                 </div>
 
                 <div className="box-button-book mt-10 mr-20 ml-20 mb-25" >
-                    <a style={{ borderRadius: "999px!important", fontSize: "20px!important" }} className="btn btn-book primary-background white-color hover-primary" href="/user/ticket/1">Thanh toán
-                    </a></div>
+                    <a
+                        className={`btn btn-book primary-background white-color hover-primary ${styles.buttonPayment}`}
+                        href="/user/ticket/1">
+                        Thanh toán
+                    </a>
+                </div>
             </div>
         </section>
     )

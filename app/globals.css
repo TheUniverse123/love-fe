@@ -36,6 +36,10 @@ input[type="radio"] {
     border-radius: 50% !important;
 }
 
+.stroke-white {
+    stroke: white !important;
+}
+
 .border-radius-25 {
     border-radius: 25px !important;
 }
@@ -64,9 +68,26 @@ input[type="radio"] {
     margin-right: 22px !important;
 }
 
+.font-20 {
+    font-size: 20px !important;
+}
+
+.font-16 {
+    font-size: 16px !important;
+}
+
+.position-relative {
+    position: relative !important;
+}
+
 .flex-center {
     display: flex !important;
     justify-content: center !important;
+    align-items: center !important;
+}
+
+.flex-center-align {
+    display: flex !important;
     align-items: center !important;
 }
 

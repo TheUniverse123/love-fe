@@ -7,3 +7,26 @@
     background-color: var(--bg-border-color) !important;
     color: #fff !important;
 }
+
+.ticketWrapper {
+    width: 80% !important;
+    margin: 0 auto !important;
+}
+
+.cardImage {
+    max-width: 740px !important;
+}
+
+.discount {
+    width: 60px !important;
+    height: 60px !important;
+    opacity: 0.8 !important;
+}
+
+.cardInfo {
+    padding: 60px 50px 60px 90px !important;
+}
+
+.buttonTicket.greyText.greyColor {
+    color: #EDEDED !important;
+}
