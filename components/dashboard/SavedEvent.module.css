@@ -1,0 +1,25 @@
+.cardImage {
+    max-width: 384px !important;
+    height: 251px !important;
+}
+
+.wish {
+    width: 40px !important;
+    height: 40px !important;
+    opacity: 0.8 !important;
+    top: 10px !important;
+    left: 15px !important;
+}
+
+.cardInfo {
+    padding: 30px 40px 30px 60px !important;
+    height: 251px !important;
+}
+
+.maxHeight {
+    max-height: 191px !important;
+}
+
+.buttonTicket.greyText.greyColor {
+    color: #EDEDED !important;
+}

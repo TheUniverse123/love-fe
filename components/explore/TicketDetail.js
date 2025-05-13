@@ -42,8 +42,7 @@ export default function TicketDetail({
                                     </div>
                                 </div>
                                 <div className="card-title">
-                                    <a className="heading-6 white-color"
-                                        style={{ fontSize: "20px!important" }}
+                                    <a className="heading-6 white-color font-20"
                                         href={link}>{title}
                                     </a>
                                 </div>

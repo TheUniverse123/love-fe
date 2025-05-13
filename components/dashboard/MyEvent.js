@@ -1,3 +1,5 @@
+import styles from "./MyEvent.module.css"
+
 export default function MyEvent({
     title,
     time,
@@ -11,9 +13,9 @@ export default function MyEvent({
         <div className="box-content-main-detail pb-0 pt-20">
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">
                 <div className="card-flight card-hotel main-background border-1px">
-                    <div className="card-image" style={{ maxWidth: smallImage ? "215px" : "384px", height: "290px!important" }}>
-                        <a className="wish flex-center main-background" href="#" style={{ width: "40px", height: "40px", opacity: 0.8, top: "10px!important", left: "15px!important" }}>
-                            <svg style={{ stroke: "white" }} width={29} height={29} viewBox="0 0 20 18"
+                    <div className={`card-image ${styles.cardImage} ${smallImage ? styles.smallImage : styles.largeImage}`}>
+                        <a className={`wish flex-center main-background ${styles.wish}`} href="#">
+                            <svg className="stroke-white" width={29} height={29} viewBox="0 0 20 18"
                                 fill="#D9D9D9" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.071 10.1422L11.4141 15.7991C10.6331 16.5801 9.36672 16.5801 8.58568 15.7991L2.92882 10.1422C0.9762 8.1896 0.9762 5.02378 2.92882 3.07116C4.88144 1.11853 8.04727 1.11853 9.99989 3.07116C11.9525 1.11853 15.1183 1.11853 17.071 3.07116C19.0236 5.02378 19.0236 8.1896 17.071 10.1422Z" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -22,11 +24,10 @@ export default function MyEvent({
                             <img src={imageSrc} alt="Travila" />
                         </a>
                     </div>
-                    <div className="card-info main-background row border-none" style={{ padding: "30px 40px 30px 60px", height: "290px!important" }}>
-                        <div className={`tour-detail-ticket ${isButtonVisible ? " col-md-8" : " col-md-12"}`} style={{ maxHeight: "210px!important", justifyContent: "space-between" }}>
+                    <div className={`card-info main-background row border-none ${styles.cardInfoEvent}`}>
+                        <div className={`tour-detail-ticket ${styles.tourDetail} ${isButtonVisible ? " col-md-8" : " col-md-12"}`}>
                             <div className="card-title">
-                                <a className="heading-6 white-color"
-                                    style={{ fontSize: "18px!important" }}
+                                <a className="heading-6 white-color font-18"
                                     href={link}>{title}
                                 </a>
                             </div>
@@ -46,9 +47,9 @@ export default function MyEvent({
                             </div>
                         </div>
                         {isButtonVisible &&
-                            <div className="tour-rate col-lg-4 mt-15 d-flex" style={{ flexDirection: "column", maxHeight: "210px!important", justifyContent: "end", alignItems: "center" }}>
-                                <button style={{ padding: "4px 16px !important", width: "60%" }} className="btn btn-default primary-background white-color hover-opacity mb-20">Quản lý</button>
-                                <button style={{ padding: "4px 16px !important", width: "60%" }} className="btn btn-default border-1px main-background primary-color hover-opacity">Chỉnh sửa</button>
+                            <div className={`tour-rate col-lg-4 mt-15 d-flex ${styles.tourRate}`}>
+                                <button className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>Quản lý</button>
+                                <button className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>Chỉnh sửa</button>
                             </div>
                         }
                     </div>

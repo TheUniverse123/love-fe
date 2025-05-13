@@ -1,8 +1,10 @@
+import styles from "./StatisticsItem.module.css"
+
 export default function StatisticsItem({ number, percent, text, isSuccess = true, icon }) {
     return (
         <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-6">
             <div className="card-style-1 hover-up d-flex main-background border-1px border-radius-10 p-20">
-                <div className="card-image flex-center mr-20" style={{ width: "56px", height: "56px", borderRadius: "50%", backgroundColor: "#1D2024" }}>
+                <div className={`card-image flex-center mr-20 ${styles.iconWrapper}`} >
                     <span >
                         <img src="/assets/icon/revenue.svg" alt="revenue" />
                     </span>

@@ -1,3 +1,5 @@
+import styles from "./ExploreWorkshops.module.css"
+
 import { workshopExplore } from "@/data";
 import ExploreBoxViewResult from "./ExploreBoxViewResult";
 import ExploreWorkshopItem from "./ExploreWorkshopItem";
@@ -19,13 +21,13 @@ export default function ExploreWorkshops() {
                                 </svg>
                             </a>
 
-                            <div className="item-sort border-1 border-color" style={{ padding: "7px 15px" }}>
+                            <div className="item-sort border-1 border-color px-15 py-7">
                                 <span className="text-xs-medium neutral-500 mr-5">Sắp xếp theo:</span>
                                 <div className="dropdown dropdown-sort border-1-right">
-                                    <button style={{ backgroundImage: "url(/assets/lib/user/imgs/template/icons/arrow-down-white.svg)!important" }} className="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button className={`btn dropdown-toggle ${styles.buttonArrow}`} id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span className="white-color">Mới nhất</span>
                                     </button>
-                                    <ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort" style={{ margin: 0 }}>
+                                    <ul className="dropdown-menu dropdown-menu-light m-0" aria-labelledby="dropdownSort">
                                         <li><a className="dropdown-item active" href="#">Mới nhất</a></li>
                                         <li><a className="dropdown-item" href="#">Nổi bật nhất</a></li>
                                     </ul>
@@ -46,7 +48,7 @@ export default function ExploreWorkshops() {
             <nav aria-label="Page navigation example">
                 <ul className="pagination">
                     <li className="page-item"><a className="page-link main-third-background white-color-4" href="#" aria-label="Previous"><span aria-hidden="true">
-                        <svg style={{ stroke: "var(--bg-white-color-4) !important" }} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" stroke strokeLinecap="round" strokeLinejoin="round" />
                         </svg></span></a></li>
                     <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">1</a></li>
@@ -57,7 +59,7 @@ export default function ExploreWorkshops() {
                     <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">...</a></li>
                     <li className="page-item"><a className="page-link main-third-background white-color-4" href="#" aria-label="Next"><span aria-hidden="true">
                         <svg
-                            style={{ stroke: "var(--bg-white-color-4) !important" }}
+                            className={styles.whiteTextsvg}
                             width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" stroke strokeLinecap="round" strokeLinejoin="round" />
                         </svg></span></a></li>

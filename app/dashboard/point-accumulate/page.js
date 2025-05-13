@@ -1,8 +1,9 @@
+import styles from "./PointAccumulatePage.module.css"
 import { historyAccumulatePoint } from '@/data'
 
 export default function PointAccumulatePage() {
     return (
-        <div style={{ marginRight: "532px", paddingLeft: "35px", paddingTop: "20px", height: "200vh" }}>
+        <div className={styles.pointAccumulate}>
             <div className="flex-space pb-20 border-1px-bottom">
                 <h4 className="white-color">Thông tin tích điểm</h4>
             </div>
@@ -21,7 +22,7 @@ export default function PointAccumulatePage() {
                 <div className="group-collapse-expand main-background border-1px-color5 p-20">
                     <button className="btn btn-collapse p-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestion" aria-expanded="false" aria-controls="collapseQuestion">
                         <p className="white-color text-md-bold">Lịch sử điểm thưởng</p>
-                        <svg style={{ stroke: "white!important" }} width={12} height={7} viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="stroke-white" width={12} height={7} viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M1 1L6 6L11 1" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
@@ -30,9 +31,16 @@ export default function PointAccumulatePage() {
                             <div className="list-questions">
                                 {historyAccumulatePoint.map((item) => (
                                     <div className="item-question main-background border-color">
-                                        <p className="text-xl-bold neutral-400">{item.date}</p>
-                                        <div className="content-question">
-                                            <p className="text-sm-medium neutral-500 whie-color">{item.points}</p>
+                                        <div className="flex-space">
+                                            <div>
+                                                <p className="text-xl-bold neutral-400 mb-0">{item.date}</p>
+                                            </div>
+                                            <div className="px-3 py-1">
+                                                <p className={`mb-0 ${item.isPositive ? styles.positive : styles.negative}`}>{item.isPositive ? "+" : "-"} {item.points}</p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-10">
+                                            <p className="white-color">{item.eventName}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -44,7 +52,7 @@ export default function PointAccumulatePage() {
                 <div className="group-collapse-expand main-background border-1px-color5 p-20">
                     <button className="btn btn-collapse p-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOverview" aria-expanded="false" aria-controls="collapseOverview">
                         <p className="white-color text-md-bold">Chính sách thành viên</p>
-                        <svg style={{ stroke: "white!important" }} width={12} height={7} viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="stroke-white" width={12} height={7} viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M1 1L6 6L11 1" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>

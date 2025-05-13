@@ -46,7 +46,9 @@ export default async function RootLayout({ children }) {
         <meta name="description" content={metadata.description} />
       </Head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div id="loader" className="loader"></div>
+        <div id="loader" className="loader">
+          <div className="spinner"></div>
+        </div>
 
         <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
         <MenuHeader />

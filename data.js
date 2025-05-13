@@ -324,27 +324,37 @@ export const historyAccumulatePoint = [
     {
         id: 1,
         date: "25/10/2023",
-        points: "100 điểm"
+        points: "100 điểm",
+        isPositive: true,
+        eventName: "Workshop 1"
     },
     {
         id: 2,
         date: "25/10/2023",
-        points: "100 điểm"
+        points: "100 điểm",
+        isPositive: false,
+        eventName: "Workshop 1"
     },
     {
         id: 3,
         date: "25/10/2023",
-        points: "100 điểm"
+        points: "100 điểm",
+        isPositive: false,
+        eventName: "Workshop 1"
     },
     {
         id: 4,
         date: "25/10/2023",
-        points: "100 điểm"
+        points: "100 điểm",
+        isPositive: true,
+        eventName: "Workshop 1"
     },
     {
         id: 5,
         date: "25/10/2023",
-        points: "100 điểm"
+        points: "100 điểm",
+        isPositive: true,
+        eventName: "Workshop 1"
     },
 ]
 

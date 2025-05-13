@@ -1,5 +1,5 @@
 import styles from "../explore/TicketDetail.module.css";
-
+import styleMain from "./MyEvent.module.css"
 export default function MyTicket({
     title,
     time,
@@ -28,11 +28,11 @@ export default function MyTicket({
                 <div className="card-flight card-hotel main-background m-0">
                 </div>
                 <div className="card-flight card-hotel main-background">
-                    <div className="card-info main-background border-color row" style={{ padding: "40px 40px 40px 80px", height: "auto!important" }}>
+                    <div className={`card-info main-background border-color row ${styleMain.cardInfo}`}>
                         <div className="col-lg-5 pr-30 border-white-dash-right">
                             <div className="card-title">
-                                <a className="heading-6 white-color"
-                                    style={{ fontSize: "18px!important" }}
+                                <a
+                                    className="heading-6 white-color font-18"
                                     href={link}>{title}
                                 </a>
                             </div>
@@ -50,7 +50,7 @@ export default function MyTicket({
                                 </div>
                                 <div className="endtime">
                                     {isButtonVisible && <div className="card-button">
-                                        <a style={{ color: "#EDEDED!important" }} className={`btn btn-gray ${styles.button}`} href="/user/ticket/1">
+                                        <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
                                             {buttonText}
                                         </a>
                                     </div>}
@@ -67,9 +67,17 @@ export default function MyTicket({
                                 </div>
 
                                 <div className="col-lg-4 row align-items-end">
-                                    <button style={{ padding: "4px 16px !important" }} className={buttonIsSuccessStyle}>{statusText}</button>
-                                    <button style={{ padding: "4px 16px !important" }} className="btn btn-default border-1px main-secondary-background primary-color hover-opacity">Xem chi tiết</button>
-                                    <button style={{ padding: "4px 16px !important", textDecoration: (isSuccess === "success" || isSuccess === "canceled") ? "line-through" : "none" }} disabled={(isSuccess === "success" || isSuccess === "canceled")} className="btn btn-default border-1px main-secondary-background neutral700-color hover-opacity">Hủy vé</button>
+                                    <button className={`${buttonIsSuccessStyle} ${styleMain.buttonStyle}`}>{statusText}</button>
+                                    <button className={`btn btn-default border-1px main-secondary-background primary-color hover-opacity ${styleMain.buttonStyle}`}>Xem chi tiết</button>
+                                    <button
+                                        style={{
+                                            textDecoration: (isSuccess === "success" || isSuccess === "canceled")
+                                                ? "line-through" : "none"
+                                        }}
+                                        disabled={(isSuccess === "success" || isSuccess === "canceled")}
+                                        className={`btn btn-default border-1px main-secondary-background neutral700-color hover-opacity ${styleMain.buttonStyle}`}>
+                                        Hủy vé
+                                    </button>
                                 </div>
                             </div>
                         </div>
