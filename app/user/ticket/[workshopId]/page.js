@@ -1,10 +1,10 @@
+import styles from "./ConfirmAndPaymentPage.module.css"
+
 import FormCheckout from "@/components/checkout/FormCheckout"
 import TicketCheckoutInformation from "@/components/checkout/TicketCheckoutInformation"
 import TicketDetail from "@/components/explore/TicketDetail"
 
 export default function ConfirmAndPaymentPage({ params }) {
-    console.log(params.slug)
-
     return (
         <main className="main main-background">
             <TicketDetail
@@ -23,10 +23,10 @@ export default function ConfirmAndPaymentPage({ params }) {
             <section className="box-section box-content-tour-detail main-background" style={{ paddingBottom: "290px" }}>
                 <div className="container">
                     <div className="flex-space-start">
-                        <div style={{ width: "59%!important" }}>
+                        <div className={styles.formLeft}>
                             <FormCheckout />
                         </div>
-                        <div style={{ width: "35%!important" }}>
+                        <div className={styles.formRight}>
                             <TicketCheckoutInformation />
                         </div>
                     </div>
