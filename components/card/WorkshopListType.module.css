@@ -1,6 +1,7 @@
 .button {
     padding: 22px 28px !important;
     background-color: var(--bg-secondary-color) !important;
+    color: #fff !important;
 }
 
 .titleWrapper {
@@ -23,4 +24,73 @@
 .swiperButtonPrev svg,
 .swiperButtonNext svg {
     stroke: white;
+}
+
+.wrapper {
+    width: 100%;
+    position: relative;
+}
+
+.caret {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px 0 rgb(90 90 90 / 51%);
+    transition: all ease-out 0.1s;
+}
+
+.caret:hover {
+    scale: 1.1;
+}
+
+.left {
+    left: -22px;
+}
+
+.right {
+    right: -22px;
+}
+
+.carousel {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(100%/3 - 11px);
+    gap: 16px;
+    scroll-behavior: smooth;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+}
+
+.carousel.no-transition {
+    scroll-behavior: auto;
+}
+
+.carousel .card {
+    overflow: hidden;
+    border-radius: 12px;
+    scroll-snap-align: start;
+}
+
+.carousel .card img {
+    height: 100%;
+    pointer-events: none;
+}
+
+.carousel.dragging {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+}
+
+.carousel.dragging .card {
+    cursor: grab;
 }

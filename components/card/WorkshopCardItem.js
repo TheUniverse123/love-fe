@@ -18,10 +18,8 @@ export default function WorkshopCardItem({ item = {
     }
 
     return (
-        <div className="swiper-slide border-0px"
-            style={{
-                maxWidth: "405px",
-            }}>
+        <div className={`border-0px ${styles.card} mr-25`}
+        >
             <div className="card-journey-small border-0px" style={{
                 boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
             }}>

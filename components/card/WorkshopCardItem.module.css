@@ -47,3 +47,8 @@
 .backgroundSecondary {
     background-color: var(--bg-secondary-color) !important;
 }
+
+.card {
+    max-width: 405px !important;
+    scroll-snap-align: start;
+}

@@ -3,8 +3,8 @@
 import styles from "./WorkshopTypeItem.module.css"
 export default function WorkshopTypeItem({ img, title, value }) {
     return (
-        <div className="col-lg-3 col-sm-6">
-            <div className="card-popular hover-up secondary-background border-none">
+        <div className="col-lg-12 col-sm-12">
+            <div className="card-popular hover-up secondary-background border-none mr-25">
                 <div className="card-image"> <img src={img} alt="Travila" /></div>
                 <div className="card-info">
                     <div className="card-meta">

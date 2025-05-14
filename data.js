@@ -270,7 +270,7 @@ export const filters = [
         title: 'Thể loại',
         items: [
             { label: 'Nghệ thuật & Thủ công', count: 32, type: "art" },
-            { label: 'Ẩm thực & Pha chế', count: 13, type: "f&b" },
+            { label: 'Ẩm thực & Pha chế', count: 13, type: "food" },
             { label: 'Sức khỏe', count: 23, type: "health" },
             { label: 'Phát triển kỹ năng', count: 23, type: "skill" },
             { label: 'Khác', count: 35, type: "other" },

@@ -40,3 +40,8 @@
     padding-bottom: 100px !important;
     padding-top: 0px !important
 }
+
+.containerSlider {
+    width: 100vw;
+    margin-left: 210px !important;
+}
