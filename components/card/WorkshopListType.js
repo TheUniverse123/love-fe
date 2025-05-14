@@ -24,22 +24,22 @@ export default function WorkshopListType() {
                         <WorkshopTypeItem
                             img="/assets/workshop-category/image1.png"
                             title="Nghệ thuật và thủ công"
-                            link="destination-2.html"
+                            value="art"
                         />
                         <WorkshopTypeItem
                             img="/assets/workshop-category/image2.png"
                             title="Ẩm thực & pha chế"
-                            link="destination-2.html"
+                            value="f&b"
                         />
                         <WorkshopTypeItem
                             img="/assets/workshop-category/image3.png"
                             title="Sức khỏe"
-                            link="destination-2.html"
+                            value="health"
                         />
                         <WorkshopTypeItem
                             img="/assets/workshop-category/image4.png"
                             title="Phát triển kỹ năng"
-                            link="destination-2.html"
+                            value="skill"
                         />
                     </div>
                 </div>

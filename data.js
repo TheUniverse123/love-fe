@@ -269,11 +269,11 @@ export const filters = [
     {
         title: 'Thể loại',
         items: [
-            { label: 'Nghệ thuật & Thủ công', count: 32 },
-            { label: 'Ẩm thực & Pha chế', count: 13 },
-            { label: 'Sức khỏe', count: 23 },
-            { label: 'Phát triển kỹ năng', count: 23 },
-            { label: 'Khác', count: 35 },
+            { label: 'Nghệ thuật & Thủ công', count: 32, type: "art" },
+            { label: 'Ẩm thực & Pha chế', count: 13, type: "f&b" },
+            { label: 'Sức khỏe', count: 23, type: "health" },
+            { label: 'Phát triển kỹ năng', count: 23, type: "skill" },
+            { label: 'Khác', count: 35, type: "other" },
         ]
     }
 ];
@@ -610,3 +610,4 @@ export const quickLinks = [
         status: 'resolved',
     }
 ];
+
