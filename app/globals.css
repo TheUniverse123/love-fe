@@ -136,6 +136,10 @@ input[type="radio"] {
     font-size: 15px !important;
 }
 
+.font-14 {
+    font-size: 14px !important;
+}
+
 .font-11 {
     font-size: 11px !important;
 }
@@ -245,7 +249,9 @@ input[type="radio"] {
 #calendar-events th.datepicker-switch {
     visibility: hidden !important;
 }
-
+.neutral-500.text-md-medium.pl-10 {
+    max-width: 317px;
+}
 
 .calendar-events-custom #calendar-events th.prev,
 .calendar-events-custom #calendar-events th.next,

@@ -59,6 +59,11 @@ export default function DashboardSidebar() {
                     <TicketIcon icon="report" />
                     <div className={`ml-10 ${styles.menuItem}`}>Quản lý báo cáo</div>
                 </a>
+
+                <a href="/dashboard/review" className={`${styles.menuItemContainer} flex-start ${activeItem === 'review' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('review')}>
+                    <TicketIcon icon="report" />
+                    <div className={`ml-10 ${styles.menuItem}`}>Xét duyệt sự kiện</div>
+                </a>
             </div>
 
             <div className={`${styles.menu} pb-5 mt-20`}>

@@ -12,6 +12,7 @@ export default function TicketDetail({
     link,
     buttonText,
     isButtonVisible = true,
+    mode = "ticket"
 }) {
     return (
         <section className="box-section block-content-tourlist main-background">
@@ -51,21 +52,26 @@ export default function TicketDetail({
                                         <img src="/assets/icon/clock1.svg" alt="Clock Icon" />
                                         <p className="text-time-ticket text-md-medium">{time}</p>
                                     </div>
-                                    <div className="card-duration-tour">
+                                    <div className={`card-duration-tour ${mode === "review" ? "mb-0" : ""}`}>
                                         <img src="/assets/icon/clock1.svg" alt="Clock Icon" />
                                         <div>
                                             <p className="text-time-ticket text-md-medium">Workshop 1</p>
-                                            <p className="neutral-500 text-md-medium pl-10">{address}</p>
+                                            <p className="neutral-500 text-md-medium pl-10 font-14">{address}</p>
                                         </div>
                                     </div>
-                                    <div className="endtime">
-                                        <div className="card-price">
+                                    <div className={`endtime ${mode === "review" ? "align-items-end" : ""}`}>
+                                        <div className={`card-price ${mode === "review" ? "d-flex h-100 align-items-start" : ""}`}>
                                             <h6 className="heading-6 primary-color">{price} đ</h6>
                                         </div>
                                         {isButtonVisible && <div className="card-button">
                                             <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
                                                 {buttonText}
                                             </a>
+                                        </div>}
+
+                                        {mode === "review" && <div className={`tour-rate col-lg-4 d-flex ${styles.tourRate}`}>
+                                            <a href={mode === "review" && "/dashboard/review/1"} className={`btn btn-default primary-background white-color hover-opacity mb-10 ${styles.buttonManage}`}>Chấp nhận</a>
+                                            <a className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>Từ chối</a>
                                         </div>}
                                     </div>
                                 </div>

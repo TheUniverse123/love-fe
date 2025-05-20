@@ -31,6 +31,19 @@
     color: #EDEDED !important;
 }
 
+.buttonManage {
+    padding: 4px 16px !important;
+    width: 60% !important;
+    min-width: 110px;
+}
+
+.tourRate {
+    flex-direction: column !important;
+    max-height: 210px !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+}
+
 @media (min-width: 600px) and (max-width: 1200px) {
     .cardImage {
         width: 100% !important;
