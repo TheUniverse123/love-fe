@@ -30,12 +30,12 @@ export default function TimeAndTicket() {
                 <InputLabel label="Ngày sự kiện" />
 
                 <div className="row mt-45 p-20 pt-30 border-1px-color4 border-radius-10 flex-space">
-                    <div className="col-md-6 mb-20 pr-50">
+                    <div className="col-xxl-6 col-lg-12 mb-20 pr-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian bắt đầu</p>
                         <Calendar />
                     </div>
 
-                    <div className="col-md-6 mb-20 pl-50">
+                    <div className="col-xxl-6 col-lg-12 mb-20 pl-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian kết thúc</p>
                         <Calendar />
                     </div>
@@ -53,35 +53,35 @@ export default function TimeAndTicket() {
                         </div>
                     </div>
 
-                    <div className="col-md-2 mb-20">
+                    <div className="col-xxl-3 col-xl-4 mb-20">
                         <div className="form-group">
                             <InputLabel label="Tổng số lượng vé" isMarginLeft />
                             <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="12" />
                         </div>
                     </div>
 
-                    <div className="col-md-3 mb-20">
+                    <div className="col-xxl-4 col-xl-4 mb-20">
                         <div className="form-group">
                             <InputLabel label="Số vé tối thiểu trong 1 đơn hàng" isMarginLeft />
                             <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="12" />
                         </div>
                     </div>
 
-                    <div className="col-md-3 mb-20">
+                    <div className="col-xxl-4 col-xl-4 mb-20">
                         <div className="form-group">
                             <InputLabel label="Số vé tối đa trong 1 đơn hàng" isMarginLeft />
                             <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="12" />
                         </div>
                     </div>
 
-                    <div className="col-md-2 mb-20">
+                    <div className="col-xxl-3 col-xl-4 mb-20">
                         <div className="form-group">
                             <InputLabel label="Giá vé" isMarginLeft />
                             <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="12" />
                         </div>
                     </div>
 
-                    <div className="col-md-2" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="col-xxl-3 col-xl-4" style={{ display: 'flex', alignItems: 'center' }}>
                         <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="checkbox"
@@ -131,12 +131,12 @@ export default function TimeAndTicket() {
                 </div>
 
                 <div className="row p-20 pt-30 border-1px-color4 border-radius-10 flex-space">
-                    <div className="col-md-6 mb-20 pr-50">
+                    <div className="col-xxl-6 col-lg-12 mb-20 pr-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian bắt đầu bán vé</p>
                         <Calendar />
                     </div>
 
-                    <div className="col-md-6 mb-20 pl-50">
+                    <div className="col-xxl-6 col-lg-12 mb-20 pl-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian kết thúc bán vé</p>
                         <Calendar />
                     </div>
@@ -154,7 +154,7 @@ export default function TimeAndTicket() {
                         <InputLabel label="Hình ảnh vé" isMarginLeft isRequired={false} />
                         <div
                             className="flex-center form-input-background border-dash-white"
-                            style={{ width: "367px", height: "192px", borderRadius: "32px", flexDirection: "column" }}
+                            style={{ width: "100%", height: "192px", borderRadius: "32px", flexDirection: "column" }}
                             onClick={() => document.getElementById('ticket-upload').click()} // Mở hộp thoại chọn tệp khi bấm vào khung
                         >
                             {ticketFile ? (

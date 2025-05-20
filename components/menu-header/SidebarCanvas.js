@@ -1,3 +1,6 @@
+'use client'
+
+import { fetchLogout } from "@/app/api/account"
 import styles from "./SidebarCanvas.module.css"
 import { quickLinks } from "@/data"
 import Image from "next/image"
@@ -38,7 +41,7 @@ export default function SidebarCanvas() {
                                 <p className="text-md-bold white-color">Tên người dùng</p>
                             </div>
                         </div>
-                        <a className="btn btn-black border-background" href="#">Đăng xuất</a>
+                        <button className="btn btn-black border-background" onClick={fetchLogout}>Đăng xuất</button>
                     </div>
                     <div className="box-quicklinks">
                         <div className="box-list-quicklinks mb-20">
@@ -49,7 +52,7 @@ export default function SidebarCanvas() {
                                     </div>
                                     <div className="item-info">
                                         <a href={item.link}>
-                                            <h6 className="text-md-bold white-color">{item.title}</h6>
+                                            <h6 className="text-md-bold white-color font-15">{item.title}</h6>
                                         </a>
                                         <p className={`text-xs neutral-500 ${item.status || ''}`}>
                                             {item.description}

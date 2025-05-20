@@ -1,8 +1,16 @@
+'use client'
+
 import Logo from "@/public/assets/logo/logo";
 import UserNavigation from "../navigation/UserNavigation";
 import styles from "./UserHeader.module.css"
 import Button from "../button/Button";
+import { getUserInfo } from "@/app/util/auth";
 export default function UserHeader() {
+
+    function handleResetActiveItem() {
+        localStorage.removeItem("activeItem");
+    }
+
     return (
         <header className={`header sticky-bar ${styles.header}`}>
             <div className={`background-body ${styles.backgroundSecondary}`}>
@@ -18,13 +26,15 @@ export default function UserHeader() {
                         </div>
                     </div>
                     <div className="header-right">
-                        <div className="d-none d-xxl-inline-block align-middle mr-22">
-                            <Button link="/dashboard/create-event" text="Tạo sự kiện" color="primary" style={{ marginRight: "21px" }} />
-                            <Button text="Đăng nhập" color="grey" isSignIn={true}/>
+                        <div className="mr-22">
+                            {getUserInfo() &&
+                                <Button onClick={handleResetActiveItem} link="/dashboard/create-event" text="Tạo sự kiện" color="primary" style={{ marginRight: "21px" }} />
+                            }
+                            <Button text="Đăng nhập" color="grey" isSignIn={true} />
                         </div>
-                        <div className={`burger-icon-2 burger-icon-white ${styles.primaryBackground}`}>
+                        {getUserInfo() && <div className={`burger-icon-2 burger-icon-white ${styles.primaryBackground}`}>
                             <img src="/assets/lib/user/imgs/template/icons/menu.svg" alt="icon menu" />
-                        </div>
+                        </div>}
                         <div className="burger-icon burger-icon-white">
                             <span className="burger-icon-top" />
                             <span className="burger-icon-mid" />

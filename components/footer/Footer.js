@@ -23,7 +23,7 @@ export default function Footer() {
         <footer className={`footer ${styles.footer}`}>
             <div className="container">
                 <div className="row">
-                    <div className={`col-md-4 col-sm-12 ${styles.footerWrapper}`}>
+                    <div className={`col-lg-4 col-md-6 col-sm-12 ${styles.footerWrapper}`}>
                         <div ><a className="d-inline-block mb-20" href="index.html">
                             <Logo />
                         </a>
@@ -41,7 +41,7 @@ export default function Footer() {
                             </div>
                         </div>
                     </div>
-                    <div className={`col-md-4 col-sm-12 ${styles.footerWrapper}`}>
+                    <div className={`col-lg-4 col-md-6 col-sm-12 ${styles.footerWrapper}`}>
                         <div className="mb-2">
                             <h6 className="text-linear-3 neutral1000-color font-17">Chính sách và điều khoản</h6>
                             <ul className="menu-footer">
@@ -64,7 +64,7 @@ export default function Footer() {
                             </ul>
                         </div>
                     </div>
-                    <div className={`col-md-4 col-sm-12 ${styles.footerWrapper}`}>
+                    <div className={`col-lg-4 col-md-6 col-sm-12 ${styles.footerWrapper}`}>
                         <div className="mb-2">
                             <h6 className="text-linear-3 neutral1000-color font-17">Hỗ trợ</h6>
                             <ul className="menu-footer">

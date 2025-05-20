@@ -1,6 +1,6 @@
 .cardImage {
     max-width: 384px !important;
-    height: 251px !important;
+    height: 280px !important;
 }
 
 .wish {
@@ -13,7 +13,7 @@
 
 .cardInfo {
     padding: 30px 40px 30px 60px !important;
-    height: 251px !important;
+    height: 280px !important;
 }
 
 .maxHeight {
@@ -22,4 +22,28 @@
 
 .buttonTicket.greyText.greyColor {
     color: #EDEDED !important;
+}
+
+@media (min-width: 600px) and (max-width: 1500px) {
+    .title.titleResponsive.titleSmall {
+        font-size: 16px !important;
+    }
+
+    .cardInfo {
+        padding: 30px 40px 30px 60px !important;
+    }
+
+    .titlePrice {
+        font-size: 25px !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1300px) {
+    .cardInfo {
+        padding: 30px 40px 30px 40px !important;
+    }
+
+    .address {
+        font-size: 12px !important;
+    }
 }

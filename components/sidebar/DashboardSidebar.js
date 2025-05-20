@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 import styles from './DashboardSidebar.module.css';
 import TicketIcon from '@/public/assets/icon/TicketIcon';
+import { fetchLogout } from '@/app/api/account';
 
 export default function DashboardSidebar() {
-    const [activeItem, setActiveItem] = useState("ticket");
+    const [activeItem, setActiveItem] = useState();
 
     useEffect(() => {
         const savedActiveItem = localStorage.getItem("activeItem");
@@ -65,7 +66,7 @@ export default function DashboardSidebar() {
                     <TicketIcon icon="user" />
                     <div className={`ml-10 ${styles.menuItem}`}>Tài khoản của tôi</div>
                 </a>
-                <a href="/dashboard/my-event" className={`${styles.menuItemContainer} flex-start ${activeItem === 'logout' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('logout')}>
+                <a onClick={fetchLogout} className={`${styles.menuItemContainer} flex-start ${activeItem === 'logout' ? styles.active : ''}`} style={{ padding: "12px 0" }}>
                     <TicketIcon icon="logout" />
                     <div className={`ml-10 ${styles.menuItem}`}>Đăng xuất</div>
                 </a>

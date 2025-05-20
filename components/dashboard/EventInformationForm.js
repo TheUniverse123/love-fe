@@ -59,7 +59,7 @@ export default function EventInformationForm() {
                     <div className='col-md-5 mb-20'>
                         <div
                             className="flex-center form-input-background border-dash-white"
-                            style={{ width: "381px", height: "381px", borderRadius: "32px", flexDirection: "column" }}
+                            style={{ width: "100%", height: "381px", borderRadius: "32px", flexDirection: "column" }}
                             onClick={() => document.getElementById('logo-upload').click()}
                         >
                             {logoFile ? (
@@ -86,7 +86,7 @@ export default function EventInformationForm() {
                     <div className='col-md-7 mb-20'>
                         <div
                             className="flex-center form-input-background border-dash-white"
-                            style={{ width: "562px", height: "381px", borderRadius: "32px", flexDirection: "column" }}
+                            style={{ width: "100%", height: "381px", borderRadius: "32px", flexDirection: "column" }}
                             onClick={() => document.getElementById('background-upload').click()} // Mở hộp thoại chọn tệp khi bấm vào khung
                         >
                             {backgroundImage ? (
@@ -277,10 +277,10 @@ export default function EventInformationForm() {
             <div className="secondary-background border-radius-25 mb-35" style={{ padding: "20px 40px" }}>
                 <div className="row mt-10">
                     {/* Input Tải logo Ban Tổ chức */}
-                    <div className="col-md-4 mb-20">
+                    <div className="col-md-5 mb-20">
                         <div
                             className="flex-center form-input-background border-dash-white"
-                            style={{ width: "293px", height: "293px", borderRadius: "32px", flexDirection: "column" }}
+                            style={{ width: "100%", height: "293px", borderRadius: "32px", flexDirection: "column" }}
                             onClick={() => document.getElementById('organizer-logo-upload').click()} // Mở hộp thoại chọn tệp khi bấm vào khung
                         >
                             {organizerLogo ? (
@@ -303,7 +303,7 @@ export default function EventInformationForm() {
                         </div>
                     </div>
 
-                    <div className="col-md-8 mb-20">
+                    <div className="col-md-7 mb-20">
                         <div className="form-group">
                             <InputLabel label="Tên Ban Tổ chức" isMarginLeft />
                             <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31 ml-20" type="text" placeholder="Tên Ban Tổ chức" />

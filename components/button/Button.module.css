@@ -29,3 +29,9 @@
 .textWhite {
     color: #EDEDED !important;
 }
+
+@media (min-width: 600px) and (max-width: 1400px) {
+    .button {
+        display: block !important;
+    }
+}

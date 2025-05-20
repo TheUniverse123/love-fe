@@ -3,7 +3,7 @@ import { useState } from "react";
 import EventInformationForm from "@/components/dashboard/EventInformationForm";
 import CheckoutInformationForm from "@/components/dashboard/CheckoutInformationForm";
 import TimeAndTicket from "@/components/dashboard/TimeAndTicket";
-
+import styles from "./CreateEventPage.module.css"
 export default function CreateEventPage() {
     const [activeTab, setActiveTab] = useState(1);
     const handleTabChange = (tabIndex) => {
@@ -11,7 +11,7 @@ export default function CreateEventPage() {
     };
 
     return (
-        <div style={{ marginRight: activeTab === 2 ? "160px" : "380px", paddingLeft: "35px", paddingTop: "20px" }}>
+        <div className={styles.container} style={{ marginRight: activeTab === 2 ? "100px" : "380px", paddingLeft: "35px", paddingTop: "20px" }}>
             <div className="flex-space pb-20 border-1px-bottom">
                 <h4 className="white-color">Tạo sự kiện</h4>
             </div>

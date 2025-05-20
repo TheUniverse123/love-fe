@@ -45,3 +45,29 @@
     width: 100vw;
     margin-left: 210px !important;
 }
+
+@media (min-width: 600px) and (max-width: 1400px) {
+    .containerSlider {
+        margin-left: 3rem !important;
+    }
+
+    .title {
+        font-size: 35px !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+    .containerSlider {
+        margin-left: 50px !important;
+    }
+
+    .title {
+        font-size: 30px !important;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1500px) {
+    .containerSlider {
+        margin-left: 4rem !important;
+    }
+}

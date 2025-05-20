@@ -1,4 +1,3 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import Chatbot from "@/components/chatbot/Chatbot";
 import ClientLoader from "@/components/ClientLoader";
 import Footer from "@/components/footer/Footer";
@@ -7,9 +6,13 @@ import InjectCSS from "@/components/lib-loader/InjectCSS";
 import MenuHeader from "@/components/menu-header/MenuHeader";
 import PopupSignin from "@/components/popup/PopupSignin";
 import PopupSignup from "@/components/popup/PopupSignup";
+import { Geist, Geist_Mono } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
+import Providers from "./util/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,21 +49,22 @@ export default async function RootLayout({ children }) {
         <meta name="description" content={metadata.description} />
       </Head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div id="loader" className="loader">
-          <div className="spinner"></div>
-        </div>
+        <Providers>
+          <div id="loader" className="loader">
+            <div className="spinner"></div>
+          </div>
+          <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
+          <MenuHeader />
+          <UserHeader />
+          {children}
+          <Footer />
+          <PopupSignin />
+          <PopupSignup />
+          <Chatbot />
+          <ClientLoader />
+          <ToastContainer />
+        </Providers>
 
-        <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
-        <MenuHeader />
-        <UserHeader />
-        {children}
-        <Footer />
-
-        <PopupSignin />
-        <PopupSignup />
-        <Chatbot />
-
-        <ClientLoader />
         <Script
           src="/assets/lib/user/js/vendor/jquery-3.7.1.min.js"
           strategy="beforeInteractive"

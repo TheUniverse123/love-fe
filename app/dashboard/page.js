@@ -74,6 +74,7 @@ export default function BookedTicketPage() {
             link={ticket.link}
             buttonText={ticket.buttonText}
             isButtonVisible={ticket.isButtonVisible}
+            isSuccess={ticket.isSuccess}
           />
         ))}
 

@@ -1,6 +1,6 @@
 .header {
-    padding: 14.5px 58px !important;
-    background-color: var(--bg-secondary-color)!important;
+    padding: 14.5px 50px !important;
+    background-color: var(--bg-secondary-color) !important;
     border-bottom: none !important;
 }
 
@@ -9,5 +9,11 @@
 }
 
 .primaryBackground {
-    background-color: var(--bg-primary-color)!important;
+    background-color: var(--bg-primary-color) !important;
+}
+
+@media (min-width: 600px) and (max-width: 1400px) {
+    .header {
+        padding: 0 20px !important;
+    }
 }

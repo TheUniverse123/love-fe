@@ -1,5 +1,5 @@
 .cardInfo {
-    padding: 40px 40px 40px 80px !important;
+    padding: 50px 80px 40px 80px !important;
     height: auto !important;
 }
 
@@ -41,6 +41,7 @@
 .buttonManage {
     padding: 4px 16px !important;
     width: 60% !important;
+    min-width: 110px;
 }
 
 .tourRate {
@@ -48,4 +49,12 @@
     max-height: 210px !important;
     justify-content: flex-end !important;
     align-items: center !important;
+}
+
+
+@media (min-width: 600px) and (max-width: 1300px) {
+    .cardInfoEvent {
+        padding: 20px 30px 20px 30px !important;
+        height: auto !important;
+    }
 }

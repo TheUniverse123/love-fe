@@ -24,10 +24,10 @@ export default function WorkshopDetailPage({ params }) {
             <section className="box-section box-content-tour-detail main-background" style={{ paddingBottom: "290px" }}>
                 <div className="container">
                     <div className="row mt-30">
-                        <div className="col-md-8">
+                        <div className="col-lg-8 col-md-6 col-md-12">
                             <WorkshopDetailItem />
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-lg-4 col-md-6 col-md-12">
                             <BookingForm />
                             <PopularPostsSidebar title="Có thể bạn sẽ thích" posts={posts} />
                         </div>

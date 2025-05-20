@@ -14,26 +14,25 @@ export default function WorkshopBanner() {
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 1,
-        arrows: false, // Disable default arrows because we will use custom ones
+        arrows: false,
         responsive: [
             {
-                breakpoint: 1024, // For medium screens
+                breakpoint: 768,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: 1,
                     slidesToScroll: 1,
                 }
             },
             {
-                breakpoint: 768, // For small screens
+                breakpoint: 1024,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 1,
                 }
-            },
-            {
-                breakpoint: 480, // For extra small screens
+            }, {
+                breakpoint: 1200,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 3,
                     slidesToScroll: 1,
                 }
             }
@@ -79,7 +78,7 @@ export default function WorkshopBanner() {
 
             <div className="container">
                 <div className={`mb-40 mt-100 ${styles.titleWrapper}`}>
-                    <h2 className="neutral100-color">Bạn đang quan tâm chủ đề nào</h2>
+                    <h2 className={`neutral100-color ${styles.title}`}>Bạn đang quan tâm chủ đề nào</h2>
                     <div className="box-button-slider box-button-slider-team text-end">
                         {/* Custom Prev and Next buttons */}
                         <div

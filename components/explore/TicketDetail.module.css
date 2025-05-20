@@ -30,3 +30,12 @@
 .buttonTicket.greyText.greyColor {
     color: #EDEDED !important;
 }
+
+@media (min-width: 600px) and (max-width: 1200px) {
+    .cardImage {
+        width: 100% !important;
+        object-fit: cover;
+        display: inline-block;
+        min-width: 100% !important;
+    }
+}

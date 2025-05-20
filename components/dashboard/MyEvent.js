@@ -26,7 +26,7 @@ export default function MyEvent({
                     </div>
                     <div className={`card-info main-background row border-none ${styles.cardInfoEvent}`}>
                         <div className={`tour-detail-ticket ${styles.tourDetail} ${isButtonVisible ? " col-md-8" : " col-md-12"}`}>
-                            <div className="card-title">
+                            <div className="mt-10">
                                 <a className="heading-6 white-color font-18"
                                     href={link}>{title}
                                 </a>
@@ -47,7 +47,7 @@ export default function MyEvent({
                             </div>
                         </div>
                         {isButtonVisible &&
-                            <div className={`tour-rate col-lg-4 mt-15 d-flex ${styles.tourRate}`}>
+                            <div className={`tour-rate col-lg-4 d-flex ${styles.tourRate}`}>
                                 <button className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>Quản lý</button>
                                 <button className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>Chỉnh sửa</button>
                             </div>

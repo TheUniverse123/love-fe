@@ -11,3 +11,10 @@
 .whiteTextsvg {
     stroke: var(--bg-white-color-4) !important;
 }
+
+
+@media (min-width: 600px) and (max-width: 1500px) {
+    .myEvent {
+        margin-right: 100px !important;
+    }
+}

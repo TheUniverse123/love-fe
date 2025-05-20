@@ -30,7 +30,7 @@ export default function SavedEvent({
                     <div className={`card-info main-background border-color row ${styleMain.cardInfo}`}>
                         <div className={`tour-detail-ticket col-lg-8 ${styleMain.maxHeight}`}>
                             <div className="card-title">
-                                <a className="heading-6 white-color font-16"
+                                <a className={`heading-6 white-color font-18 ${styleMain.title} ${styleMain.titleResponsive} ${styleMain.titleSmall}`}
                                     href={link}>{title}
                                 </a>
                             </div>
@@ -43,7 +43,7 @@ export default function SavedEvent({
                                     <img src="/assets/icon/clock1.svg" alt="Clock Icon" />
                                     <div>
                                         <p className="text-time-ticket text-md-medium">Workshop 1</p>
-                                        <p className="neutral-500 text-md-medium pl-10">{address}</p>
+                                        <p className={`neutral-500 text-md-medium pl-10 ${styleMain.address}`}>{address}</p>
                                     </div>
                                 </div>
 
@@ -58,7 +58,7 @@ export default function SavedEvent({
 
                             <div className="endtime">
                                 <div className="card-price">
-                                    <h3 className="heading-6 primary-color font-30">{price} đ</h3>
+                                    <h3 className={`heading-6 primary-color font-30 ${styleMain.titlePrice}`}>{price} đ</h3>
                                 </div>
                                 {isButtonVisible && <div className="card-button">
                                     <a

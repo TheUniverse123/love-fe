@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import styles from "./Chatbox.module.css"
 import { GoogleGenAI } from "@google/genai"
 
-const API_KEY = "AIzaSyCpVlAraW5EBBnw7-5pj0X5UffJFT0yJ_A"
+const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 function getCurrentTime() {
     return new Date().toLocaleTimeString('vi-VN', {
         hour: '2-digit',

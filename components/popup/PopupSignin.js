@@ -1,58 +1,176 @@
-import styles from "./PopupSignin.module.css"
+'use client'
+
+import { decodeToken, fetchLogin, fetchLogout } from "@/app/api/account";
+import { getAuthToken, getAuthTokenDuration, setUserInfoToStorage } from "@/app/util/auth";
+import { validateNonEmptyString, validatePassword } from "@/app/util/validation";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import styles from "./PopupSignin.module.css";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 export default function PopupSignin() {
+    const [activeTab, setActiveTab] = useState("signin"); // signin | forgot | reset
+
+    const [formState, setFormState] = useState({
+        email: "",
+        password: "",
+        error: {},
+    });
+
+    const handleAutoLogout = () => {
+        const token = getAuthToken();
+        if (!token || token === 'EXPIRED') {
+            fetchLogout();
+            return;
+        }
+        const tokenDuration = getAuthTokenDuration();
+
+        const timer = setTimeout(() => {
+            fetchLogout();
+        }, tokenDuration);
+        return () => clearTimeout(timer);
+    };
+
+    const { mutate } = useMutation({
+        mutationKey: ['login'],
+        mutationFn: (userInfo) => fetchLogin(userInfo.email, userInfo.password),
+        onSuccess: (response) => {
+            const decodedToken = decodeToken(response?.result?.accessToken);
+            const userInfo = {
+                email: formState.email,
+                roles: decodedToken.payload.role,
+                accessToken: response?.result.accessToken,
+                expiration: response?.result.expiration,
+                refreshToken: response?.result.refreshToken,
+            };
+            setUserInfoToStorage(userInfo);
+            handleAutoLogout()
+            setFormState({
+                email: "",
+                password: "",
+                error: {},
+            })
+            toast.success("Đăng nhập thành công");
+            setTimeout(() => {
+                location.reload()
+            }, 2000)
+        },
+        onError: () => {
+            toast.error("Email hoặc password không hợp lệ");
+        },
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const { email, password } = formState;
+        const errors = {};
+
+        if (!validateNonEmptyString(email)) {
+            errors.email = "Email là bắt buộc";
+        }
+
+        if (!validateNonEmptyString(password)) {
+            errors.password = "Mật khẩu là bắt buộc";
+        } else if (!validatePassword(password)) {
+            errors.password = "Mật khẩu bao gồm tối thiểu 6 kí tự, với ít nhất 1 kí tự in hoa, thường và kí tự đặc biệt";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setFormState((prev) => ({ ...prev, error: errors }));
+            return;
+        }
+
+        mutate({ email, password });
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormState((prev) => ({
+            ...prev,
+            [name]: value,
+            error: { ...prev.error, [name]: "" },
+        }));
+    };
+
     return (
         <div className="popup-signin transparent-background">
             <div className="popup-container border-0px">
                 <div className="main-secondary-background" style={{ borderRadius: "16px" }}>
-                    <div className={`popup-content pb-20 primary-background ${styles.popupHeader}`}>
-                        <a className="close-popup-signin border-background" />
-                        <div className="d-flex gap-2 align-items-center">
-                            <h4 className="white-color mt-30">Đăng nhập</h4>
+                    {activeTab === "signin" && (<>
+                        <div className={`popup-content pb-20 primary-background ${styles.popupHeader}`}>
+                            <a className="close-popup-signin border-background" />
+                            <div className="d-flex gap-2 align-items-center">
+                                <h4 className="white-color mt-30">Đăng nhập</h4>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className={`popup-content pt-20 ${styles.popupBody}`}>
-                        <div className="box-button-logins">
-                            <a className="btn btn-login btn-google mr-10 border-background border-color-3" href="#">
-                                <img src="/assets/lib/user/imgs/template/popup/google.svg" alt="Travila" />
-                                <span className="text-sm-bold white-color">Đăng nhập bằng Google</span>
-                            </a>
-                            <a className="btn btn-login mr-10 border-background border-color-3" href="#">
-                                <img src="/assets/lib/user/imgs/template/popup/facebook.svg" alt="Travila" />
-                            </a>
-                            <a className="btn btn-login border-background border-color-3" href="#">
-                                <img src="/assets/icon/apple.svg" alt="Travila" />
-                            </a>
-                        </div>
-                        <div className="form-login">
-                            <form action="#">
-                                <div className="form-group">
-                                    <input className="form-control username popupsigin border-color-3" type="text" placeholder="Nhập email hoặc số điện thoại" />
-                                </div>
-                                <div className="form-group">
-                                    <input className="form-control password popupsigin border-color-3" type="password" placeholder="Nhập mật khẩu" />
-                                </div>
-                                <div className="form-group">
-                                    <div className="box-remember-forgot">
-                                        <div className="remeber-me">
-                                            <label className="text-xs-medium neutral-500">
-                                                <input className="cb-remember mr-5" type="checkbox" />Nhớ mật khẩu
-                                            </label>
-                                        </div>
-                                        <div className="forgotpass"> <a className="text-xs-medium neutral-500" href="#">Quên mật khẩu</a></div>
+                        <div className={`popup-content pt-20 ${styles.popupBody}`}>
+                            <div className="box-button-logins">
+                                <a className="btn btn-login btn-google mr-10 border-background border-color-3">
+                                    <img src="/assets/lib/user/imgs/template/popup/google.svg" alt="Travila" />
+                                    <span className="text-sm-bold white-color">Đăng nhập bằng Google</span>
+                                </a>
+                            </div>
+                            <div className="form-login">
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form-group">
+                                        <input
+                                            name="email"
+                                            value={formState.email}
+                                            autoComplete="off"
+                                            className={`form-control username popupsigin border-color-3 ${formState.error.email ? "error error-border" : ""}`}
+                                            type="email"
+                                            placeholder="Nhập email"
+                                            onInput={handleInputChange}
+                                        />
+                                        {formState.error.email && <p className="error-message-validate">{formState.error.email}</p>}
                                     </div>
-                                </div>
-                                <div className="form-group mt-45 mb-90"> <a className="btn btn-black-lg primary-background-2" href="#">Đăng nhập
-                                    <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
-                                <p className="text-sm-medium neutral-500">Chưa có tài khoản? <a className="primary-color-2 btn-signup" href="#">Tạo tài khoản ngay!</a></p>
-                            </form>
+                                    <div className="form-group">
+                                        <input
+                                            name="password"
+                                            value={formState.password}
+                                            autoComplete="off"
+                                            className={`form-control password popupsigin border-color-3 ${formState.error.password ? "error error-border" : ""}`}
+                                            type="password"
+                                            placeholder="Nhập mật khẩu"
+                                            onInput={handleInputChange}
+                                        />
+                                        {formState.error.password && <p className="error-message-validate">{formState.error.password}</p>}
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="box-remember-forgot">
+                                            <div className="remeber-me">
+                                                <label className="text-xs-medium neutral-500">
+                                                    <input className="cb-remember mr-5" type="checkbox" />Nhớ mật khẩu
+                                                </label>
+                                            </div>
+                                            <div className="forgotpass"> <a className="text-xs-medium neutral-500" onClick={() => setActiveTab("forgot")}>Quên mật khẩu</a></div>
+                                        </div>
+                                    </div>
+                                    <div className="form-group mt-45 mb-90">
+                                        <button className="btn btn-black-lg primary-background-2" type="submit">
+                                            Đăng nhập
+                                            <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M8 15L15 8L8 1M15 8L1 8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <p className="text-sm-medium neutral-500">Chưa có tài khoản? <a className="primary-color-2 btn-signup">Tạo tài khoản ngay!</a></p>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    </>)}
+
+                    {activeTab === "forgot" && (
+                        <ForgotPasswordForm onBack={() => setActiveTab("signin")} onNext={() => setActiveTab("reset")} />
+                    )}
+
+                    {activeTab === "reset" && (
+                        <ResetPasswordForm onBack={() => setActiveTab("signin")} />
+                    )}
                 </div>
             </div>
         </div>
-    )
+    );
 }

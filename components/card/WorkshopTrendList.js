@@ -38,6 +38,12 @@ export default function WorkshopTrendList({ sectionType = "default", items, titl
                     slidesToShow: 2,
                     slidesToScroll: 1,
                 }
+            }, {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                }
             }
         ]
     };
@@ -60,7 +66,7 @@ export default function WorkshopTrendList({ sectionType = "default", items, titl
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-md-9">
-                        <h2 className="neutral100-color">{title}</h2>
+                        <h2 className={`neutral100-color ${styles.title}`}>{title}</h2>
                     </div>
                     <div className="col-md-3 position-relative">
                         <div className="box-button-slider box-button-slider-team justify-content-end">

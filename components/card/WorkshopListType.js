@@ -51,6 +51,12 @@ export default function WorkshopListType() {
                     slidesToShow: 2,
                     slidesToScroll: 1,
                 }
+            }, {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                }
             }
         ]
     };
@@ -71,7 +77,7 @@ export default function WorkshopListType() {
         <section className="section-box box-top-category main-background">
             <div className="container">
                 <div className={`mb-40 ${styles.titleWrapper}`}>
-                    <h2 className="neutral100-color">Bạn đang quan tâm chủ đề nào</h2>
+                    <h2 className={`neutral100-color ${styles.title}`}>Bạn đang quan tâm chủ đề nào</h2>
                     <div className="box-button-slider box-button-slider-team text-end">
                         <div
                             className={`${styles.swiperButtonPrev} swiper-button-prev-style-1`}

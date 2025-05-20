@@ -476,6 +476,28 @@ export const tickets = {
                 buttonText: "Đặt ngay",
                 isButtonVisible: false,
             },
+            {
+                title: "WORKSHOP 'Sáng Tạo' Góc Quay Nấu Ăn Tại Nhà",
+                time: "10:00 - 11:30, 27 tháng 02, 2025",
+                address: "53/104 Trần Khánh Dư, phường Tân Định, Quận 1, Thành Phố Hồ Chí Minh",
+                price: "100.000",
+                imageSrc: "/assets/workshop/explore/detail/1.png",
+                link: "/dashboard/point-accumulate",
+                buttonText: "Đặt ngay",
+                isButtonVisible: false,
+                isSuccess: "success"
+            },
+            {
+                title: "WORKSHOP 'Sáng Tạo' Góc Quay Nấu Ăn Tại Nhà",
+                time: "10:00 - 11:30, 27 tháng 02, 2025",
+                address: "53/104 Trần Khánh Dư, phường Tân Định, Quận 1, Thành Phố Hồ Chí Minh",
+                price: "100.000",
+                imageSrc: "/assets/workshop/explore/detail/1.png",
+                link: "/dashboard/point-accumulate",
+                buttonText: "Đặt ngay",
+                isButtonVisible: false,
+                isSuccess: "canceled"
+            },
         ],
         completed: [
             {
@@ -487,6 +509,7 @@ export const tickets = {
                 link: "/dashboard/point-accumulate",
                 buttonText: "Xem chi tiết",
                 isButtonVisible: false,
+                isSuccess: "success"
             },
         ],
     },
@@ -513,6 +536,7 @@ export const tickets = {
                 link: "/dashboard/point-accumulate",
                 buttonText: "Đặt ngay",
                 isButtonVisible: false,
+                isSuccess: "success"
             },
         ],
     },
@@ -572,42 +596,36 @@ export const tickets = {
 
 export const quickLinks = [
     {
-        icon: '/assets/icon/sidebar-canvas/notification.svg',
-        title: 'Thông báo',
-        description: '2 thông báo mới',
-        link: '#',
-    },
-    {
-        icon: '/assets/icon/sidebar-canvas/bookmarks.svg',
-        title: 'Đã lưu',
-        description: '7 sự kiện',
-        link: '#',
-    },
-    {
-        icon: '/assets/icon/sidebar-canvas/file.svg',
+        icon: '/assets/icon/sidebar-canvas/ticket.svg',
         title: 'Vé đã đặt',
         description: '3 sự kiện',
         link: '#',
         status: 'resolved',
     },
     {
-        icon: '/assets/icon/sidebar-canvas/discount.svg',
+        icon: '/assets/icon/sidebar-canvas/myevent.svg',
         title: 'Sự kiện của tôi',
         description: 'Trong hôm nay',
         link: '#',
     },
     {
-        icon: '/assets/icon/sidebar-canvas/friends.svg',
-        title: 'Cài đặt',
-        description: 'Tài khoản của bạn',
+        icon: '/assets/icon/sidebar-canvas/saved.svg',
+        title: 'Sự kiện đã lưu',
+        description: '7 sự kiện',
         link: '#',
     },
     {
-        icon: '/assets/icon/sidebar-canvas/file.svg',
-        title: 'Chưa biết',
+        icon: '/assets/icon/sidebar-canvas/report.svg',
+        title: 'Quản lý báo cáo',
         description: '3 sự kiện',
         link: '#',
         status: 'resolved',
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/user.svg',
+        title: 'Cài đặt',
+        description: 'Tài khoản của bạn',
+        link: '#',
     }
 ];
 
