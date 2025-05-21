@@ -1,11 +1,28 @@
 'use client'
 
-import { fetchLogout } from "@/app/api/account"
+import { fetchLogout, fetchUserInfo } from "@/app/api/account"
 import styles from "./SidebarCanvas.module.css"
 import { quickLinks } from "@/data"
 import Image from "next/image"
+import { getUserInfo } from "@/app/util/auth"
+import { useQuery } from "@tanstack/react-query"
 
+const userInfo = getUserInfo()
 export default function SidebarCanvas() {
+    const { data } = useQuery({
+        queryKey: ['user-info'],
+        queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
+        staleTime: 1000 * 60 * 5,
+        refetchInterval: 1000 * 60 * 5,
+    })
+
+    const handleItemClick = (link, type) => {
+        localStorage.setItem("activeItem", type);
+        window.location.href = link
+    };
+
+    console.log(data?.result)
+
     return (
         <div className="sidebar-canvas-wrapper perfect-scrollbar main-background">
             <div className="sidebar-canvas-container">
@@ -36,9 +53,14 @@ export default function SidebarCanvas() {
                 <div className="sidebar-canvas-content">
                     <div className="box-author-profile border-1px">
                         <div className="card-author">
-                            <div className="card-image"> <img src="/assets/lib/user/imgs/page/homepage1/author2.png" alt="Travila" /></div>
+                            <div className="card-image">
+                                <img
+                                    src={data?.result?.avatarUrl ? data?.result?.avatarUrl :
+                                        "/assets/lib/user/imgs/page/homepage1/author2.png"}
+                                    alt="Travila" />
+                            </div>
                             <div className="card-info">
-                                <p className="text-md-bold white-color">Tên người dùng</p>
+                                <p className="text-md-bold white-color">{data?.result?.fullName ? data?.result?.fullName : 'Tên người dùng'}</p>
                             </div>
                         </div>
                         <button className="btn btn-black border-background" onClick={fetchLogout}>Đăng xuất</button>
@@ -51,7 +73,7 @@ export default function SidebarCanvas() {
                                         <Image src={item.icon} alt={item.title} width={24} height={24} />
                                     </div>
                                     <div className="item-info">
-                                        <a href={item.link}>
+                                        <a onClick={() => handleItemClick(item.link, item.type)}>
                                             <h6 className="text-md-bold white-color font-15">{item.title}</h6>
                                         </a>
                                         <p className={`text-xs neutral-500 ${item.status || ''}`}>

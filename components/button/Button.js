@@ -32,7 +32,7 @@ export default function Button({ text, link = "#", icon, color = "primary",
         <>
             <a
                 className={`btn btn-default ${isSignIn ? 'btn-signin' : ''} ${styles.button} ${sizeClass} ${colorClass} ${textColorClass}`}
-                href={link} {...props}>
+                href={link ? link : ""} {...props}>
                 {text} {icon}
             </a>
         </>

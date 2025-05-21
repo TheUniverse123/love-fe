@@ -599,33 +599,38 @@ export const quickLinks = [
         icon: '/assets/icon/sidebar-canvas/ticket.svg',
         title: 'Vé đã đặt',
         description: '3 sự kiện',
-        link: '#',
+        link: '/dashboard',
         status: 'resolved',
+        type: "ticket",
     },
     {
         icon: '/assets/icon/sidebar-canvas/myevent.svg',
         title: 'Sự kiện của tôi',
         description: 'Trong hôm nay',
-        link: '#',
+        link: '/dashboard/my-event',
+        type: "event",
     },
     {
         icon: '/assets/icon/sidebar-canvas/saved.svg',
         title: 'Sự kiện đã lưu',
         description: '7 sự kiện',
-        link: '#',
+        link: '/dashboard/saved-event',
+        type: "savedEvent",
     },
     {
         icon: '/assets/icon/sidebar-canvas/report.svg',
         title: 'Quản lý báo cáo',
         description: '3 sự kiện',
-        link: '#',
+        link: '/dashboard/report',
         status: 'resolved',
+        type: "report",
     },
     {
         icon: '/assets/icon/sidebar-canvas/user.svg',
         title: 'Cài đặt',
         description: 'Tài khoản của bạn',
-        link: '#',
+        link: '/dashboard/profile',
+        type: "user",
     }
 ];
 

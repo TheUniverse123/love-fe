@@ -1,0 +1,17 @@
+.container {
+    margin-right: 520px;
+    padding-left: 35px;
+    padding-top: 20px;
+}
+
+@media (min-width: 1400px) and (max-width: 1500px) {
+    .container {
+        margin-right: 300px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1399px) {
+    .container {
+        margin-right: 200px;
+    }
+}

@@ -5,8 +5,9 @@ import UserNavigation from "../navigation/UserNavigation";
 import styles from "./UserHeader.module.css"
 import Button from "../button/Button";
 import { getUserInfo } from "@/app/util/auth";
+import { usePopup } from "@/contexts/PopupContext";
 export default function UserHeader() {
-
+    const { openPopup } = usePopup()
     function handleResetActiveItem() {
         localStorage.removeItem("activeItem");
     }
@@ -30,7 +31,9 @@ export default function UserHeader() {
                             {getUserInfo() &&
                                 <Button onClick={handleResetActiveItem} link="/dashboard/create-event" text="Tạo sự kiện" color="primary" style={{ marginRight: "21px" }} />
                             }
-                            <Button text="Đăng nhập" color="grey" isSignIn={true} />
+                            <button className="btn btn-default grey-background btn-normal" onClick={openPopup}>
+                                Đăng nhập
+                            </button>
                         </div>
                         {getUserInfo() && <div className={`burger-icon-2 burger-icon-white ${styles.primaryBackground}`}>
                             <img src="/assets/lib/user/imgs/template/icons/menu.svg" alt="icon menu" />

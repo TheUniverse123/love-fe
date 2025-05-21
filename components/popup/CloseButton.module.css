@@ -1,0 +1,10 @@
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1234;
+    height: 42px;
+    width: 42px;
+    background: url('/assets/lib/user/imgs/template/icons/close.png') no-repeat center;
+    cursor: pointer;
+}

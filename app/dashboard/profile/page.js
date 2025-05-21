@@ -1,10 +1,30 @@
 'use client'
-import Calendar from "@/components/calendar/Calendar";
-import { useState } from "react"
 
+import { fetchUserInfo } from "@/app/api/account";
+import styles from "./Profile.module.css"
+import { getUserInfo } from "@/app/util/auth";
+import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query";
+
+const userInfo = getUserInfo()
 export default function ProfilePage() {
-    const [imageUrl, setImageUrl] = useState(null);
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        dateOfBirth: '',
+        gender: 0,
+        address: '',
+    });
 
+    const { data } = useQuery({
+        queryKey: ['user-info'],
+        queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
+        staleTime: 1000 * 60 * 5,
+        refetchInterval: 1000 * 60 * 5,
+    })
+    const [imageUrl, setImageUrl] = useState(null);
+    console.log(data)
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -20,8 +40,23 @@ export default function ProfilePage() {
         document.getElementById('file-upload').click();
     };
 
+    useEffect(() => {
+        if (data?.result) {
+            const { fullName, email, phoneNumber, dateOfBirth, gender, address } = data.result;
+            setFormData({
+                fullName: fullName || '',
+                email: email || '',
+                phoneNumber: phoneNumber || '',
+                dateOfBirth: dateOfBirth?.startsWith("0001") ? '' : dateOfBirth.slice(0, 10), // chuyển sang 'YYYY-MM-DD'
+                gender: gender ?? 0,
+                address: address || ''
+            });
+        }
+    }, [data]);
+
+
     return (
-        <div style={{ marginRight: "520px", paddingLeft: "35px", paddingTop: "20px" }}>
+        <div className={styles.container}>
             <div className="flex-space pb-20 border-1px-bottom">
                 <h4 className="white-color">Thông tin tài khoản</h4>
             </div>
@@ -32,28 +67,56 @@ export default function ProfilePage() {
                         <div className="col-md-12 mb-20">
                             <div className="form-group">
                                 <p className='ml-25 mb-15 text-lg-bold white-color'>Họ và tên</p>
-                                <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="Nhập tên của bạn" />
+                                <input
+                                    style={{ padding: "16px 25px" }}
+                                    className="form-control form-input-background border-none border-radius-31"
+                                    type="text"
+                                    placeholder="Nhập tên của bạn"
+                                    value={formData.fullName}
+                                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                />
                             </div>
                         </div>
 
                         <div className="col-md-6 mb-20">
                             <div className="form-group">
                                 <p className='ml-25 mb-15 text-lg-bold white-color'>Email</p>
-                                <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="email" placeholder="Nhập Email" />
+                                <input
+                                    style={{ padding: "16px 25px" }}
+                                    className="form-control form-input-background border-none border-radius-31"
+                                    type="email"
+                                    placeholder="Nhập Email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                />
                             </div>
                         </div>
 
                         <div className="col-md-6 mb-20">
                             <div className="form-group">
                                 <p className='ml-25 mb-15 text-lg-bold white-color'>Số điện thoại</p>
-                                <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="Nhậ́p số điện thoại" />
+                                <input
+                                    style={{ padding: "16px 25px" }}
+                                    className="form-control form-input-background border-none border-radius-31"
+                                    type="text"
+                                    placeholder="Nhậ́p số điện thoại"
+                                    value={formData.phoneNumber}
+                                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                                />
                             </div>
                         </div>
 
                         <div className="col-md-6 mb-50">
-                            <div className="form-group">
+                            <div className="form-group position-relative">
                                 <p className='ml-25 mb-15 text-lg-bold white-color'>Ngày tháng năm sinh</p>
-                                <input style={{ padding: "16px 25px" }} className="form-control form-input-background border-none border-radius-31" type="text" placeholder="DD/MM/YYYY" />
+                                <input
+                                    style={{ padding: "16px 25px" }}
+                                    className="form-control calendar-date form-input-background border-none border-radius-31"
+                                    type="text"
+                                    placeholder="DD/MM/YYYY"
+                                    value={formData.dateOfBirth}
+                                    onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                                />
                             </div>
                         </div>
 
@@ -75,6 +138,8 @@ export default function ProfilePage() {
                                                 accentColor: '#fff',
                                                 border: '1px solid #fff'
                                             }}
+                                            checked={formData.gender === 0}
+                                            onChange={() => setFormData({ ...formData, gender: 0 })}
                                         />
                                         <label
                                             htmlFor="event-payment"
@@ -100,6 +165,8 @@ export default function ProfilePage() {
                                                 accentColor: '#fff',
                                                 border: '1px solid #fff'
                                             }}
+                                            checked={formData.gender === 1}
+                                            onChange={() => setFormData({ ...formData, gender: 1 })}
                                         />
                                         <label
                                             htmlFor="credit-card-payment"
@@ -125,6 +192,8 @@ export default function ProfilePage() {
                                                 accentColor: '#fff',
                                                 border: '1px solid #fff'
                                             }}
+                                            checked={formData.gender === 2}
+                                            onChange={() => setFormData({ ...formData, gender: 2 })}
                                         />
                                         <label
                                             htmlFor="credit-card-payment"

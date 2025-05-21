@@ -144,6 +144,10 @@ input[type="radio"] {
     font-size: 11px !important;
 }
 
+.btn-normal {
+    padding: 11px 27px !important;
+}
+
 .position-relative {
     position: relative !important;
 }
@@ -232,6 +236,10 @@ input[type="radio"] {
     background-color: var(--bg-canceled-button-color) !important;
 }
 
+.grey-background {
+    background-color: var(--bg-grey-color) !important;
+}
+
 .primary-background {
     background-color: var(--bg-primary-color) !important;
 }
@@ -249,6 +257,7 @@ input[type="radio"] {
 #calendar-events th.datepicker-switch {
     visibility: hidden !important;
 }
+
 .neutral-500.text-md-medium.pl-10 {
     max-width: 317px;
 }
@@ -532,7 +541,9 @@ textarea.form-control.main-background.border-color:focus {
     top: 761.667px !important;
     padding: 15px 20px !important;
     border-radius: 20px !important;
+    top: 760px !important;
 }
+
 
 .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-right.datepicker-orient-bottom {
     background-color: var(--bg-main-color) !important;
@@ -542,6 +553,10 @@ textarea.form-control.main-background.border-color:focus {
     border-radius: 20px !important;
 }
 
+main.d-flex~.datepicker.datepicker-dropdown {
+    top: 600px !important;
+}
+
 ul.dropdown-menu.dropdown-menu-light.show {
     padding: 0 !important;
     border-radius: 0 !important;
@@ -549,6 +564,14 @@ ul.dropdown-menu.dropdown-menu-light.show {
 
 ::before,
 ::after {
+    display: none !important;
+}
+
+.popup-signin.transparent-background {
+    display: block;
+}
+
+.display-none {
     display: none !important;
 }
 

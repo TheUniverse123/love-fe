@@ -7,11 +7,16 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./PopupSignin.module.css";
+
+import { usePopup } from "@/contexts/PopupContext";
+import CloseButton from "./CloseButton";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import ResetPasswordForm from "./ResetPasswordForm";
+import PopupRegister from "./PopupRegister";
 
 export default function PopupSignin() {
-    const [activeTab, setActiveTab] = useState("signin"); // signin | forgot | reset
+    const [activeTab, setActiveTab] = useState("signin");
+    const { isPopupVisible, closePopup } = usePopup()
 
     const [formState, setFormState] = useState({
         email: "",
@@ -44,6 +49,7 @@ export default function PopupSignin() {
                 accessToken: response?.result.accessToken,
                 expiration: response?.result.expiration,
                 refreshToken: response?.result.refreshToken,
+                id: decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
             };
             setUserInfoToStorage(userInfo);
             handleAutoLogout()
@@ -94,13 +100,18 @@ export default function PopupSignin() {
         }));
     };
 
+    const handleClose = () => {
+        closePopup()
+        setActiveTab("signin")
+    }
+
     return (
-        <div className="popup-signin transparent-background">
+        <div className={`popup-signin transparent-background ${!isPopupVisible ? "display-none" : ""}`}>
             <div className="popup-container border-0px">
                 <div className="main-secondary-background" style={{ borderRadius: "16px" }}>
                     {activeTab === "signin" && (<>
                         <div className={`popup-content pb-20 primary-background ${styles.popupHeader}`}>
-                            <a className="close-popup-signin border-background" />
+                            <CloseButton onClose={handleClose} />
                             <div className="d-flex gap-2 align-items-center">
                                 <h4 className="white-color mt-30">Đăng nhập</h4>
                             </div>
@@ -156,18 +167,24 @@ export default function PopupSignin() {
                                             </svg>
                                         </button>
                                     </div>
-                                    <p className="text-sm-medium neutral-500">Chưa có tài khoản? <a className="primary-color-2 btn-signup">Tạo tài khoản ngay!</a></p>
+                                    <p className="text-sm-medium neutral-500">Chưa có tài khoản?
+                                        <a onClick={() => setActiveTab("signup")} className="primary-color-2">Tạo tài khoản ngay!</a>
+                                    </p>
                                 </form>
                             </div>
                         </div>
                     </>)}
 
+                    {activeTab === "signup" && (
+                        <PopupRegister onNext={() => setActiveTab("signin")} onClose={handleClose} />
+                    )}
+
                     {activeTab === "forgot" && (
-                        <ForgotPasswordForm onBack={() => setActiveTab("signin")} onNext={() => setActiveTab("reset")} />
+                        <ForgotPasswordForm onClose={handleClose} onBack={() => setActiveTab("signin")} onNext={() => setActiveTab("reset")} />
                     )}
 
                     {activeTab === "reset" && (
-                        <ResetPasswordForm onBack={() => setActiveTab("signin")} />
+                        <ResetPasswordForm onClose={handleClose} onBack={() => setActiveTab("signin")} />
                     )}
                 </div>
             </div>
