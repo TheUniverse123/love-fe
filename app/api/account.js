@@ -103,3 +103,29 @@ export const fetchConfirmEmail = async (email, token) => {
         })
     return data
 }
+
+export const fetchForgotPassword = async (email) => {
+    const data = await axiosInstanceJson.post(`/api/Auth/forgot-password`, {
+        email
+    })
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchResetPassword = async (request) => {
+    const data = await axiosInstanceJson.post(`/api/Auth/reset-password`, request)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}

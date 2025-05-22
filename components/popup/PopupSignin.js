@@ -4,7 +4,7 @@ import { decodeToken, fetchLogin, fetchLoginGoogle, fetchLogout, fetchUserInfoVe
 import { getAuthToken, getAuthTokenDuration, getUserInfo, setUserInfoToStorage } from "@/app/util/auth";
 import { validateNonEmptyString, validatePassword } from "@/app/util/validation";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./PopupSignin.module.css";
 
@@ -19,8 +19,17 @@ import { auth, provider } from "@/app/util/firebase";
 
 export default function PopupSignin() {
     const [activeTab, setActiveTab] = useState("signin");
-    const { isPopupVisible, closePopup } = usePopup()
-
+    const { isPopupVisible, closePopup, openPopup } = usePopup()
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const type = params.get("type");
+            if (type === "reset") {
+                setActiveTab("reset");
+                openPopup()
+            }
+        }
+    }, []);
     const [formState, setFormState] = useState({
         email: "",
         password: "",

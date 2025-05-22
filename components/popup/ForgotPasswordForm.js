@@ -5,20 +5,26 @@ import stylesMain from "./ForgotPasswordForm.module.css"
 import { useState } from "react";
 import { validateNonEmptyString } from "@/app/util/validation";
 import { toast } from "react-toastify";
+import { fetchForgotPassword } from "@/app/api/account";
 
 export default function ForgotPasswordForm({ onNext, onClose }) {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateNonEmptyString(email)) {
             setError("Email là bắt buộc");
             return;
         }
         setError("");
-        toast.success("Đã gửi email đặt lại mật khẩu");
-        onNext();
+
+        const response = await fetchForgotPassword(email)
+        if (response.statusCode === 200) {
+            toast.success("Đã gửi email đặt lại mật khẩu, hãy kiểm tra email của bạn!");
+        } else {
+            toast.error(response[0])
+        }
     };
 
     return (

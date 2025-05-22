@@ -4,6 +4,8 @@ import CloseButton from "./CloseButton";
 import styles from "./PopupSignin.module.css";
 
 import { useState } from "react";
+import { fetchResetPassword } from "@/app/api/account";
+import { toast } from "react-toastify";
 
 export default function ResetPasswordForm({ onBack, onClose }) {
     const [password, setPassword] = useState("");
@@ -25,9 +27,28 @@ export default function ResetPasswordForm({ onBack, onClose }) {
             setError(newErrors);
             return;
         }
-        setError({});
-        toast.success("Đặt lại mật khẩu thành công");
-        onBack();
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get("email");
+        const token = params.get("token");
+
+        const submitData = {
+            email, token, newPassword: password
+        }
+
+        async function fetchToken() {
+            const response = await fetchResetPassword(submitData)
+            console.log(response)
+            if (response.statusCode === 200) {
+                setError({});
+                window.location.href = "/"
+                toast.success("Đặt lại mật khẩu thành công");
+                onBack();
+            } else {
+                toast.error(response[0])
+            }
+        }
+
+        fetchToken()
     };
 
     return (
