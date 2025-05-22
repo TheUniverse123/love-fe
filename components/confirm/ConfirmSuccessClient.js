@@ -6,15 +6,15 @@ import { useEffect } from 'react'
 
 export default function ConfirmSuccessClient() {
     const searchParams = useSearchParams()
-    const email = decodeURIComponent(searchParams.get('email'))
+    const email = decodeURIComponent(searchParams.get('email') || '')
+    const token = searchParams.get('token') || ''
 
-    console.log(email, token)
-    const url = window.location.href
-    const rawQuery = url.split('?')[1];
-    const token = rawQuery.split('token=')[1].split('&')[0];
     useEffect(() => {
-        fetchConfirmEmail(email, token)
-    }, [])
+        if (email && token) {
+            console.log(email, token)
+            fetchConfirmEmail(email, token)
+        }
+    }, [email, token])
 
     const styles = {
         page: {
@@ -84,6 +84,5 @@ export default function ConfirmSuccessClient() {
                 </div>
             </div>
         </main>
-
     )
 }
