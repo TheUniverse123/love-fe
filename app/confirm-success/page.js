@@ -1,6 +1,6 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { fetchConfirmEmail } from '../api/account';
 
 export default function VerificationSuccessPage() {
@@ -63,25 +63,27 @@ export default function VerificationSuccessPage() {
         fetchConfirmEmail(email, token)
     }, [])
     return (
-        <div style={styles.page}>
-            <div style={styles.card}>
-                {/* Large Check Icon */}
-                <div style={styles.iconLarge}>
-                    <img
-                        src='https://www.iconpacks.net/icons/2/free-check-icon-3278-thumb.png'
-                        alt='checkicon'
-                        style={{ width: '50%', display: 'inline-block' }}
-                    />
+        <Suspense>
+            <div style={styles.page}>
+                <div style={styles.card}>
+                    {/* Large Check Icon */}
+                    <div style={styles.iconLarge}>
+                        <img
+                            src='https://www.iconpacks.net/icons/2/free-check-icon-3278-thumb.png'
+                            alt='checkicon'
+                            style={{ width: '50%', display: 'inline-block' }}
+                        />
+                    </div>
+                    <div style={styles.header}>Tài Khoản Đã Được Xác Thực</div>
+                    <p style={styles.message}>
+                        Tài khoản của bạn đã được xác thực thành công! Bạn có thể đăng nhập vào
+                        tài khoản của mình ngay bây giờ.
+                    </p>
+                    <a href='/auth/login' style={styles.button}>
+                        Đi đến Đăng Nhập
+                    </a>
                 </div>
-                <div style={styles.header}>Tài Khoản Đã Được Xác Thực</div>
-                <p style={styles.message}>
-                    Tài khoản của bạn đã được xác thực thành công! Bạn có thể đăng nhập vào
-                    tài khoản của mình ngay bây giờ.
-                </p>
-                <a href='/auth/login' style={styles.button}>
-                    Đi đến Đăng Nhập
-                </a>
             </div>
-        </div>
+        </Suspense>
     )
 }
