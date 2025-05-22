@@ -1,8 +1,8 @@
 'use client'
 
+import { fetchConfirmEmail } from '@/app/api/account'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import { fetchConfirmEmail } from '../api/account'
 
 export default function ConfirmSuccessClient() {
     const searchParams = useSearchParams()
