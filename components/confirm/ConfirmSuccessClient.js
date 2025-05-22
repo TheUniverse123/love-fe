@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 export default function ConfirmSuccessClient() {
     const searchParams = useSearchParams()
     const email = decodeURIComponent(searchParams.get('email'))
-    const token = searchParams.get('token')
+    const token = decodeURIComponent(searchParams.get('token'))
 
     useEffect(() => {
         if (email && token) {
