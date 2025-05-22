@@ -689,14 +689,18 @@ input.form-control.username:focus,
 input.form-control.email:focus,
 input.form-control.phone:focus,
 textarea.form-control:focus,
-input.form-control.password:focus,
+input.form-control.password:focus {
+    font-size: 16px !important;
+    color: #fff !important;
+}
+
 input.form-control.username::placeholder,
 input.form-control.email::placeholder,
 input.form-control.phone::placeholder,
 textarea.form-control::placeholder,
 input.form-control.password::placeholder {
     font-size: 16px !important;
-    color: #575756 !important;
+    color: #575757 !important;
 }
 
 button.accordion-button.text-heading-5.main-background.border-color.collapsed::after {

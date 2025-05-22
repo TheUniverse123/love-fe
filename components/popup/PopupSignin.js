@@ -1,7 +1,7 @@
 'use client'
 
-import { decodeToken, fetchLogin, fetchLogout } from "@/app/api/account";
-import { getAuthToken, getAuthTokenDuration, setUserInfoToStorage } from "@/app/util/auth";
+import { decodeToken, fetchLogin, fetchLoginGoogle, fetchLogout, fetchUserInfoVer2 } from "@/app/api/account";
+import { getAuthToken, getAuthTokenDuration, getUserInfo, setUserInfoToStorage } from "@/app/util/auth";
 import { validateNonEmptyString, validatePassword } from "@/app/util/validation";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -13,6 +13,9 @@ import CloseButton from "./CloseButton";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import ResetPasswordForm from "./ResetPasswordForm";
 import PopupRegister from "./PopupRegister";
+import { Spinner } from "react-bootstrap";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "@/app/util/firebase";
 
 export default function PopupSignin() {
     const [activeTab, setActiveTab] = useState("signin");
@@ -38,18 +41,33 @@ export default function PopupSignin() {
         return () => clearTimeout(timer);
     };
 
-    const { mutate } = useMutation({
+    const handleAutoLogoutVerGoogle = (duration) => {
+        const userInfo = getUserInfo()
+        const token = userInfo?.accessToken
+        if (!token || token === 'EXPIRED') {
+            fetchLogout();
+            return;
+        }
+        const timer = setTimeout(() => {
+            fetchLogout();
+        }, duration);
+        return () => clearTimeout(timer);
+    };
+
+    const { mutate, isPending } = useMutation({
         mutationKey: ['login'],
         mutationFn: (userInfo) => fetchLogin(userInfo.email, userInfo.password),
-        onSuccess: (response) => {
+        onSuccess: async (response) => {
             const decodedToken = decodeToken(response?.result?.accessToken);
+            const userId = decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
+
             const userInfo = {
                 email: formState.email,
                 roles: decodedToken.payload.role,
                 accessToken: response?.result.accessToken,
                 expiration: response?.result.expiration,
                 refreshToken: response?.result.refreshToken,
-                id: decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
+                id: userId,
             };
             setUserInfoToStorage(userInfo);
             handleAutoLogout()
@@ -103,6 +121,38 @@ export default function PopupSignin() {
     const handleClose = () => {
         closePopup()
         setActiveTab("signin")
+        setFormState({
+            email: "",
+            password: "",
+            error: {},
+        })
+    }
+
+    function login() {
+        signInWithPopup(auth, provider)
+            .then((result) => result.user.getIdToken())
+            .then(async (idToken) => {
+                const response = await fetchLoginGoogle(idToken);
+                const decodedToken = decodeToken(response?.result)
+                const userId = decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
+                const userInfoFetch = await fetchUserInfoVer2(userId)
+                const userInfo = {
+                    email: userInfoFetch?.result.email,
+                    roles: decodedToken?.payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+                    accessToken: response?.result,
+                    id: userId,
+                    expiration: decodedToken?.payload.exp,
+                };
+                setUserInfoToStorage(userInfo);
+                handleAutoLogoutVerGoogle(decodedToken?.payload.exp)
+                toast.success("Đăng nhập thành công");
+                setTimeout(() => {
+                    location.reload()
+                }, 2000)
+            })
+            .catch(() => {
+                toast.error("Đăng nhập thất bại, vui lòng thử lại sau!")
+            });
     }
 
     return (
@@ -120,7 +170,7 @@ export default function PopupSignin() {
                             <div className="box-button-logins">
                                 <a className="btn btn-login btn-google mr-10 border-background border-color-3">
                                     <img src="/assets/lib/user/imgs/template/popup/google.svg" alt="Travila" />
-                                    <span className="text-sm-bold white-color">Đăng nhập bằng Google</span>
+                                    <span onClick={login} className="text-sm-bold white-color">Đăng nhập bằng Google</span>
                                 </a>
                             </div>
                             <div className="form-login">
@@ -160,8 +210,8 @@ export default function PopupSignin() {
                                         </div>
                                     </div>
                                     <div className="form-group mt-45 mb-90">
-                                        <button className="btn btn-black-lg primary-background-2" type="submit">
-                                            Đăng nhập
+                                        <button disabled={isPending} className="btn btn-black-lg primary-background-2" type="submit">
+                                            {isPending ? <Spinner /> : 'Đăng nhập'}
                                             <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M8 15L15 8L8 1M15 8L1 8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                             </svg>

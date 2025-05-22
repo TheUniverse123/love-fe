@@ -1,10 +1,11 @@
 'use client'
 
-import { fetchUserInfo } from "@/app/api/account";
-import styles from "./Profile.module.css"
+import { fetchUserInfo, updateUserInfo } from "@/app/api/account";
 import { getUserInfo } from "@/app/util/auth";
-import { useEffect, useState } from "react"
-import { useQuery } from "@tanstack/react-query";
+import { formatDate } from "@/app/util/convert";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import styles from "./Profile.module.css";
 
 const userInfo = getUserInfo()
 export default function ProfilePage() {
@@ -23,6 +24,28 @@ export default function ProfilePage() {
         staleTime: 1000 * 60 * 5,
         refetchInterval: 1000 * 60 * 5,
     })
+
+    const { mutate, loading } = useMutation({
+        mutationKey: ['update-user'],
+        mutationFn: (userInfo) => updateUserInfo(userInfo),
+        onSuccess: (response) => {
+            toast.error("Cập nhật tài khoản thành công");
+        },
+        onError: () => {
+            toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+        },
+    });
+
+    const handleUpdateProfile = () => {
+        const dataSubmit = {
+            id: getUserInfo().id,
+            ...formData,
+            avatarUrl: "",
+        }
+
+        mutate(dataSubmit)
+    }
+
     const [imageUrl, setImageUrl] = useState(null);
     console.log(data)
     const handleImageUpload = (event) => {
@@ -47,14 +70,12 @@ export default function ProfilePage() {
                 fullName: fullName || '',
                 email: email || '',
                 phoneNumber: phoneNumber || '',
-                dateOfBirth: dateOfBirth?.startsWith("0001") ? '' : dateOfBirth.slice(0, 10), // chuyển sang 'YYYY-MM-DD'
+                dateOfBirth: dateOfBirth || '',
                 gender: gender ?? 0,
                 address: address || ''
             });
         }
     }, [data]);
-
-
     return (
         <div className={styles.container}>
             <div className="flex-space pb-20 border-1px-bottom">
@@ -63,192 +84,197 @@ export default function ProfilePage() {
 
             <div className="pt-40 pb-200">
                 <div className="secondary-background border-radius-25 p-20 mb-35">
-                    <div className="row mt-10">
-                        <div className="col-md-12 mb-20">
-                            <div className="form-group">
-                                <p className='ml-25 mb-15 text-lg-bold white-color'>Họ và tên</p>
-                                <input
-                                    style={{ padding: "16px 25px" }}
-                                    className="form-control form-input-background border-none border-radius-31"
-                                    type="text"
-                                    placeholder="Nhập tên của bạn"
-                                    value={formData.fullName}
-                                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                />
-                            </div>
-                        </div>
+                    <form onSubmit={handleUpdateProfile}>
 
-                        <div className="col-md-6 mb-20">
-                            <div className="form-group">
-                                <p className='ml-25 mb-15 text-lg-bold white-color'>Email</p>
-                                <input
-                                    style={{ padding: "16px 25px" }}
-                                    className="form-control form-input-background border-none border-radius-31"
-                                    type="email"
-                                    placeholder="Nhập Email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="col-md-6 mb-20">
-                            <div className="form-group">
-                                <p className='ml-25 mb-15 text-lg-bold white-color'>Số điện thoại</p>
-                                <input
-                                    style={{ padding: "16px 25px" }}
-                                    className="form-control form-input-background border-none border-radius-31"
-                                    type="text"
-                                    placeholder="Nhậ́p số điện thoại"
-                                    value={formData.phoneNumber}
-                                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="col-md-6 mb-50">
-                            <div className="form-group position-relative">
-                                <p className='ml-25 mb-15 text-lg-bold white-color'>Ngày tháng năm sinh</p>
-                                <input
-                                    style={{ padding: "16px 25px" }}
-                                    className="form-control calendar-date form-input-background border-none border-radius-31"
-                                    type="text"
-                                    placeholder="DD/MM/YYYY"
-                                    value={formData.dateOfBirth}
-                                    onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="col-md-6 mb-40">
-                            <p className='ml-25 mb-15 text-lg-bold white-color'>Giới tính</p>
-                            <div className="row" style={{ width: "80%", alignItems: "center", padding: "16px 25px" }}>
-                                <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
-                                        <input
-                                            type="radio"
-                                            id="event-payment"
-                                            name="payment-method"
-                                            style={{
-                                                width: '23px',
-                                                height: '23px',
-                                                backgroundColor: '#fff',
-                                                borderRadius: '50%',
-                                                marginRight: '10px',
-                                                accentColor: '#fff',
-                                                border: '1px solid #fff'
-                                            }}
-                                            checked={formData.gender === 0}
-                                            onChange={() => setFormData({ ...formData, gender: 0 })}
-                                        />
-                                        <label
-                                            htmlFor="event-payment"
-                                            className="item-payment-method-text"
-                                            style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
-                                        >
-                                            Nam
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
-                                        <input
-                                            type="radio"
-                                            id="credit-card-payment"
-                                            name="payment-method"
-                                            style={{
-                                                width: '23px',
-                                                height: '23px',
-                                                backgroundColor: '#fff',
-                                                borderRadius: '50%',
-                                                marginRight: '10px',
-                                                accentColor: '#fff',
-                                                border: '1px solid #fff'
-                                            }}
-                                            checked={formData.gender === 1}
-                                            onChange={() => setFormData({ ...formData, gender: 1 })}
-                                        />
-                                        <label
-                                            htmlFor="credit-card-payment"
-                                            className="item-payment-method-text"
-                                            style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
-                                        >
-                                            Nữ
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
-                                        <input
-                                            type="radio"
-                                            id="credit-card-payment"
-                                            name="payment-method"
-                                            style={{
-                                                width: '23px',
-                                                height: '23px',
-                                                backgroundColor: '#fff',
-                                                borderRadius: '50%',
-                                                marginRight: '10px',
-                                                accentColor: '#fff',
-                                                border: '1px solid #fff'
-                                            }}
-                                            checked={formData.gender === 2}
-                                            onChange={() => setFormData({ ...formData, gender: 2 })}
-                                        />
-                                        <label
-                                            htmlFor="credit-card-payment"
-                                            className="item-payment-method-text"
-                                            style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
-                                        >
-                                            Khác
-                                        </label>
-                                    </div>
+                        <div className="row mt-10">
+                            <div className="col-md-12 mb-20">
+                                <div className="form-group">
+                                    <p className='ml-25 mb-15 text-lg-bold white-color'>Họ và tên</p>
+                                    <input
+                                        style={{ padding: "16px 25px" }}
+                                        className="form-control form-input-background border-none border-radius-31"
+                                        type="text"
+                                        placeholder="Nhập tên của bạn"
+                                        value={formData.fullName}
+                                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                    />
                                 </div>
                             </div>
-                        </div>
 
-                        <div className='col-md-12 mb-20'>
-                            <div className='flex-start'>
-                                <div
-                                    style={{
-                                        borderRadius: "50%",
-                                        width: "64px",
-                                        height: "64px",
-                                        backgroundColor: "#C4C4C4",
-                                        backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
-                                        cursor: 'pointer' // Thêm con trỏ chuột khi người dùng hover vào
-                                    }}
-                                ></div>
-                                <p className='text-md-bold white-color ml-20'>Ảnh đại diện</p>
+                            <div className="col-md-6 mb-20">
+                                <div className="form-group">
+                                    <p className='ml-25 mb-15 text-lg-bold white-color'>Email</p>
+                                    <input
+                                        disabled
+                                        style={{ padding: "16px 25px" }}
+                                        className="form-control form-input-background border-none border-radius-31"
+                                        type="email"
+                                        placeholder="Nhập Email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <div className='col-md-12 mb-20'
-                            onClick={triggerFileInput} // Khi bấm vào hình tròn sẽ mở dialog chọn file
-                        >
-                            <div
-                                className="flex-center form-input-background border-dash-white"
-                                style={{ padding: "22px 0", borderRadius: "32px", flexDirection: "column" }}
+                            <div className="col-md-6 mb-20">
+                                <div className="form-group">
+                                    <p className='ml-25 mb-15 text-lg-bold white-color'>Số điện thoại</p>
+                                    <input
+                                        style={{ padding: "16px 25px" }}
+                                        className="form-control form-input-background border-none border-radius-31"
+                                        type="text"
+                                        placeholder="Nhập số điện thoại"
+                                        value={formData.phoneNumber}
+                                        onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-md-6 mb-50">
+                                <div className="form-group position-relative">
+                                    <p className='ml-25 mb-15 text-lg-bold white-color'>Ngày tháng năm sinh</p>
+                                    <input
+                                        style={{ padding: "16px 25px" }}
+                                        className="form-control calendar-date form-input-background border-none border-radius-31"
+                                        type="text"
+                                        placeholder="DD/MM/YYYY"
+                                        value={formatDate(formData.dateOfBirth)}
+                                        onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-md-6 mb-40">
+                                <p className='ml-25 mb-15 text-lg-bold white-color'>Giới tính</p>
+                                <div className="row" style={{ width: "80%", alignItems: "center", padding: "16px 25px" }}>
+                                    <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <input
+                                                type="radio"
+                                                id="event-payment"
+                                                name="payment-method"
+                                                style={{
+                                                    width: '23px',
+                                                    height: '23px',
+                                                    backgroundColor: '#fff',
+                                                    borderRadius: '50%',
+                                                    marginRight: '10px',
+                                                    accentColor: '#fff',
+                                                    border: '1px solid #fff'
+                                                }}
+                                                checked={formData.gender === 0}
+                                                onChange={() => setFormData({ ...formData, gender: 0 })}
+                                            />
+                                            <label
+                                                htmlFor="event-payment"
+                                                className="item-payment-method-text"
+                                                style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
+                                            >
+                                                Nam
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <input
+                                                type="radio"
+                                                id="credit-card-payment"
+                                                name="payment-method"
+                                                style={{
+                                                    width: '23px',
+                                                    height: '23px',
+                                                    backgroundColor: '#fff',
+                                                    borderRadius: '50%',
+                                                    marginRight: '10px',
+                                                    accentColor: '#fff',
+                                                    border: '1px solid #fff'
+                                                }}
+                                                checked={formData.gender === 1}
+                                                onChange={() => setFormData({ ...formData, gender: 1 })}
+                                            />
+                                            <label
+                                                htmlFor="credit-card-payment"
+                                                className="item-payment-method-text"
+                                                style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
+                                            >
+                                                Nữ
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <input
+                                                type="radio"
+                                                id="credit-card-payment"
+                                                name="payment-method"
+                                                style={{
+                                                    width: '23px',
+                                                    height: '23px',
+                                                    backgroundColor: '#fff',
+                                                    borderRadius: '50%',
+                                                    marginRight: '10px',
+                                                    accentColor: '#fff',
+                                                    border: '1px solid #fff'
+                                                }}
+                                                checked={formData.gender === 2}
+                                                onChange={() => setFormData({ ...formData, gender: 2 })}
+                                            />
+                                            <label
+                                                htmlFor="credit-card-payment"
+                                                className="item-payment-method-text"
+                                                style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', marginBottom: "0!important" }}
+                                            >
+                                                Khác
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='col-md-12 mb-20'>
+                                <div className='flex-start'>
+                                    <div
+                                        style={{
+                                            borderRadius: "50%",
+                                            width: "64px",
+                                            height: "64px",
+                                            backgroundColor: "#C4C4C4",
+                                            backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                            cursor: 'pointer' // Thêm con trỏ chuột khi người dùng hover vào
+                                        }}
+                                    ></div>
+                                    <p className='text-md-bold white-color ml-20'>Ảnh đại diện</p>
+                                </div>
+                            </div>
+
+                            <div className='col-md-12 mb-20'
+                                onClick={triggerFileInput} // Khi bấm vào hình tròn sẽ mở dialog chọn file
                             >
-                                <div>
-                                    <img src="/assets/icon/upload-icon.svg" />
+                                <div
+                                    className="flex-center form-input-background border-dash-white"
+                                    style={{ padding: "22px 0", borderRadius: "32px", flexDirection: "column" }}
+                                >
+                                    <div>
+                                        <img src="/assets/icon/upload-icon.svg" />
+                                    </div>
+                                    <div className="mt-25">
+                                        <span className="primary-color text-sm-bold">Bấm vào đây </span>
+                                        <span style={{ color: "#475569" }}>để tải tệp hình ảnh hoặc kéo thả.</span>
+                                    </div>
+                                    <p style={{ color: "#94A3B8" }}>Định dạng hỗ trợ: SVG, JPG, PNG (tối đa 10MB mỗi tệp)</p>
+                                    <input
+                                        type="file"
+                                        onChange={handleImageUpload}
+                                        style={{ display: 'none' }} // Ẩn input file
+                                        id="file-upload"
+                                    />
                                 </div>
-                                <div className="mt-25">
-                                    <span className="primary-color text-sm-bold">Bấm vào đây </span>
-                                    <span style={{ color: "#475569" }}>để tải tệp hình ảnh hoặc kéo thả.</span>
-                                </div>
-                                <p style={{ color: "#94A3B8" }}>Định dạng hỗ trợ: SVG, JPG, PNG (tối đa 10MB mỗi tệp)</p>
-                                <input
-                                    type="file"
-                                    onChange={handleImageUpload}
-                                    style={{ display: 'none' }} // Ẩn input file
-                                    id="file-upload"
-                                />
                             </div>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
 
                 <div className="flex-end">

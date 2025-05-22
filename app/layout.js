@@ -142,6 +142,7 @@ export default async function RootLayout({ children }) {
           src="/assets/lib/user/js/main.js?v=1.0.0"
           strategy="afterInteractive"
         />
+
       </body>
     </html >
   );

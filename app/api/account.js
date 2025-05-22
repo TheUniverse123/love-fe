@@ -32,8 +32,68 @@ export const fetchLogout = () => {
     location.reload()
 }
 
+export const fetchLoginGoogle = async (token) => {
+    const data = await axiosInstanceJson.post(`/api/Auth/google-login`, token)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchUserInfoVer2 = async (userId) => {
+    const data = await axiosInstanceJson.get(`/api/Users/${userId}`)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
 export const fetchUserInfo = async ({ signal, userId }) => {
     const data = await axiosInstanceJson.get(`/api/Users/${userId}`)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const updateUserInfo = async ({ signal, userUpdate }) => {
+    const data = await axiosInstanceJson.put(`/api/Users/update`, userUpdate)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchRegister = async (userRegister) => {
+    const data = await axiosInstanceJson.post(`/api/Users/register`, userRegister)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchConfirmEmail = async (email, password) => {
+    const data = await axiosInstanceJson.get(`/api/Auth/confirm-email?email=${email}&password=${password}`)
         .then((response) => {
             return response.data
         }
