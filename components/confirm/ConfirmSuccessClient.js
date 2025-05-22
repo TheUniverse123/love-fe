@@ -5,16 +5,21 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function ConfirmSuccessClient() {
-    const searchParams = useSearchParams()
-    const email = decodeURIComponent(searchParams.get('email') || '')
-    const token = searchParams.get('token') || ''
-
     useEffect(() => {
-        if (email && token) {
-            console.log(email, token)
-            fetchConfirmEmail(email, token)
+        const url = window.location.href
+        const rawQuery = url.split('?')[1]
+
+        if (rawQuery) {
+            const params = new URLSearchParams(rawQuery)
+            const tokenParam = params.get('token')
+            const emailParam = params.get('email')
+            if (tokenParam && emailParam) {
+                const decodedEmail = decodeURIComponent(emailParam)
+                console.log(decodedEmail, tokenParam)
+                fetchConfirmEmail(decodedEmail, tokenParam)
+            }
         }
-    }, [email, token])
+    }, [])
 
     const styles = {
         page: {
