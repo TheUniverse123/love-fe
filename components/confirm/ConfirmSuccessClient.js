@@ -1,7 +1,6 @@
 'use client'
 
 import { fetchConfirmEmail } from '@/app/api/account'
-import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function ConfirmSuccessClient() {
@@ -11,12 +10,12 @@ export default function ConfirmSuccessClient() {
 
         if (rawQuery) {
             const params = new URLSearchParams(rawQuery)
-            const tokenParam = params.get('token')
+            const token = url.split('token=')[1]?.split('&')[0]
             const emailParam = params.get('email')
-            if (tokenParam && emailParam) {
+            if (token && emailParam) {
                 const decodedEmail = decodeURIComponent(emailParam)
-                console.log(decodedEmail, tokenParam)
-                fetchConfirmEmail(decodedEmail, tokenParam)
+                console.log(decodedEmail, token)
+                fetchConfirmEmail(decodedEmail, token)
             }
         }
     }, [])
