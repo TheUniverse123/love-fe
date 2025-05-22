@@ -92,8 +92,8 @@ export const fetchRegister = async (userRegister) => {
     return data
 }
 
-export const fetchConfirmEmail = async (email, password) => {
-    const data = await axiosInstanceJson.get(`/api/Auth/confirm-email?email=${email}&password=${password}`)
+export const fetchConfirmEmail = async (email, token) => {
+    const data = await axiosInstanceJson.get(`/api/Auth/confirm-email?email=${email}&token=${token}`)
         .then((response) => {
             return response.data
         }
