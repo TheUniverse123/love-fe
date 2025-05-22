@@ -7,8 +7,11 @@ import { useEffect } from 'react'
 export default function ConfirmSuccessClient() {
     const searchParams = useSearchParams()
     const email = decodeURIComponent(searchParams.get('email'))
-    const token = decodeURIComponent(searchParams.get('token'))
+
     console.log(email, token)
+    const url = window.location.href
+    const rawQuery = url.split('?')[1];
+    const token = rawQuery.split('token=')[1].split('&')[0];
     useEffect(() => {
         fetchConfirmEmail(email, token)
     }, [])
