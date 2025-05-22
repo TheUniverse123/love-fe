@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 
 export default function ConfirmSuccessClient() {
     const searchParams = useSearchParams()
-    const email = searchParams.get('email')
+    const email = decodeURIComponent(searchParams.get('email'))
     const token = searchParams.get('token')
 
     useEffect(() => {
@@ -63,23 +63,26 @@ export default function ConfirmSuccessClient() {
     }
 
     return (
-        <div style={styles.page}>
-            <div style={styles.card}>
-                <div style={styles.iconLarge}>
-                    <img
-                        src='https://www.iconpacks.net/icons/2/free-check-icon-3278-thumb.png'
-                        alt='checkicon'
-                        style={{ width: '50%', display: 'inline-block' }}
-                    />
+        <main className="main">
+            <div style={styles.page}>
+                <div style={styles.card}>
+                    <div style={styles.iconLarge}>
+                        <img
+                            src='https://www.iconpacks.net/icons/2/free-check-icon-3278-thumb.png'
+                            alt='checkicon'
+                            style={{ width: '50%', display: 'inline-block' }}
+                        />
+                    </div>
+                    <div style={styles.header}>Tài Khoản Đã Được Xác Thực</div>
+                    <p style={styles.message}>
+                        Tài khoản của bạn đã được xác thực thành công! Bạn có thể đăng nhập vào tài khoản của mình ngay bây giờ.
+                    </p>
+                    <a href='/' style={styles.button}>
+                        Quay về trang chủ
+                    </a>
                 </div>
-                <div style={styles.header}>Tài Khoản Đã Được Xác Thực</div>
-                <p style={styles.message}>
-                    Tài khoản của bạn đã được xác thực thành công! Bạn có thể đăng nhập vào tài khoản của mình ngay bây giờ.
-                </p>
-                <a href='/auth/login' style={styles.button}>
-                    Đi đến Đăng Nhập
-                </a>
             </div>
-        </div>
+        </main>
+
     )
 }
