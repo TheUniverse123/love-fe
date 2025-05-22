@@ -40,8 +40,8 @@ export default function ResetPasswordForm({ onBack, onClose }) {
             console.log(response)
             if (response.statusCode === 200) {
                 setError({});
-                window.location.href = "/"
                 toast.success("Đặt lại mật khẩu thành công");
+                setTimeout(() => window.location.href = "/", 2000)
                 onBack();
             } else {
                 toast.error(response[0])
