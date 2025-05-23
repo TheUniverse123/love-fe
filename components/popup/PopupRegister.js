@@ -1,7 +1,6 @@
 'use client'
 
 import { fetchRegister } from "@/app/api/account";
-import { generateRandomUsername } from "@/app/util/convert";
 import { validateNonEmptyString, validatePassword } from "@/app/util/validation";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -12,8 +11,8 @@ import { Spinner } from "react-bootstrap";
 
 export default function PopupRegister({ onClose, onNext }) {
     const [formState, setFormState] = useState({
-        name: generateRandomUsername(),
-        username: generateRandomUsername(),
+        name: "",
+        username: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -34,6 +33,8 @@ export default function PopupRegister({ onClose, onNext }) {
         e.preventDefault();
         const { name, username, email, password, confirmPassword, agreeTerms } = formState;
         const errors = {};
+        if (!validateNonEmptyString(name)) errors.name = "Họ và tên là bắt buộc";
+        if (!validateNonEmptyString(username)) errors.username = "Tên người dùng là bắt buộc";
 
         if (!validateNonEmptyString(email)) errors.email = "Email là bắt buộc";
 
@@ -62,14 +63,15 @@ export default function PopupRegister({ onClose, onNext }) {
         onSuccess: async (response) => {
             if (response.statusCode === 201) {
                 setFormState({
-                    name: generateRandomUsername(),
-                    username: generateRandomUsername(),
+                    name: "",
+                    username: "",
                     email: "",
                     password: "",
                     confirmPassword: "",
                     agreeTerms: false,
                     error: {},
-                })
+                });
+
                 toast.success("Đăng ký tài khoản thành công, vui lòng kiểm tra email để xác nhận tài khoản!");
             } else {
                 toast.error(response[0])
@@ -89,22 +91,50 @@ export default function PopupRegister({ onClose, onNext }) {
                 </div>
             </div>
 
-            <div className={`popup-content pt-40 ${styles.popupBody}`}>
+            <div className={`popup-content pt-40 ${styles.popupBody} ${styles.popupScroll}`}>
                 <CloseButton onClose={onClose} />
                 <div className="form-login">
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <input
+                                className={`form-control username ${formState.error.name ? "error error-border" : ""}`}
+                                type="text"
+                                name="name"
+                                value={formState.name}
+                                placeholder="Họ và tên"
+                                onInput={handleInputChange}
+                                autoComplete="off"
+                            />
+                            {formState.error.name && (
+                                <p className="error-message-validate font-11">{formState.error.name}</p>
+                            )}
+                        </div>
+                        <div className="form-group">
+                            <input
+                                className={`form-control username ${formState.error.username ? "error error-border" : ""}`}
+                                type="text"
+                                name="username"
+                                value={formState.username}
+                                placeholder="Tên người dùng"
+                                onInput={handleInputChange}
+                                autoComplete="off"
+                            />
+                            {formState.error.username && (
+                                <p className="error-message-validate font-11">{formState.error.username}</p>
+                            )}
+                        </div>
+                        <div className="form-group">
+                            <input
                                 className={`form-control email ${formState.error.email ? "error error-border" : ""}`}
+                                autoComplete="off"
                                 type="email"
                                 name="email"
                                 value={formState.email}
                                 placeholder="Email"
                                 onInput={handleInputChange}
-                                autoComplete="off"
                             />
                             {formState.error.email && (
-                                <p className="error-message-validate">{formState.error.email}</p>
+                                <p className="error-message-validate font-11">{formState.error.email}</p>
                             )}
                         </div>
                         <div className="form-group">
@@ -117,7 +147,7 @@ export default function PopupRegister({ onClose, onNext }) {
                                 onInput={handleInputChange}
                             />
                             {formState.error.password && (
-                                <p className="error-message-validate">{formState.error.password}</p>
+                                <p className="error-message-validate font-11">{formState.error.password}</p>
                             )}
                         </div>
                         <div className="form-group">
@@ -130,7 +160,7 @@ export default function PopupRegister({ onClose, onNext }) {
                                 onInput={handleInputChange}
                             />
                             {formState.error.confirmPassword && (
-                                <p className="error-message-validate">{formState.error.confirmPassword}</p>
+                                <p className="error-message-validate font-11">{formState.error.confirmPassword}</p>
                             )}
                         </div>
                         <div className="form-group">
@@ -149,7 +179,7 @@ export default function PopupRegister({ onClose, onNext }) {
                                     </label>
 
                                     {formState.error.agreeTerms && (
-                                        <p className="error-message-validate">{formState.error.agreeTerms}</p>
+                                        <p className="error-message-validate font-11">{formState.error.agreeTerms}</p>
                                     )}
                                 </div>
                             </div>

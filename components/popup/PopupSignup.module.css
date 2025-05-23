@@ -11,3 +11,30 @@
 .formInputCustom {
     background-color: var(--bg-border-color) !important;
 }
+
+.popupScroll {
+    max-height: 673px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.popupScroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.popupScroll::-webkit-scrollbar-thumb {
+    background-color: var(--bg-secondary-color);
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.popupScroll::-webkit-scrollbar-track {
+    background-color: #444;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.popupScroll::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bg-secondary-color);
+}

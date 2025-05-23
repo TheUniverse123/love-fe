@@ -1,6 +1,7 @@
 .cardInfo {
     padding: 50px 80px 40px 80px !important;
     height: auto !important;
+    justify-content: space-between;
 }
 
 .cardInfoEvent {

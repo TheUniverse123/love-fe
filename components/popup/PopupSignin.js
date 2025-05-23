@@ -194,7 +194,7 @@ export default function PopupSignin() {
                                             placeholder="Nhập email"
                                             onInput={handleInputChange}
                                         />
-                                        {formState.error.email && <p className="error-message-validate">{formState.error.email}</p>}
+                                        {formState.error.email && <p className="error-message-validate font-11">{formState.error.email}</p>}
                                     </div>
                                     <div className="form-group">
                                         <input
@@ -206,7 +206,7 @@ export default function PopupSignin() {
                                             placeholder="Nhập mật khẩu"
                                             onInput={handleInputChange}
                                         />
-                                        {formState.error.password && <p className="error-message-validate">{formState.error.password}</p>}
+                                        {formState.error.password && <p className="error-message-validate font-11">{formState.error.password}</p>}
                                     </div>
                                     <div className="form-group">
                                         <div className="box-remember-forgot">
