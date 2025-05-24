@@ -68,7 +68,7 @@ export const fetchUserInfo = async ({ signal, userId }) => {
     return data
 }
 
-export const updateUserInfo = async ({ signal, userUpdate }) => {
+export const updateUserInfo = async (userUpdate) => {
     const data = await axiosInstanceJson.put(`/api/Users/update`, userUpdate)
         .then((response) => {
             return response.data

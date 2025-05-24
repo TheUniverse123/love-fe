@@ -1,10 +1,60 @@
-import styles from "./ExploreWorkshops.module.css"
+'use client'
 
-import { workshopExplore } from "@/data";
+import styles from "./ExploreWorkshops.module.css"
 import ExploreBoxViewResult from "./ExploreBoxViewResult";
 import ExploreWorkshopItem from "./ExploreWorkshopItem";
+import { useQuery } from "@tanstack/react-query";
+import { fetchWorkshops } from "@/app/api/workshop";
+import { converWorkshopApi } from "@/app/util/convert";
+import { useEffect, useState } from "react";
 
 export default function ExploreWorkshops() {
+    const [workshops, setWorkshops] = useState([])
+    const [page, setPage] = useState(1);
+
+    const { data } = useQuery({
+        queryKey: ['workshop-all', page],
+        queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: page, pageSize: 15 }),
+    });
+    
+    function handleChange(num) {
+        setPage(num)
+    }
+    function getVisiblePages(current, total) {
+        const delta = 2;
+        const pages = [];
+
+        const left = Math.max(2, current - delta);
+        const right = Math.min(total - 1, current + delta);
+
+        pages.push(1);
+
+        if (left > 2) {
+            pages.push("...");
+        }
+
+        for (let i = left; i <= right; i++) {
+            pages.push(i);
+        }
+
+        if (right < total - 1) {
+            pages.push("...");
+        }
+
+        if (total > 1) {
+            pages.push(total);
+        }
+
+        return pages;
+    }
+
+    useEffect(() => {
+        if (data?.statusCode === 200) {
+            setWorkshops(converWorkshopApi(data.result));
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }, [data]);
+
     return (
         <div className="content-right">
             <div className="box-filters mb-25 pb-5 border-1 border-bottom-custom">
@@ -40,29 +90,70 @@ export default function ExploreWorkshops() {
             </div>
             <div className="box-grid-tours wow fadeIn">
                 <div className="row">
-                    {workshopExplore.map((card, index) => (
+                    {workshops.map((card, index) => (
                         <ExploreWorkshopItem key={index} {...card} />
                     ))}
                 </div>
             </div>
             <nav aria-label="Page navigation example">
                 <ul className="pagination">
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#" aria-label="Previous"><span aria-hidden="true">
-                        <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" stroke strokeLinecap="round" strokeLinejoin="round" />
-                        </svg></span></a></li>
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link secondary-background white-color active" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">3</a></li>
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">4</a></li>
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">5</a></li>
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#">...</a></li>
-                    <li className="page-item"><a className="page-link main-third-background white-color-4" href="#" aria-label="Next"><span aria-hidden="true">
-                        <svg
-                            className={styles.whiteTextsvg}
-                            width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" stroke strokeLinecap="round" strokeLinejoin="round" />
-                        </svg></span></a></li>
+
+                    <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+                        <a
+                            className="page-link main-third-background white-color-4"
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (page > 1) handleChange(page - 1);
+                            }}
+                            aria-label="Previous"
+                        >
+                            <span aria-hidden="true">
+                                <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12">
+                                    <path d="M6 1.33L1.33 6M1.33 6L6 10.67M1.33 6H10.67" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </span>
+                        </a>
+                    </li>
+
+                    {getVisiblePages(page, 100).map((num, idx) => (
+                        <li key={idx} className="page-item">
+                            {num === "..." ? (
+                                <li className="page-item">
+                                    <a className="page-link main-third-background white-color-4" href="#">...</a>
+                                </li>
+                            ) : (
+                                <a
+                                    href="#"
+                                    className={`page-link ${page === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleChange(num);
+                                    }}
+                                >
+                                    {num}
+                                </a>
+                            )}
+                        </li>
+                    ))}
+
+                    <li className={`page-item ${page === 100 ? "disabled" : ""}`}>
+                        <a
+                            className="page-link main-third-background white-color-4"
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (page < 100) handleChange(page + 1);
+                            }}
+                            aria-label="Next"
+                        >
+                            <span aria-hidden="true">
+                                <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12">
+                                    <path d="M6 10.67L10.67 6L6 1.33M10.67 6H1.33" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

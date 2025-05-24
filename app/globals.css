@@ -773,6 +773,16 @@ input.form-control.password.popupsigin.border-color-3.error.error-border {
     color: #DF0000 !important;
 }
 
+.btn.btn-black-lg.secondary-background:hover {
+    color: var(--bg-white-color) !important;
+    background-color: var(--bg-secondary-color) !important;
+}
+
+.btn.btn-black-lg.primary-background:hover {
+    color: var(--bg-white-color) !important;
+    background-color: var(--bg-primary-color) !important;
+}
+
 @media (min-width: 1400px) and (max-width: 1500px) {
 
     a.heading-6.white-color,

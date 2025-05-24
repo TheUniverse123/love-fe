@@ -3,9 +3,10 @@ import { validatePassword } from "@/app/util/validation";
 import CloseButton from "./CloseButton";
 import styles from "./PopupSignin.module.css";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { fetchResetPassword } from "@/app/api/account";
 import { toast } from "react-toastify";
+import { Spinner } from "react-bootstrap";
 
 export default function ResetPasswordForm({ onBack, onClose }) {
     const [password, setPassword] = useState("");
@@ -14,8 +15,7 @@ export default function ResetPasswordForm({ onBack, onClose }) {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         const newErrors = {};
         if (!validatePassword(password)) {
             newErrors.password = "Mật khẩu không hợp lệ";
@@ -41,16 +41,16 @@ export default function ResetPasswordForm({ onBack, onClose }) {
             if (response.statusCode === 200) {
                 setError({});
                 toast.success("Đặt lại mật khẩu thành công");
-                setTimeout(() => window.location.href = "/", 2000)
-                onBack();
+                setTimeout(() => {
+                    window.location.href = "/"
+                }, 2000)
             } else {
                 toast.error(response[0])
             }
         }
-
         fetchToken()
     };
-
+    const [state, formAction, isPending] = useActionState(handleSubmit);
     return (
         <>
             <div className={`popup-content pb-20 primary-background ${styles.popupHeader}`}>
@@ -60,7 +60,7 @@ export default function ResetPasswordForm({ onBack, onClose }) {
                 </div>
             </div>
             <div className={`popup-content pt-20 ${styles.popupBody}`}>
-                <form onSubmit={handleSubmit}>
+                <form action={formAction}>
                     <div className="form-group position-relative">
                         <p className="white-color text-lg-bold mt-20 mb-15 font-16">Mật khẩu mới</p>
                         <input
@@ -92,8 +92,8 @@ export default function ResetPasswordForm({ onBack, onClose }) {
                         {error.confirmPassword && <p className="error-message-validate">{error.confirmPassword}</p>}
                     </div>
                     <div className="form-group mt-60 mb-30">
-                        <button className="btn btn-black-lg primary-background-2" type="submit">
-                            Lưu thay đổi
+                        <button disabled={isPending} className="btn btn-black-lg primary-background-2" type="submit">
+                            {isPending ? <Spinner /> : 'Lưu thay đổi'}
                         </button>
                     </div>
                 </form>
