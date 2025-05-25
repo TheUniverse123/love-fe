@@ -4,7 +4,6 @@ import styles from "./FilterRange.module.css"
 
 export default function FilterRange() {
     const [value, setValue] = useState(500000);
-    const [isOpen, setIsOpen] = useState(true);
     const min = 0;
     const max = 1000000;
 
@@ -19,12 +18,11 @@ export default function FilterRange() {
         <div className="block-filter border-1">
             <h6
                 className="text-lg-bold item-collapse white-color"
-                onClick={() => setIsOpen(!isOpen)}
                 style={{ cursor: "pointer" }}
             >
                 Lọc theo giá
             </h6>
-            {isOpen && (
+            <div className="box-collapse scrollFilter">
                 <div className={styles.container}>
                     <div className={`${styles.sliderWrapper}`}>
                         <div className={styles.valueLabel}>
@@ -45,7 +43,8 @@ export default function FilterRange() {
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
+
         </div>
     )
 }
