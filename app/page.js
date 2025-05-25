@@ -1,26 +1,46 @@
+'use client'
+
 import Banner from "@/components/banner/Banner";
 import WorkshopBanner from "@/components/card/WorkshopBanner";
 import WorkshopListType from "@/components/card/WorkshopListType";
 import WorkshopTrendList from "@/components/card/WorkshopTrendList";
-import { AIChooseWorkshops, comingSoonWorkshops, trendWorkshops } from "@/data";
+import { useQuery } from "@tanstack/react-query";
+import { fetchComingSoonWorkshops, fetchMostBookedWorkshops, fetchWorkshops } from "./api/workshop";
+import { convertTrendWorkshop } from "./util/convert";
 
 export default function Home() {
+
+  const { data: AIChooseWorkshops } = useQuery({
+    queryKey: ['AI-workshops'],
+    queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 15 }),
+  });
+
+  const { data: comingSoonWorkshops } = useQuery({
+    queryKey: ['upcoming-workshops'],
+    queryFn: ({ signal }) => fetchComingSoonWorkshops({ signal, pageNumber: 1, pageSize: 15 }),
+  });
+
+  const { data: trendWorkshops } = useQuery({
+    queryKey: ['most-booked-workshops'],
+    queryFn: ({ signal }) => fetchMostBookedWorkshops({ signal, pageNumber: 1, pageSize: 15 }),
+  });
+
   return (
     <>
       <main className="main">
         <Banner />
         <WorkshopListType />
-        <WorkshopTrendList items={trendWorkshops} title="Workshop xu hướng" />
+        <WorkshopTrendList items={convertTrendWorkshop(trendWorkshops?.result)} title="Workshop xu hướng" />
         <WorkshopBanner />
         <WorkshopTrendList
           background="secondary"
           sectionType="style1"
-          items={AIChooseWorkshops}
+          items={convertTrendWorkshop(AIChooseWorkshops?.result)}
           title="AI Chọn Rồi, Vào Workshop Thôi!" />
         <WorkshopTrendList
           background="secondary"
           sectionType="style2"
-          items={comingSoonWorkshops}
+          items={convertTrendWorkshop(comingSoonWorkshops?.result)}
           title="Coming soon" />
       </main>
     </>

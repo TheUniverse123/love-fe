@@ -31,6 +31,22 @@
     color: #fff !important;
 }
 
+@media (min-width: 600px) and (max-width: 1399px) {
+    .cardInfo {
+        min-height: 189.33px !important;
+    }
+}
+
+@media (min-width: 1400px){
+    .cardInfo {
+        min-height: 235.33px !important;
+    }
+}
+
+.endSection {
+    padding: auto;
+}
+
 .cardInfo:hover {
     box-shadow: none !important;
     border: none !important;

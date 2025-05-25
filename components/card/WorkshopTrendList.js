@@ -95,7 +95,7 @@ export default function WorkshopTrendList({ sectionType = "default", items, titl
             <div className={`container-slider box-swiper-padding ${styles.containerSlider}`}>
                 <div className="box-swiper mt-30">
                     <Slider ref={sliderRef} {...settings}>
-                        {items.map((item) => (
+                        {items?.map((item) => (
                             <div key={item.id} className="swiper-slide">
                                 <WorkshopCardItem key={item.id} item={item} backgroundColor={background} />
                             </div>

@@ -1,3 +1,5 @@
+import { fetchWorkshopsCount } from "./app/api/workshop";
+
 export const trendWorkshops = [
     {
         id: Math.random(),
@@ -118,15 +120,9 @@ export const comingSoonWorkshops = [
 export const filters = [
     {
         title: 'Vị trí',
-        items: [
-            { label: 'Quận 1', count: 198 },
-            { label: 'Quận 2', count: 32 },
-            { label: 'Quận 3', count: 13 },
-            { label: 'Quận 4', count: 23 },
-            { label: 'Quận 5', count: 35 },
-            { label: 'Quận 6', count: 56 },
-            { label: 'Quận 7', count: 76 }
-        ]
+        items: (await fetchWorkshopsCount()).result.map(item => (
+            { label: item.district, count: item.workshopCount }
+        )),
     },
     {
         title: 'Thể loại',

@@ -10,8 +10,8 @@ export function formatDate(isoString) {
 }
 
 export function formatPrice(price) {
-  if (isNaN(price)) return '';
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " đ";
+    if (isNaN(price)) return '';
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " đ";
 }
 
 export function convertToISOString(dateStr) {
@@ -29,7 +29,7 @@ export function generateRandomUsername(length = 8) {
     return "user" + username;
 }
 
-export function converWorkshopApi(workshops) {
+export function converWorkshopApi(workshops = []) {
     return workshops.map(item => {
         return {
             label: "",
@@ -38,7 +38,21 @@ export function converWorkshopApi(workshops) {
             title: item.title,
             date: formatDate(item.startDate),
             price: formatPrice(item.price),
-            link: `/user/explore/${item.id}`
+            link: `/user/explore/${item.workshopId}`
+        }
+    })
+}
+
+export function convertTrendWorkshop(workshops = []) {
+    return workshops?.map(item => {
+        return {
+            id: item.workshopId,
+            img: item.imagePath,
+            avgRating: item.averageRating,
+            reviews: "Chưa có",
+            title: item.title,
+            date: formatDate(item.startDate),
+            price: formatPrice(item.price),
         }
     })
 }

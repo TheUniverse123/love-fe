@@ -11,15 +11,12 @@ export default function WorkshopCardItem({ item = {
     if (backgroundColor === "secondary") {
         backgroundClass = "secondary-background"
     }
-
     let borderRatingStyles = `${styles.borderRating} ${styles.backgroundDefault}`
     if (backgroundColor === "secondary") {
         borderRatingStyles = `${styles.borderRating} ${styles.backgroundSecondary}`
     }
-
     return (
-        <div className={`border-0px ${styles.card} mr-25`}
-        >
+        <div className={`border-0px ${styles.card} mr-25`}>
             <div className="card-journey-small border-0px" style={{
                 boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
             }}>
@@ -31,7 +28,7 @@ export default function WorkshopCardItem({ item = {
                     </a>
                     <img className={styles.imageWorkshop} src={item.img} alt="workshop-item" />
                 </div>
-                <div className={`card-info ${backgroundClass} ${styles.cardInfo}`}>
+                <div className={`card-info ${backgroundClass} ${styles.cardInfo} d-flex flex-column flex-space-start`}>
                     <div className="card-rating">
                         <div className="card-left"> </div>
                         <div
@@ -51,7 +48,7 @@ export default function WorkshopCardItem({ item = {
                             <p className="text-time text-md-medium">{item.date}</p>
                         </div>
 
-                        <div className="endtime">
+                        <div className={`endtime ${styles.endSection}`}>
                             <div className="card-price">
                                 <h6 className="heading-6 white-color">{item.price}</h6>
                             </div>
