@@ -2,8 +2,10 @@
 import { useState, useEffect } from 'react';
 import styles from './DashboardSidebar.module.css';
 import TicketIcon from '@/public/assets/icon/TicketIcon';
-import { fetchLogout } from '@/app/api/account';
-
+import { fetchLogout, fetchUserInfo } from '@/app/api/account';
+import { getUserInfo } from '@/app/util/auth';
+import { useQuery } from '@tanstack/react-query';
+const userInfo = getUserInfo()
 export default function DashboardSidebar() {
     const [activeItem, setActiveItem] = useState();
 
@@ -19,12 +21,17 @@ export default function DashboardSidebar() {
         localStorage.setItem("activeItem", item); // Lưu trạng thái vào localStorage
     };
 
+    const { data } = useQuery({
+        queryKey: ['user-info'],
+        queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
+    })
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.profile}>
                 <div className='flex-space'>
                     <img className={styles.avatar} src="/assets/icon/avatar.png" alt="User Avatar" />
-                    <span className={styles.userName}>Tên người dùng</span>
+                    <span className={styles.userName}>{data ? data?.result.userName : 'Tên người dùng'}</span>
                 </div>
                 <div className='pb-15 w-100 flex-center border-1px-bottom'>
                     <div className="btn btn-default grey-button-background mt-15"
@@ -60,10 +67,10 @@ export default function DashboardSidebar() {
                     <div className={`ml-10 ${styles.menuItem}`}>Quản lý báo cáo</div>
                 </a>
 
-                <a href="/dashboard/review" className={`${styles.menuItemContainer} flex-start ${activeItem === 'review' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('review')}>
+                {data?.result.roles.includes("Admin") && <a href="/dashboard/review" className={`${styles.menuItemContainer} flex-start ${activeItem === 'review' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('review')}>
                     <TicketIcon icon="report" />
                     <div className={`ml-10 ${styles.menuItem}`}>Xét duyệt sự kiện</div>
-                </a>
+                </a>}
             </div>
 
             <div className={`${styles.menu} pb-5 mt-20`}>

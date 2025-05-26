@@ -8,7 +8,7 @@ import { fetchWorkshops } from "@/app/api/workshop";
 import { converWorkshopApi } from "@/app/util/convert";
 import { useEffect, useState } from "react";
 
-export default function ExploreWorkshops() {
+export default function ExploreWorkshops({ filtersSelected }) {
     const [workshops, setWorkshops] = useState([])
     const [page, setPage] = useState(1);
 
@@ -16,7 +16,8 @@ export default function ExploreWorkshops() {
         queryKey: ['workshop-all', page],
         queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: page, pageSize: 15 }),
     });
-    
+
+
     function handleChange(num) {
         setPage(num)
     }
@@ -49,11 +50,18 @@ export default function ExploreWorkshops() {
     }
 
     useEffect(() => {
-        if (data?.statusCode === 200) {
-            setWorkshops(converWorkshopApi(data.result));
+        if (data) {
+            console.log(data)
+            setWorkshops(converWorkshopApi(data));
         }
         window.scrollTo({ top: 0, behavior: "smooth" })
     }, [data]);
+
+    const [selected, setSelected] = useState('Mới nhất');
+
+    const handleSelect = (label) => {
+        setSelected(label);
+    };
 
     return (
         <div className="content-right">
@@ -74,23 +82,39 @@ export default function ExploreWorkshops() {
                             <div className="item-sort border-1 border-color px-15 py-7">
                                 <span className="text-xs-medium neutral-500 mr-5">Sắp xếp theo:</span>
                                 <div className="dropdown dropdown-sort border-1-right">
-                                    <button className={`btn dropdown-toggle ${styles.buttonArrow}`} id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span className="white-color">Mới nhất</span>
+                                    <button
+                                        className={`btn dropdown-toggle ${styles.buttonArrow}`}
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                    >
+                                        <span className="white-color">{selected}</span>
                                     </button>
                                     <ul className="dropdown-menu dropdown-menu-light m-0" aria-labelledby="dropdownSort">
-                                        <li><a className="dropdown-item active" href="#">Mới nhất</a></li>
-                                        <li><a className="dropdown-item" href="#">Nổi bật nhất</a></li>
+                                        {['Mới nhất', 'Nổi bật nhất'].map((label) => (
+                                            <li key={label}>
+                                                <a
+                                                    href="#"
+                                                    className={`dropdown-item ${selected === label ? 'active' : ''}`}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleSelect(label);
+                                                    }}
+                                                >
+                                                    {label}
+                                                </a>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div className="box-grid-tours wow fadeIn">
                 <div className="row">
-                    {workshops.map((card, index) => (
+                    {workshops?.map((card, index) => (
                         <ExploreWorkshopItem key={index} {...card} />
                     ))}
                 </div>

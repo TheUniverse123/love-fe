@@ -4,8 +4,17 @@ import React, { useRef } from 'react';
 import CardImage from "./CardImage";
 import Slider from "react-slick";  // Import Slider from react-slick
 import styles from "./WorkshopBanner.module.css";
+import { useQuery } from '@tanstack/react-query';
+import { fetchWorkshops } from '@/app/api/workshop';
+import { shuffleArray } from '@/app/util/convert';
 
 export default function WorkshopBanner() {
+    const { data: randomWorkshop } = useQuery({
+        queryKey: ['random-workshops'],
+        queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 10 }),
+    });
+
+    const result = shuffleArray(randomWorkshop || [])
     const sliderRef = useRef(null);  // Create a reference for the slider
 
     // Slick slider settings
@@ -102,18 +111,9 @@ export default function WorkshopBanner() {
 
                 <div className="row">
                     <Slider ref={sliderRef} {...settings}>
-                        <div className="swiper-slide">
-                            <CardImage img="/assets/workshop/home/7.png" />
-                        </div>
-                        <div className="swiper-slide">
-                            <CardImage img="/assets/workshop/home/8.png" />
-                        </div>
-                        <div className="swiper-slide">
-                            <CardImage img="/assets/workshop/home/9.png" />
-                        </div>
-                        <div className="swiper-slide">
-                            <CardImage img="/assets/workshop/home/10.png" />
-                        </div>
+                        {result?.map(item => <div className="swiper-slide">
+                            <CardImage img={item.imagePath} />
+                        </div>)}
                     </Slider>
                 </div>
             </div>

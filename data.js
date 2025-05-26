@@ -120,8 +120,8 @@ export const comingSoonWorkshops = [
 export const filters = [
     {
         title: 'Vị trí',
-        items: (await fetchWorkshopsCount()).result.map(item => (
-            { label: item.district, count: item.workshopCount }
+        items: (await fetchWorkshopsCount())?.map(item => (
+            { label: item.district, count: item.workshopCount, type: item.district }
         )),
     },
     {

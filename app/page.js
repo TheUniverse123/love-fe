@@ -24,23 +24,22 @@ export default function Home() {
     queryKey: ['most-booked-workshops'],
     queryFn: ({ signal }) => fetchMostBookedWorkshops({ signal, pageNumber: 1, pageSize: 15 }),
   });
-
   return (
     <>
       <main className="main">
         <Banner />
         <WorkshopListType />
-        <WorkshopTrendList items={convertTrendWorkshop(trendWorkshops?.result)} title="Workshop xu hướng" />
+        <WorkshopTrendList items={convertTrendWorkshop(trendWorkshops)} title="Workshop xu hướng" />
         <WorkshopBanner />
         <WorkshopTrendList
           background="secondary"
           sectionType="style1"
-          items={convertTrendWorkshop(AIChooseWorkshops?.result)}
+          items={convertTrendWorkshop(AIChooseWorkshops)}
           title="AI Chọn Rồi, Vào Workshop Thôi!" />
         <WorkshopTrendList
           background="secondary"
           sectionType="style2"
-          items={convertTrendWorkshop(comingSoonWorkshops?.result)}
+          items={convertTrendWorkshop(comingSoonWorkshops)}
           title="Coming soon" />
       </main>
     </>

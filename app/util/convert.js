@@ -29,8 +29,18 @@ export function generateRandomUsername(length = 8) {
     return "user" + username;
 }
 
+export function shuffleArray(array = []) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
+
 export function converWorkshopApi(workshops = []) {
-    return workshops.map(item => {
+    if (workshops === undefined) return []
+    return workshops?.map(item => {
         return {
             label: "",
             imgSrc: item.imagePath,
@@ -44,6 +54,10 @@ export function converWorkshopApi(workshops = []) {
 }
 
 export function convertTrendWorkshop(workshops = []) {
+    if (workshops === undefined) return []
+    console.log(workshops)
+    console.log(workshops)
+
     return workshops?.map(item => {
         return {
             id: item.workshopId,
@@ -52,6 +66,18 @@ export function convertTrendWorkshop(workshops = []) {
             reviews: "Chưa có",
             title: item.title,
             date: formatDate(item.startDate),
+            price: formatPrice(item.price),
+        }
+    })
+}
+
+export function convertRemarkedWorkshop(workshops = []) {
+    if (!workshops) return []
+    return workshops?.map(item => {
+        return {
+            link: item.workshopId,
+            imageSrc: item.imagePath,
+            title: item.title,
             price: formatPrice(item.price),
         }
     })
