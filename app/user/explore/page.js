@@ -11,7 +11,6 @@ export default function ExplorePage() {
         filters: {},
         rating: [],
     });
-
     const onFiltersChange = (filterType, data) => {
         setFiltersSelected((prev) => ({
             ...prev,

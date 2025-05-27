@@ -11,6 +11,30 @@ export const fetchWorkshops = async ({ signal, pageNumber, pageSize }) => {
     return data
 }
 
+export const fetchWorkshopsExploreAll = async ({ signal, pageNumber, pageSize }) => {
+    const data = await axiosInstanceJson.get(`/api/Workshops/all?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+        .then((response) => {
+            return response.data.result
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchWorkshopsNumber = async () => {
+    const data = await axiosInstanceJson.get(`/api/Workshops/all?pageNumber=${1}&pageSize=${1}`)
+        .then((response) => {
+            return response.data.result.totalCount
+        }
+        ).catch((error) => {
+            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            return errors
+        })
+    return data
+}
+
 export const fetchMostBookedWorkshops = async ({ signal, pageNumber, pageSize }) => {
     const data = await axiosInstanceJson.get(`/api/Workshops/most-booked?pageNumber=${pageNumber}&pageSize=${pageSize}`)
         .then((response) => {
@@ -48,9 +72,10 @@ export const fetchWorkshopsCount = async () => {
 }
 
 export const fetchSearchWorkshops = async ({ signal, pageNumber, pageSize, search }) => {
-    const data = await axiosInstanceJson.get(`/api/Workshops/search?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+    const data = await axiosInstanceJson
+        .get(`/api/Workshops/search?pageNumber=${pageNumber}&pageSize=${pageSize}&District=${search.district}&CategoryId=${search.categoryId}&MinPrice=0&MaxPrice=${search.maxPrice}`)
         .then((response) => {
-            return response.data.result.items
+            return response.data.result
         }
         ).catch((error) => {
             const errors = error.response.data.errorMessages || error.response.data.errors || []

@@ -1,4 +1,8 @@
-import { fetchWorkshopsCount } from "./app/api/workshop";
+import { fetchCountConfirmTicket } from "./app/api/booking";
+import { fetchCategoryCount } from "./app/api/category";
+import { fetchWorkshopsCount, fetchWorkshopsNumber } from "./app/api/workshop";
+import { getUserInfo } from "./app/util/auth";
+const userInfo = getUserInfo()
 
 export const trendWorkshops = [
     {
@@ -117,6 +121,16 @@ export const comingSoonWorkshops = [
     },
 ]
 
+const dataCategory = await fetchCategoryCount();
+const totalNumber = await fetchWorkshopsNumber();
+
+console.log(dataCategory)
+const categoryCount1 = dataCategory?.find(item => item.categoryId === 1)?.workshopCount || 0
+const categoryCount2 = dataCategory?.find(item => item.categoryId === 2)?.workshopCount || 0
+const categoryCount3 = dataCategory?.find(item => item.categoryId === 3)?.workshopCount || 0
+const categoryCount4 = dataCategory?.find(item => item.categoryId === 4)?.workshopCount || 0
+const categoryCount5 = totalNumber - categoryCount1 - categoryCount2 - categoryCount3 - categoryCount4
+
 export const filters = [
     {
         title: 'Vị trí',
@@ -127,11 +141,11 @@ export const filters = [
     {
         title: 'Thể loại',
         items: [
-            { label: 'Nghệ thuật & Thủ công', count: 32, type: "art" },
-            { label: 'Ẩm thực & Pha chế', count: 13, type: "food" },
-            { label: 'Sức khỏe', count: 23, type: "health" },
-            { label: 'Phát triển kỹ năng', count: 23, type: "skill" },
-            { label: 'Khác', count: 35, type: "other" },
+            { label: 'Nghệ thuật & Thủ công', count: categoryCount1, type: "art" },
+            { label: 'Ẩm thực & Pha chế', count: categoryCount2, type: "food" },
+            { label: 'Sức khỏe', count: categoryCount3, type: "health" },
+            { label: 'Phát triển kỹ năng', count: categoryCount4, type: "skill" },
+            { label: 'Khác', count: categoryCount5, type: "other" },
         ]
     }
 ];
@@ -456,7 +470,7 @@ export const quickLinks = [
     {
         icon: '/assets/icon/sidebar-canvas/ticket.svg',
         title: 'Vé đã đặt',
-        description: '3 sự kiện',
+        description: `${userInfo?.id ? (await fetchCountConfirmTicket(userInfo?.id)) : 'Chưa có'} sự kiện`,
         link: '/dashboard',
         status: 'resolved',
         type: "ticket",
@@ -471,16 +485,16 @@ export const quickLinks = [
     {
         icon: '/assets/icon/sidebar-canvas/saved.svg',
         title: 'Sự kiện đã lưu',
-        description: '7 sự kiện',
+        description: 'Chưa có sự kiện',
         link: '/dashboard/saved-event',
         type: "savedEvent",
     },
     {
         icon: '/assets/icon/sidebar-canvas/report.svg',
         title: 'Quản lý báo cáo',
-        description: '3 sự kiện',
+        // description: '3 sự kiện',
         link: '/dashboard/report',
-        status: 'resolved',
+        // status: 'online',
         type: "report",
     },
     {
