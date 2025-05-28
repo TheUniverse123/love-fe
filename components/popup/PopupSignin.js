@@ -150,7 +150,7 @@ export default function PopupSignin() {
                     roles: decodedToken?.payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
                     accessToken: response?.result,
                     id: userId,
-                    expiration: decodedToken?.payload.exp,
+                    expiration: decodedToken?.payload.exp * 1000,
                 };
                 setUserInfoToStorage(userInfo);
                 handleAutoLogoutVerGoogle(decodedToken?.payload.exp)

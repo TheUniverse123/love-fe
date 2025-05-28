@@ -61,7 +61,7 @@ export default function TicketDetail({
                                     </div>
                                     <div className={`endtime ${mode === "review" ? "align-items-end" : ""}`}>
                                         <div className={`card-price ${mode === "review" ? "d-flex h-100 align-items-start" : ""}`}>
-                                            <h6 className="heading-6 primary-color">{price} đ</h6>
+                                            <h6 className="heading-6 primary-color">{price}</h6>
                                         </div>
                                         {isButtonVisible && <div className="card-button">
                                             <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">

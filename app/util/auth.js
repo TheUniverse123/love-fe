@@ -3,18 +3,17 @@ import Cookies from 'js-cookie'
 const COOKIE_EXPIRATION_DAYS = 1 / 24;
 
 export const getAuthToken = () => {
-    const userInfo = getUserInfo()
-    const token = userInfo?.accessToken
-    if (!token) {
-        return null
+    const userInfo = getUserInfo();
+    if (!userInfo || !userInfo.accessToken) {
+        return null;  // Không có token
     }
-    const tokenDuration = getAuthTokenDuration()
-
+    const tokenDuration = getAuthTokenDuration();
     if (tokenDuration < 0) {
-        return 'EXPIRED'
+        return "EXPIRED";  // Token hết hạn, không dùng nữa
     }
-    return token
-}
+    return userInfo.accessToken;
+};
+
 
 export const setAuthToken = (accessToken) => {
     Cookies.set('accessToken', accessToken, {
@@ -43,7 +42,7 @@ export const setUserInfoToStorage = (userInfo) => {
 export const getAuthTokenDuration = () => {
     const userInfo = getUserInfo()
     if (!userInfo || !userInfo.expiration) {
-        return 0  // Nếu không có expiration, trả về 0 (hết hạn ngay lập tức)
+        return 0
     }
     const expirationDate = new Date(userInfo.expiration)
     const now = new Date()

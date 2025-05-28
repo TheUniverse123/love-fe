@@ -1,6 +1,7 @@
 .cardImage {
     width: 405px !important;
     height: 205px !important;
+    position: static !important;
 }
 
 .imageWorkshop {

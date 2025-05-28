@@ -1,0 +1,65 @@
+.lineBookingTickets {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.itemTicket {
+    display: flex;
+    justify-content: space-between;
+    width: 256px;
+    align-items: center;
+}
+
+.dropdownQuantity {
+    position: relative;
+}
+
+.whiteColor {
+    color: white;
+}
+
+.dropdownIcon {
+    stroke: var(--bg-white-color) !important;
+}
+
+.dropdownMenu {
+    padding: 8px 12px !important;
+    max-height: 300px;
+    overflow-y: auto !important;
+}
+
+.dropdownMenu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dropdownMenu::-webkit-scrollbar-thumb {
+    background-color: var(--bg-secondary-color);
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.dropdownMenu::-webkit-scrollbar-track {
+    background-color: #444;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.dropdownMenu::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bg-secondary-color);
+}
+
+.inputListItem {
+    padding-bottom: 8px;
+}
+
+.inputQuantity {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    text-align: center;
+    background-color: #171717;
+    color: var(--bg-white-color);
+}

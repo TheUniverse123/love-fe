@@ -38,7 +38,7 @@ export function shuffleArray(array = []) {
     return newArray;
 }
 
-export function converWorkshopApi(workshops = []) {
+export function convertWorkshopApi(workshops = []) {
     if (workshops === undefined) return []
     return workshops?.map(item => {
         return {
@@ -48,16 +48,14 @@ export function converWorkshopApi(workshops = []) {
             title: item.title,
             date: formatDate(item.startDate),
             price: formatPrice(item.price),
-            link: `/user/explore/${item.workshopId}`
+            link: `/user/explore/${item.workshopId}`,
+            approvedReviewCount: item.approvedReviewCount,
         }
     })
 }
 
 export function convertTrendWorkshop(workshops = []) {
     if (workshops === undefined) return []
-    console.log(workshops)
-    console.log(workshops)
-
     return workshops?.map(item => {
         return {
             id: item.workshopId,
@@ -81,4 +79,32 @@ export function convertRemarkedWorkshop(workshops = []) {
             price: formatPrice(item.price),
         }
     })
+}
+
+export function formatDateRange(startDateStr, endDateStr) {
+    const start = new Date(startDateStr);
+    const end = new Date(endDateStr);
+
+    // Lấy giờ, phút theo định dạng 2 chữ số
+    const padZero = (num) => num.toString().padStart(2, '0');
+
+    const startHour = padZero(start.getHours());
+    const startMinute = padZero(start.getMinutes());
+
+    const endHour = padZero(end.getHours());
+    const endMinute = padZero(end.getMinutes());
+
+    const day = padZero(start.getDate());
+    const month = padZero(start.getMonth() + 1); // Tháng trong JS từ 0-11
+    const year = start.getFullYear();
+
+    return `${startHour}:${startMinute} - ${endHour}:${endMinute}, ${day} tháng ${month}, ${year}`;
+}
+
+export function getTimeFromISO(isoString) {
+    if (!isoString) return "00:00";
+    const date = new Date(isoString);
+    const h = date.getHours().toString().padStart(2, "0");
+    const m = date.getMinutes().toString().padStart(2, "0");
+    return `${h}:${m}`;
 }

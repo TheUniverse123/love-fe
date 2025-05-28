@@ -1,7 +1,7 @@
 'use client'
 
 import { fetchWorkshopsExploreAll, fetchSearchWorkshops } from "@/app/api/workshop";
-import { converWorkshopApi } from "@/app/util/convert";
+import { convertWorkshopApi } from "@/app/util/convert";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import ExploreBoxViewResult from "./ExploreBoxViewResult";
@@ -131,7 +131,7 @@ export default function ExploreWorkshops({ filtersSelected }) {
 
     useEffect(() => {
         if (data) {
-            setWorkshops(converWorkshopApi(data?.items));
+            setWorkshops(convertWorkshopApi(data?.items));
             setTotalPages(data?.totalPages);
             if (data?.currentPage && data.currentPage !== page) {
                 setPage(data.currentPage);

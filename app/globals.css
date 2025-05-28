@@ -84,6 +84,10 @@ input[type="radio"] {
     stroke: white !important;
 }
 
+.stroke-black {
+    stroke: black !important;
+}
+
 .border-radius-25 {
     border-radius: 25px !important;
 }
@@ -138,6 +142,14 @@ input[type="radio"] {
 
 .font-14 {
     font-size: 14px !important;
+}
+
+.font-13 {
+    font-size: 13px !important;
+}
+
+.font-12 {
+    font-size: 12px !important;
 }
 
 .font-11 {
@@ -362,6 +374,10 @@ input[type="radio"] {
 
 .black-color {
     color: #000000 !important;
+}
+
+.black-background {
+    background-color: #000 !important;
 }
 
 .background-image-none {

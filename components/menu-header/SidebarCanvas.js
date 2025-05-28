@@ -6,9 +6,14 @@ import { quickLinks } from "@/data"
 import Image from "next/image"
 import { getUserInfo } from "@/app/util/auth"
 import { useQuery } from "@tanstack/react-query"
+import { fetchWorkshopOfUsers } from "@/app/api/workshop"
+import CalendarSidebarCanvas from "../calendar/CalendarSidebarCanvas"
+import { useEffect, useState } from "react"
 
 const userInfo = getUserInfo()
 export default function SidebarCanvas() {
+    const [dataDates, setDataDates] = useState([])
+
     const { data } = useQuery({
         queryKey: ['user-info'],
         queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
@@ -16,13 +21,24 @@ export default function SidebarCanvas() {
         refetchInterval: 1000 * 60 * 5,
     })
 
+    const { data: workshopDates } = useQuery({
+        queryKey: ['workshop-dates'],
+        queryFn: ({ signal }) => fetchWorkshopOfUsers({ signal, userId: userInfo.id }),
+        staleTime: 1000 * 60 * 5,
+        refetchInterval: 1000 * 60 * 5,
+    })
+
+    useEffect(() => {
+        if (workshopDates) {
+            if (workshopDates.statusCode === 200) {
+                setDataDates(workshopDates.result)
+            }
+        }
+    }, [workshopDates])
     const handleItemClick = (link, type) => {
         localStorage.setItem("activeItem", type);
         window.location.href = link
     };
-
-    console.log(data?.result)
-
     return (
         <div className="sidebar-canvas-wrapper perfect-scrollbar main-background">
             <div className="sidebar-canvas-container">
@@ -86,9 +102,7 @@ export default function SidebarCanvas() {
                     </div>
                     <div className="box-eventsdate calendar-events-custom">
                         <h6 className="title-eventsdate white-color">Ngày sự kiện</h6>
-                        <div className="box-calendar-events">
-                            <div id="calendar-events" className="border-background border-0px"></div>
-                        </div>
+                        <CalendarSidebarCanvas dataDates={dataDates} />
                     </div>
 
                     <div className="box-contactus">

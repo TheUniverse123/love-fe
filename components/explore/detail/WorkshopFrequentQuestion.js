@@ -5,7 +5,7 @@ export default function WorkshopFrequentQuestion({ questions }) {
         <div className="group-collapse-expand main-background border-color">
             <button className="btn btn-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestion" aria-expanded="false" aria-controls="collapseQuestion">
                 <h6 className="white-color">Câu hỏi thường gặp</h6>
-                <svg style={{stroke: "white!important"}} width={12} height={7} viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="stroke-white" width={12} height={7} viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L6 6L11 1" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </button>

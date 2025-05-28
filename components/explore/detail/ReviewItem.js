@@ -10,7 +10,7 @@ export default function ReviewItem({ author, time, rating, content }) {
                     </div>
                 </div>
                 <div className="rate-review">
-                    {Array.from({ length: 5 }, (_, index) => (
+                    {Array.from({ length: { rating } }, (_, index) => (
                         <img key={index} src="/assets/icon/star-secondary.svg" alt="img-love" />
                     ))}
                 </div>
