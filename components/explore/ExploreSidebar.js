@@ -10,7 +10,7 @@ import { fetchMostBookedWorkshops } from '@/app/api/workshop';
 import { convertRemarkedWorkshop, shuffleArray } from '@/app/util/convert';
 
 export default function ExploreSidebar({ onFiltersChange, filtersSelected }) {
-    const [isRatingOpen, setIsRatingOpen] = useState(true); // State collapse cho phần đánh giá
+    const [isRatingOpen, setIsRatingOpen] = useState(true);
 
     const handleRatingChange = (ratingValue, checked) => {
         let newRating = [...filtersSelected.rating];

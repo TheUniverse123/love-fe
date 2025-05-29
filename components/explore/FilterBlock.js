@@ -1,5 +1,4 @@
-import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const FilterBlock = ({ title, items = [], selectedItems = [], onChange }) => {
     const [checkedItems, setCheckedItems] = useState(selectedItems ?? []);
@@ -10,8 +9,6 @@ const FilterBlock = ({ title, items = [], selectedItems = [], onChange }) => {
     }, [selectedItems]);
 
     const handleCheckboxChange = (type, isChecked) => {
-        console.log(type, isChecked);
-
         let updatedChecked;
         if (isChecked) {
             updatedChecked = [...checkedItems, type];
@@ -21,11 +18,6 @@ const FilterBlock = ({ title, items = [], selectedItems = [], onChange }) => {
         setCheckedItems(updatedChecked);
         if (onChange) onChange(updatedChecked);
     };
-
-    const searchParams = useSearchParams();
-    const value = searchParams.get('value');
-
-    // Hàm toggle collapse
     const toggleCollapse = () => {
         setIsOpen(prev => !prev);
     };
@@ -39,7 +31,6 @@ const FilterBlock = ({ title, items = [], selectedItems = [], onChange }) => {
             >
                 {title}
             </h6>
-            {/* Ẩn/hiện phần nội dung theo isOpen */}
             {isOpen && (
                 <div className="box-collapse scrollFilter">
                     <ul className="list-filter-checkbox">
@@ -48,7 +39,7 @@ const FilterBlock = ({ title, items = [], selectedItems = [], onChange }) => {
                                 <label className="cb-container">
                                     <input
                                         type="checkbox"
-                                        checked={checkedItems.includes(item.type) || value === item?.type}
+                                        checked={checkedItems.includes(item.type)}
                                         onChange={(e) => handleCheckboxChange(item.type, e.target.checked)}
                                     />
                                     <span className="text-sm-medium white-color">{item.label}</span>

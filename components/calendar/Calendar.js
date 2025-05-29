@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import styles from './Calendar.module.css';
 
-const Calendar = () => {
+const Calendar = ({ onDateChange, onTimeChange }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedHour, setSelectedHour] = useState("00");
@@ -11,9 +11,17 @@ const Calendar = () => {
     const [hoursList, setHoursList] = useState(generateTimeList("hour"));
     const [minutesList, setMinutesList] = useState(generateTimeList("minute"));
 
+    // State quản lý việc đóng/mở lịch
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
     useEffect(() => {
         setInputValue("Chọn ngày, giờ");
+        if (onTimeChange) onTimeChange(selectedHour, selectedMinute); // Truyền giờ phút lên
     }, [selectedHour, selectedMinute]);
+
+    useEffect(() => {
+        if (onDateChange) onDateChange(selectedDate); // Truyền ngày lên
+    }, [selectedDate]);
 
     const generateCalendar = (month) => {
         const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
@@ -38,13 +46,13 @@ const Calendar = () => {
     };
 
     const handleSave = () => {
-        // Nếu không chọn ngày, giờ hoặc phút, lấy giá trị mặc định là hiện tại
         const dateToSave = selectedDate || new Date();
         const hourToSave = selectedHour || dateToSave.getHours();
         const minuteToSave = selectedMinute || dateToSave.getMinutes();
 
-        const dateString = `${dateToSave.toLocaleDateString()} ${hourToSave}:${minuteToSave}`;
+        const dateString = `${dateToSave.toLocaleDateString('en-GB')} ${hourToSave}:${minuteToSave}`;
         setInputValue(dateString);
+        setIsCalendarOpen(false)
     };
 
     const days = generateCalendar(currentMonth);
@@ -55,6 +63,11 @@ const Calendar = () => {
 
     const nextMonth = () => {
         setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)));
+    };
+
+    // Hàm toggle đóng/mở lịch
+    const toggleCalendar = () => {
+        setIsCalendarOpen(!isCalendarOpen);
     };
 
     return (
@@ -68,80 +81,87 @@ const Calendar = () => {
                     className={styles.inputField}
                     readOnly
                 />
-                <img src="/assets/icon/arrow-down-dashboard.svg" />
+                <img
+                    src="/assets/icon/arrow-down-dashboard.svg"
+                    onClick={toggleCalendar} // Bấm vào mũi tên để toggle lịch
+                    style={{ cursor: "pointer" }}
+                />
             </div>
 
-            <div className="d-flex">
-                <div className={styles.calendar}>
-                    <div className={`${styles.calendarHeader} mb-30`}>
-                        <button onClick={prevMonth}>
-                            <img src="/assets/icon/arrows-left.svg" />
-                        </button>
-                        <span className="grey-color-text text-xl-bold">{currentMonth.toLocaleString("default", { month: "long", year: "numeric" })}</span>
-                        <button onClick={nextMonth}>
-                            <img src="/assets/icon/arrows-right.svg" />
-                        </button>
-                    </div>
-
-                    <div className={styles.calendarBody}>
-                        <div className={styles.calendarDays}>
-                            {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
-                                <div className={styles.calendarDay} key={day}>{day}</div>
-                            ))}
-                        </div>
-                        <div className={styles.calendarDates}>
-                            {days.map((day, index) => (
-                                <div
-                                    className={`${styles.calendarDate} ${day ? "" : styles.empty} ${selectedDate && selectedDate.getDate() === day ? styles.selected : ""}`}
-                                    key={index}
-                                    onClick={() => handleDateClick(day)}
-                                >
-                                    {day}
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Nút lưu */}
-                        <div className={styles.saveButton}>
-                            <button onClick={handleSave} className={`${styles.saveBtn} flex-center`}>
-                                <span className="text-md-bold mr-10">Lưu</span>
-                                <img src="/assets/icon/tick.svg" alt="Save" />
+            {/* Toggle phần lịch */}
+            {isCalendarOpen && (
+                <div className="d-flex">
+                    <div className={styles.calendar}>
+                        <div className={`${styles.calendarHeader} mb-30`}>
+                            <button onClick={prevMonth}>
+                                <img src="/assets/icon/arrows-left.svg" />
+                            </button>
+                            <span className="grey-color-text text-xl-bold">{currentMonth.toLocaleString("default", { month: "long", year: "numeric" })}</span>
+                            <button onClick={nextMonth}>
+                                <img src="/assets/icon/arrows-right.svg" />
                             </button>
                         </div>
-                    </div>
-                </div>
 
-                {/* Cuộn giờ và phút */}
-                <div className={styles.timePicker}>
-                    <div className={styles.timeColumn}>
-                        <div className={styles.scrollableList}>
-                            {hoursList.map((hour) => (
-                                <div
-                                    key={hour}
-                                    className={`${styles.timeItem} ${selectedHour === hour ? styles.selectedTime : ""}`}
-                                    onClick={() => setSelectedHour(hour)}
-                                >
-                                    {hour}
-                                </div>
-                            ))}
+                        <div className={styles.calendarBody}>
+                            <div className={styles.calendarDays}>
+                                {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
+                                    <div className={styles.calendarDay} key={day}>{day}</div>
+                                ))}
+                            </div>
+                            <div className={styles.calendarDates}>
+                                {days.map((day, index) => (
+                                    <div
+                                        className={`${styles.calendarDate} ${day ? "" : styles.empty} ${selectedDate && selectedDate.getDate() === day ? styles.selected : ""}`}
+                                        key={index}
+                                        onClick={() => handleDateClick(day)}
+                                    >
+                                        {day}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Nút lưu */}
+                            <div className={styles.saveButton}>
+                                <button onClick={handleSave} className={`${styles.saveBtn} flex-center`}>
+                                    <span className="text-md-bold mr-10">Lưu</span>
+                                    <img src="/assets/icon/tick.svg" alt="Save" />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div className={styles.timeColumn}>
-                        <div className={styles.scrollableList}>
-                            {minutesList.map((minute) => (
-                                <div
-                                    key={minute}
-                                    className={`${styles.timeItem} ${selectedMinute === minute ? styles.selectedTime : ""}`}
-                                    onClick={() => setSelectedMinute(minute)}
-                                >
-                                    {minute}
-                                </div>
-                            ))}
+                    {/* Cuộn giờ và phút */}
+                    <div className={styles.timePicker}>
+                        <div className={styles.timeColumn}>
+                            <div className={styles.scrollableList}>
+                                {hoursList.map((hour) => (
+                                    <div
+                                        key={hour}
+                                        className={`${styles.timeItem} ${selectedHour === hour ? styles.selectedTime : ""}`}
+                                        onClick={() => setSelectedHour(hour)}
+                                    >
+                                        {hour}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className={styles.timeColumn}>
+                            <div className={styles.scrollableList}>
+                                {minutesList.map((minute) => (
+                                    <div
+                                        key={minute}
+                                        className={`${styles.timeItem} ${selectedMinute === minute ? styles.selectedTime : ""}`}
+                                        onClick={() => setSelectedMinute(minute)}
+                                    >
+                                        {minute}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

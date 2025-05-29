@@ -123,8 +123,6 @@ export const comingSoonWorkshops = [
 
 const dataCategory = await fetchCategoryCount();
 const totalNumber = await fetchWorkshopsNumber();
-
-console.log(dataCategory)
 const categoryCount1 = dataCategory?.find(item => item.categoryId === 1)?.workshopCount || 0
 const categoryCount2 = dataCategory?.find(item => item.categoryId === 2)?.workshopCount || 0
 const categoryCount3 = dataCategory?.find(item => item.categoryId === 3)?.workshopCount || 0

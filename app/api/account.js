@@ -6,7 +6,6 @@ export function decodeToken(token) {
         const decoded = jwt.decode(token, { complete: true });
         return decoded;
     } catch (error) {
-        console.error('Failed to decode token:', error);
         return null;
     }
 }

@@ -18,7 +18,6 @@ export const fetchPostReview = async (post) => {
             return response.data
         }
         ).catch((error) => {
-            console.log(error)
             const errors = error.response.data.errorMessages || error.response.data.errors || []
             return errors
         })

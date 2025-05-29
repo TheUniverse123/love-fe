@@ -1,9 +1,9 @@
 'use client'
 
-import React, { Suspense, useState } from 'react'
 import ExploreBanner from '@/components/banner/ExploreBanner'
 import ExploreSidebar from '@/components/explore/ExploreSidebar'
 import ExploreWorkshops from '@/components/explore/ExploreWorkshops'
+import { Suspense, useEffect, useState } from 'react'
 
 export default function ExplorePage() {
     const [filtersSelected, setFiltersSelected] = useState({
@@ -17,7 +17,22 @@ export default function ExplorePage() {
             [filterType]: data,
         }));
     };
-
+    useEffect(() => {
+        // Kiểm tra window có tồn tại (chỉ client)
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const v = params.get("value");
+            if (v) {
+                setFiltersSelected({
+                    range: 500000,
+                    filters: {
+                        ["Thể loại"]: [v]
+                    },
+                    rating: []
+                })
+            }
+        }
+    }, [])
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <main className='main main-background'>
