@@ -18,7 +18,7 @@ const services = [
 function formatPriceVN(price) {
     return price === 0 ? "Miễn phí" : price.toLocaleString("vi-VN") + " đ";
 }
-export default function BookingForm({ workshopDetail }) {
+export default function BookingForm({ workshopDetail, mode }) {
     const [adultQty, setAdultQty] = useState(1);
     const [childQty, setChildQty] = useState(0);
     const [selectedServices, setSelectedServices] = useState([]);
@@ -127,52 +127,54 @@ export default function BookingForm({ workshopDetail }) {
                         ))}
                     </div>
                 </div>
-                <div className="item-line-booking border-color last-item">
-                    <strong className="text-lg-bold white-color">Tổng:</strong>
-                    <div className="line-booking-right">
-                        <p className="text-xl-bold white-color">{formatPriceVN(totalPrice)}</p>
+                {mode !== "review" && <>
+                    <div className="item-line-booking border-color last-item">
+                        <strong className="text-lg-bold white-color">Tổng:</strong>
+                        <div className="line-booking-right">
+                            <p className="text-xl-bold white-color">{formatPriceVN(totalPrice)}</p>
+                        </div>
                     </div>
-                </div>
-                <div className="box-button-book">
-                    <button
-                        className="btn btn-book primary-background white-color hover-primary"
-                        onClick={handleBooking}
-                    >
-                        Đặt vé
-                        <svg
-                            className="stroke-black"
-                            width={16}
-                            height={16}
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                    <div className="box-button-book">
+                        <button
+                            className="btn btn-book primary-background white-color hover-primary"
+                            onClick={handleBooking}
                         >
-                            <path
-                                d="M8 15L15 8L8 1M15 8L1 8"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-                    </button>
-                </div>
-                <div className="box-need-help">
-                    <a href="/user/help-center">
-                        <svg
-                            width={12}
-                            height={14}
-                            viewBox="0 0 12 14"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M2.83366 3.66667C2.83366 1.92067 4.25433 0.5 6.00033 0.5C7.74633 0.5 9.16699 1.92067 9.16699 3.66667C9.16699 5.41267 7.74633 6.83333 6.00033 6.83333C4.25433 6.83333 2.83366 5.41267 2.83366 3.66667ZM8.00033 7.83333H4.00033C1.88699 7.83333 0.166992 9.55333 0.166992 11.6667C0.166992 12.678 0.988992 13.5 2.00033 13.5H10.0003C11.0117 13.5 11.8337 12.678 11.8337 11.6667C11.8337 9.55333 10.1137 7.83333 8.00033 7.83333Z"
-                                fill
-                            />
-                        </svg>
-                        Cần hỗ trợ?
-                    </a>
-                </div>
+                            Đặt vé
+                            <svg
+                                className="stroke-black"
+                                width={16}
+                                height={16}
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M8 15L15 8L8 1M15 8L1 8"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="box-need-help">
+                        <a href="/user/help-center">
+                            <svg
+                                width={12}
+                                height={14}
+                                viewBox="0 0 12 14"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M2.83366 3.66667C2.83366 1.92067 4.25433 0.5 6.00033 0.5C7.74633 0.5 9.16699 1.92067 9.16699 3.66667C9.16699 5.41267 7.74633 6.83333 6.00033 6.83333C4.25433 6.83333 2.83366 5.41267 2.83366 3.66667ZM8.00033 7.83333H4.00033C1.88699 7.83333 0.166992 9.55333 0.166992 11.6667C0.166992 12.678 0.988992 13.5 2.00033 13.5H10.0003C11.0117 13.5 11.8337 12.678 11.8337 11.6667C11.8337 9.55333 10.1137 7.83333 8.00033 7.83333Z"
+                                    fill
+                                />
+                            </svg>
+                            Cần hỗ trợ?
+                        </a>
+                    </div>
+                </>}
             </div>
         </div>
     );

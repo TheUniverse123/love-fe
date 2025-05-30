@@ -6,7 +6,7 @@ import InputSearch from '@/components/search/InputSearch';
 import { fetchWorkshopsSaved } from "@/app/api/saved-workshops";
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "@/app/util/auth";
-import { formatPrice } from "@/app/util/convert";
+import { formatDate, formatPrice } from "@/app/util/convert";
 const userInfo = getUserInfo()
 
 export default function SavedEventPage() {
@@ -93,7 +93,7 @@ export default function SavedEventPage() {
               rating={event.averageRating}
               reviews={event.approvedReviewCount}
               title={event.title}
-              time={`${event.startDate} - ${event.endDate}`}
+              time={`${formatDate(event.startDate)} - ${formatDate(event.endDate)}`}
               address={event.location}
               price={event.isFree ? "Miễn phí" : formatPrice(event.price)}
               imageSrc={event.imagePath}

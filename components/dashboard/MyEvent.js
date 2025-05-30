@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from "react"
 import styles from "./MyEvent.module.css"
 
 export default function MyEvent({
@@ -8,8 +11,21 @@ export default function MyEvent({
     link,
     smallImage = false,
     isButtonVisible = true,
-    mode = "manage"
+    mode = "manage",
+    tab = ""
 }) {
+    const [tabText, setTabText] = useState('Quản lý')
+    useEffect(() => {
+        if (mode === "review") {
+            if (tab === "upcoming") {
+                setTabText("Xem chi tiết")
+            } else if (tab === "past") {
+                setTabText("Đã duyệt")
+            } else if (tab === "waiting") {
+                setTabText("Từ chối")
+            }
+        }
+    }, [mode, tab])
     return (
         <div className="box-content-main-detail pb-0 pt-20">
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">
@@ -48,8 +64,13 @@ export default function MyEvent({
                         </div>
                         {isButtonVisible &&
                             <div className={`tour-rate col-lg-4 d-flex ${styles.tourRate}`}>
-                                <a href={mode === "review" && "/user/review/1"} className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>{mode === "manage" ? 'Quản lý' : "Xét duyệt"}</a>
-                                <a className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>{mode === "manage" ? 'Chỉnh sửa' : "Từ chối"}</a>
+                                <a href={mode === "review" && "/user/review/1"}
+                                    className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>
+                                    {tabText}</a>
+                                {(tab !== "past" && tab !== "waiting") &&
+                                    <a className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>
+                                        {mode === "manage" ? 'Chỉnh sửa' : "Từ chối"}</a>
+                                }
                             </div>
                         }
                     </div>

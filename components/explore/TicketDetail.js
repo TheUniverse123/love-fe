@@ -59,19 +59,23 @@ export default function TicketDetail({
                                             <p className="neutral-500 text-md-medium pl-10 font-14">{address}</p>
                                         </div>
                                     </div>
-                                    <div className={`endtime ${mode === "review" ? "align-items-end" : ""}`}>
-                                        <div className={`card-price ${mode === "review" ? "d-flex h-100 align-items-start" : ""}`}>
+                                    <div className={`endtime`}>
+                                        {mode !== "review" && <div className={`card-price ${mode === "review" ? "d-flex h-100 align-items-start" : ""}`}>
                                             <h6 className="heading-6 primary-color">{price}</h6>
-                                        </div>
+                                        </div>}
                                         {isButtonVisible && <div className="card-button">
                                             <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
                                                 {buttonText}
                                             </a>
                                         </div>}
 
-                                        {mode === "review" && <div className={`tour-rate col-lg-4 d-flex ${styles.tourRate}`}>
-                                            <a href={mode === "review" && "/dashboard/review/1"} className={`btn btn-default primary-background white-color hover-opacity mb-10 ${styles.buttonManage}`}>Chấp nhận</a>
-                                            <a className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>Từ chối</a>
+                                        {mode === "review" && <div className={`tour-rate col-lg-12 d-flex mt-30 flex-space`}>
+                                            <a href={mode === "review" && "/dashboard/review/1"}
+                                                className={`btn btn-default primary-background white-color hover-opacity mr-20 
+                                            ${styles.buttonReview}`}>
+                                                Chấp nhận</a>
+                                            <a className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonReview}`}>
+                                                Từ chối</a>
                                         </div>}
                                     </div>
                                 </div>

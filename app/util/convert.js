@@ -50,6 +50,7 @@ export function convertWorkshopApi(workshops = []) {
             price: formatPrice(item.price),
             link: `/user/explore/${item.workshopId}`,
             approvedReviewCount: item.approvedReviewCount,
+            workshopId: item.workshopId
         }
     })
 }

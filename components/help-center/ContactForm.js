@@ -1,4 +1,125 @@
+'use client'
+import { fetchCreateQuestion } from '@/app/api/faq';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 export default function ContactForm() {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        message: '',
+        termsAccepted: false
+    });
+
+    const [errors, setErrors] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        message: '',
+        termsAccepted: ''
+    });
+
+    const validate = () => {
+        const newErrors = {};
+
+        // Validate first name
+        if (!formData.firstName) {
+            newErrors.firstName = 'Tên không được để trống';
+        } else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
+            newErrors.firstName = 'Tên chỉ được chứa chữ cái và khoảng trắng';
+        }
+
+        // Validate last name
+        if (!formData.lastName) {
+            newErrors.lastName = 'Họ không được để trống';
+        } else if (!/^[a-zA-Z\s]+$/.test(formData.lastName)) {
+            newErrors.lastName = 'Họ chỉ được chứa chữ cái và khoảng trắng';
+        }
+
+        // Validate email
+        if (!formData.email) {
+            newErrors.email = 'Email không được để trống';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email không hợp lệ';
+        }
+
+        // Validate phone number (simple validation for Vietnam phone number)
+        if (!formData.phone) {
+            newErrors.phone = 'Số điện thoại không được để trống';
+        } else if (!/^\d{10,11}$/.test(formData.phone)) {
+            newErrors.phone = 'Số điện thoại không hợp lệ';
+        }
+
+        // Validate message
+        if (!formData.message) {
+            newErrors.message = 'Vui lòng nhập nội dung tin nhắn';
+        }
+
+        // Validate terms acceptance
+        if (!formData.termsAccepted) {
+            newErrors.termsAccepted = 'Bạn phải đồng ý với chính sách và điều khoản';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Return true if no errors
+    };
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value
+        });
+
+        // Remove the error message when user starts typing or checking
+        if (value && name !== 'termsAccepted') {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                [name]: ''
+            }));
+        }
+        if (type === 'checkbox' && name === 'termsAccepted') {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                termsAccepted: ''
+            }));
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (validate()) {
+            const question = {
+                title: 'Contact Form Submission',
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                phoneNumber: formData.phone,
+                description: formData.message
+            };
+
+            const response = await fetchCreateQuestion(question);
+
+            if (response.statusCode === 201) {
+                toast.success('Gửi câu hỏi thành công!');
+                // Clear form after successful submission
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    message: '',
+                    termsAccepted: false
+                });
+            } else {
+                toast.error('Đã có lỗi xảy ra, vui lòng thử lại!');
+            }
+        }
+    };
+
     return (
         <section className="box-section box-contact-form main-background pt-0">
             <div className="container">
@@ -10,44 +131,92 @@ export default function ContactForm() {
                                 <div className="col-lg-6">
                                     <div className="form-group">
                                         <label className="text-sm-medium white-color">Tên</label>
-                                        <input className="form-control username" type="text" placeholder="First Name" />
+                                        <input
+                                            className="form-control username"
+                                            type="text"
+                                            name="firstName"
+                                            placeholder="First Name"
+                                            value={formData.firstName}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.firstName && <p className="error-message-validate font-11">{errors.firstName}</p>}
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="form-group">
                                         <label className="text-sm-medium white-color">Họ</label>
-                                        <input className="form-control username" type="text" placeholder="Last Name" />
+                                        <input
+                                            className="form-control username"
+                                            type="text"
+                                            name="lastName"
+                                            placeholder="Last Name"
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.lastName && <p className="error-message-validate font-11">{errors.lastName}</p>}
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
                                     <div className="form-group">
                                         <label className="text-sm-medium white-color">Địa chỉ email</label>
-                                        <input className="form-control email" type="email" placeholder="email@domain.com" />
+                                        <input
+                                            className="form-control email"
+                                            type="email"
+                                            name="email"
+                                            placeholder="email@domain.com"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.email && <p className="error-message-validate font-11">{errors.email}</p>}
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
                                     <div className="form-group">
                                         <label className="text-sm-medium white-color">Số điện thoại</label>
-                                        <input className="form-control phone" type="text" placeholder="Phone number" />
+                                        <input
+                                            className="form-control phone"
+                                            type="text"
+                                            name="phone"
+                                            placeholder="Phone number"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.phone && <p className="error-message-validate font-11">{errors.phone}</p>}
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
                                     <div className="form-group">
                                         <label className="text-sm-medium white-color">Vấn đề cần hỗ trợ</label>
-                                        <textarea className="form-control" rows={6} placeholder="Để lại tin nhắn cho chúng tôi..." defaultValue={""} />
+                                        <textarea
+                                            className="form-control"
+                                            rows={6}
+                                            name="message"
+                                            placeholder="Để lại tin nhắn cho chúng tôi..."
+                                            value={formData.message}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.message && <p className="error-message-validate font-11">{errors.message}</p>}
                                     </div>
                                 </div>
                                 <div className="box-remember-forgot">
                                     <div className="form-group">
                                         <div className="remeber-me">
                                             <label className="text-sm-medium neutral-500">
-                                                <input className="cb-remember" type="checkbox" />Đồng ý với <a className="text-sm-bold white-color" href="term.html">Chính sách </a>và <a className="text-sm-bold white-color" href="privacy.html">Điều khoản</a> của chúng tôi
+                                                <input
+                                                    className="cb-remember"
+                                                    type="checkbox"
+                                                    name="termsAccepted"
+                                                    checked={formData.termsAccepted}
+                                                    onChange={handleChange}
+                                                />
+                                                Đồng ý với <a className="text-sm-bold white-color" href="term.html">Chính sách </a>và <a className="text-sm-bold white-color" href="privacy.html">Điều khoản</a> của chúng tôi
                                             </label>
+                                            {errors.termsAccepted && <p className="error-message-validate font-11">{errors.termsAccepted}</p>}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
-                                    <button className="btn btn-book border-background">Gửi tin nhắn
+                                    <button className="btn btn-book border-background" onClick={handleSubmit}>Gửi tin nhắn
                                         <svg width={17} height={16} viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8.5 15L15.5 8L8.5 1M15.5 8L1.5 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -87,6 +256,5 @@ export default function ContactForm() {
                 </div>
             </div>
         </section>
-
-    )
+    );
 }

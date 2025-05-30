@@ -17,7 +17,6 @@ export default function WorkshopTrendList({ sectionType = "default", items, titl
         sectionStyle = styles.sectionStyle2;
     }
 
-    // Slick slider settings
     const settings = {
         infinite: true,
         speed: 500,

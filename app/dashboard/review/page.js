@@ -60,6 +60,7 @@ export default function MyEvents() {
             buttonText={event.buttonText}
             isSuccess={event.isSuccess}
             mode="review"
+            tab={selectedTab}
           />
         ))}
 
