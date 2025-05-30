@@ -4,11 +4,17 @@ import EventInformationForm from "@/components/dashboard/EventInformationForm";
 import CheckoutInformationForm from "@/components/dashboard/CheckoutInformationForm";
 import TimeAndTicket from "@/components/dashboard/TimeAndTicket";
 import styles from "./CreateEventPage.module.css"
+
 export default function CreateEventPage() {
     const [activeTab, setActiveTab] = useState(1);
-    const handleTabChange = (tabIndex) => {
-        setActiveTab(tabIndex);
-    };
+
+    const handleContinue = () => {
+        setActiveTab(prevTab => prevTab + 1)
+    }
+
+    const handleBack = () => {
+        setActiveTab(prevTab => prevTab - 1)
+    }
 
     return (
         <div className={styles.container} style={{ marginRight: activeTab === 2 ? "100px" : "380px", paddingLeft: "35px", paddingTop: "20px" }}>
@@ -19,7 +25,6 @@ export default function CreateEventPage() {
             <div className="tab-buttons">
                 <div className="mt-30 flex-center">
                     <button
-                        onClick={() => handleTabChange(1)} // Gọi hàm chuyển tab
                         className={`btn btn-default ${activeTab === 1 ? 'primary-background' : 'border-1px-primary border-background'}`}
                         style={{ padding: "11px 27px!important" }}
                     >
@@ -33,7 +38,6 @@ export default function CreateEventPage() {
                     }}></div>
 
                     <button
-                        onClick={() => handleTabChange(2)} // Gọi hàm chuyển tab
                         className={`btn btn-default ${activeTab === 2 ? 'primary-background' : 'border-1px-primary border-background'}`}
                         style={{ padding: "11px 27px!important" }}
                     >
@@ -47,7 +51,6 @@ export default function CreateEventPage() {
                     }}></div>
 
                     <button
-                        onClick={() => handleTabChange(3)} // Gọi hàm chuyển tab
                         className={`btn btn-default ${activeTab === 3 ? 'primary-background' : 'border-1px-primary border-background'}`}
                         style={{ padding: "11px 27px!important" }}
                     >
@@ -56,9 +59,17 @@ export default function CreateEventPage() {
                 </div>
             </div>
 
-            {activeTab === 1 && <EventInformationForm />}
-            {activeTab === 2 && <TimeAndTicket />}
-            {activeTab === 3 && <CheckoutInformationForm />}
+            <div className={styles.tabContent}>
+                <div className={`tab-pane ${activeTab === 1 ? 'show' : 'hide'}`}>
+                    <EventInformationForm onContinue={handleContinue} />
+                </div>
+                <div className={`tab-pane ${activeTab === 2 ? 'show' : 'hide'}`}>
+                    <TimeAndTicket onContinue={handleContinue} onBack={handleBack} />
+                </div>
+                <div className={`tab-pane ${activeTab === 3 ? 'show' : 'hide'}`}>
+                    <CheckoutInformationForm onContinue={handleContinue} onBack={handleBack} />
+                </div>
+            </div>
         </div>
     );
 }

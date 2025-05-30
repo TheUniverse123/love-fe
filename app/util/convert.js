@@ -61,7 +61,7 @@ export function convertTrendWorkshop(workshops = []) {
             id: item.workshopId,
             img: item.imagePath,
             avgRating: item.averageRating,
-            reviews: "Chưa có",
+            reviews: item.approvedReviewCount,
             title: item.title,
             date: formatDate(item.startDate),
             price: formatPrice(item.price),

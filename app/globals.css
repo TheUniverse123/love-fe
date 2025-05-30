@@ -591,6 +591,21 @@ ul.dropdown-menu.dropdown-menu-light.show {
     display: none !important;
 }
 
+.tab-pane {
+    display: none;
+    /* Mặc định ẩn tất cả các tab */
+}
+
+.tab-pane.show {
+    display: block;
+    /* Hiển thị tab hiện tại */
+}
+
+.tab-pane.hide {
+    display: none;
+    /* Ẩn các tab khác */
+}
+
 th.datepicker-switch {
     background-color: transparent !important;
     color: #E4E6E8 !important;
@@ -797,6 +812,10 @@ input.form-control.password.popupsigin.border-color-3.error.error-border {
 .btn.btn-black-lg.primary-background:hover {
     color: var(--bg-white-color) !important;
     background-color: var(--bg-primary-color) !important;
+}
+
+.saved-events {
+    fill: var(--bs-warning);
 }
 
 @media (min-width: 1400px) and (max-width: 1500px) {

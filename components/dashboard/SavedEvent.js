@@ -58,7 +58,7 @@ export default function SavedEvent({
 
                             <div className="endtime">
                                 <div className="card-price">
-                                    <h3 className={`heading-6 primary-color font-30 ${styleMain.titlePrice}`}>{price} đ</h3>
+                                    <h3 className={`heading-6 primary-color font-30 ${styleMain.titlePrice}`}>{price}</h3>
                                 </div>
                                 {isButtonVisible && <div className="card-button">
                                     <a

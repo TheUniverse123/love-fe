@@ -1,5 +1,6 @@
 import { fetchCountConfirmTicket } from "./app/api/booking";
 import { fetchCategoryCount } from "./app/api/category";
+import { fetchWorkshopsSavedVer2 } from "./app/api/saved-workshops";
 import { fetchWorkshopsCount, fetchWorkshopsNumber } from "./app/api/workshop";
 import { getUserInfo } from "./app/util/auth";
 const userInfo = getUserInfo()
@@ -483,7 +484,7 @@ export const quickLinks = [
     {
         icon: '/assets/icon/sidebar-canvas/saved.svg',
         title: 'Sự kiện đã lưu',
-        description: 'Chưa có sự kiện',
+        description: `${userInfo?.id ? (await fetchWorkshopsSavedVer2(1, 1, userInfo?.id)) : 'Chưa có'} sự kiện`,
         link: '/dashboard/saved-event',
         type: "savedEvent",
     },

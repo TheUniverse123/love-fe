@@ -14,6 +14,18 @@
     margin-bottom: 12px !important;
 }
 
+.title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Giới hạn tối đa 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Hiển thị dấu ba chấm khi nội dung dài hơn */
+    line-height: 1.5rem;
+    /* Điều chỉnh chiều cao dòng (tuỳ chọn) */
+}
+
 .button {
     background: #222222 !important;
     border: 1px solid #313131 !important;
@@ -38,7 +50,7 @@
     }
 }
 
-@media (min-width: 1400px){
+@media (min-width: 1400px) {
     .cardInfo {
         min-height: 235.33px !important;
     }

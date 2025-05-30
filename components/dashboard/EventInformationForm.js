@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from "react";
-import Button from "../button/Button";
-import InputLabel from "./InputLabel";
-import useProvinces from "@/app/hooks/useProvinces";
 import useDistricts from "@/app/hooks/useDistricts";
+import useProvinces from "@/app/hooks/useProvinces";
 import useWards from "@/app/hooks/useWards";
+import { useState } from "react";
+import InputLabel from "./InputLabel";
 
-export default function EventInformationForm() {
+export default function EventInformationForm({ onContinue }) {
     const [logoFile, setLogoFile] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [organizerLogo, setOrganizerLogo] = useState(null);
@@ -164,10 +163,9 @@ export default function EventInformationForm() {
 
     const handleSubmit = () => {
         if (validate()) {
-            // Xử lý submit tiếp tục
-            alert("Form hợp lệ, tiến hành gửi dữ liệu");
+            onContinue()
         } else {
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({ top: 0, behavior: "smooth" })
         }
     };
 
@@ -176,8 +174,6 @@ export default function EventInformationForm() {
             <div className="secondary-background border-radius-25 mb-35" style={{ padding: "20px 40px" }}>
                 <div className="row mt-10">
                     <InputLabel label="Tải hình" />
-
-                    {/* Input Tải logo sự kiện */}
                     <div className='col-md-5 mb-20'>
                         <div
                             className="flex-center form-input-background border-dash-white"
@@ -497,7 +493,7 @@ export default function EventInformationForm() {
                                 value={organizerName}
                                 onChange={handleOrganizerNameChange}
                             />
-                            {errors.organizerName && <p className="error-message-validate font-12">{errors.organizerName}</p>}
+                            {errors.organizerName && <p className="error-message-validate font-12 ml-20">{errors.organizerName}</p>}
                         </div>
 
                         <div className="form-group">
@@ -510,12 +506,11 @@ export default function EventInformationForm() {
                                 value={organizerInfo}
                                 onChange={handleOrganizerInfoChange}
                             />
-                            {errors.organizerInfo && <p className="error-message-validate font-12">{errors.organizerInfo}</p>}
+                            {errors.organizerInfo && <p className="error-message-validate font-12 ml-20">{errors.organizerInfo}</p>}
                         </div>
                     </div>
                 </div>
             </div>
-
             <button
                 className="btn btn-default primary-background white-color w-100 mb-50"
                 onClick={handleSubmit}

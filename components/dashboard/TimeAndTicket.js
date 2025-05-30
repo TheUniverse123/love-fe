@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "../calendar/Calendar";
 import InputLabel from "./InputLabel";
 
-export default function TimeAndTicket() {
+export default function TimeAndTicket({ onContinue, onBack }) {
     const [isChecked, setIsChecked] = useState(false);
     const [ticketFile, setTicketFile] = useState(null);
     const [eventStartDate, setEventStartDate] = useState(null);
@@ -19,6 +19,12 @@ export default function TimeAndTicket() {
     const [ticketPrice, setTicketPrice] = useState(0);
     const [eventDescription, setEventDescription] = useState('');
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (ticketPrice === 0) {
+            setIsChecked(true)
+        }
+    }, [ticketPrice])
 
     const clearError = (field) => {
         if (errors[field]) {
@@ -118,7 +124,6 @@ export default function TimeAndTicket() {
         }
         return null;
     };
-
     const validate = () => {
         const newErrors = {};
 
@@ -127,7 +132,6 @@ export default function TimeAndTicket() {
         if (isNaN(minTickets) || Number(minTickets) < 0 || Number(minTickets) > 999) newErrors.minTickets = "Vui lòng nhập số vé tối thiểu hợp lệ (0-999)";
         if (isNaN(maxTickets) || Number(maxTickets) < 0 || Number(maxTickets) > 999) newErrors.maxTickets = "Vui lòng nhập số vé tối đa hợp lệ (0-999)";
         else if (Number(minTickets) > Number(maxTickets)) newErrors.maxTickets = "Số vé tối đa phải lớn hơn hoặc bằng số vé tối thiểu";
-        console.log(ticketPrice)
         if (isNaN(ticketPrice) || Number(ticketPrice) < 0) newErrors.ticketPrice = "Vui lòng nhập giá vé hợp lệ";
         if (!eventStartDate) newErrors.eventStartDate = "Vui lòng chọn thời gian bắt đầu sự kiện";
         if (!eventEndDate) newErrors.eventEndDate = "Vui lòng chọn thời gian kết thúc sự kiện";
@@ -165,7 +169,6 @@ export default function TimeAndTicket() {
 
         if (!eventDescription.trim()) newErrors.eventDescription = "Vui lòng nhập mô tả sự kiện";
         if (!ticketFile) newErrors.ticketFile = "Vui lòng tải hình ảnh vé";
-        if (!isChecked) newErrors.isChecked = "Vui lòng xác nhận vé miễn phí nếu có";
 
         setErrors(newErrors);
 
@@ -174,9 +177,9 @@ export default function TimeAndTicket() {
 
     const handleSubmit = () => {
         if (validate()) {
-            alert("Form hợp lệ, tiến hành gửi dữ liệu");
+            onContinue()
         } else {
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({ top: 0, behavior: "smooth" })
         }
     };
 
@@ -291,7 +294,7 @@ export default function TimeAndTicket() {
                         <div className="item-payment-method mr-10" style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="checkbox"
-                                id="event-payment"
+                                id="free-checkbox"
                                 name="payment-method"
                                 checked={isChecked}  // Điều chỉnh theo trạng thái
                                 onChange={handleChange}  // Cập nhật trạng thái khi thay đổi
@@ -318,14 +321,13 @@ export default function TimeAndTicket() {
                                 )}
                             </div>
                             <label
-                                htmlFor="event-payment"
+                                htmlFor="free-checkbox"
                                 className="item-payment-method-text item-payment"
                                 style={{ color: '#fff', fontSize: '14px', cursor: 'pointer', margin: '0!important' }}
                             >
                                 Miễn phí
                             </label>
                         </div>
-                        {errors.isChecked && <p className="error-message-validate font-12">{errors.isChecked}</p>}
                     </div>
                 </div>
 
@@ -387,10 +389,18 @@ export default function TimeAndTicket() {
                 </div>
             </div>
 
-            <button
-                className="btn btn-default primary-background white-color w-100 mb-50"
-                onClick={handleSubmit}
-            >Tiếp tục</button>
+            <div className="row">
+                <div className="col col-lg-6"><button
+                    onClick={onBack}
+                    className="btn btn-default main-background white-color w-100 mb-50"
+                >Quay lại</button></div>
+                <div className="col col-lg-6">
+                    <button
+                        className="btn btn-default primary-background white-color w-100 mb-50"
+                        onClick={handleSubmit}
+                    >Tiếp tục</button>
+                </div>
+            </div>
         </div>
     )
 }

@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
-import InputLabel from './InputLabel'
+import { useState } from 'react'
 import Button from '../button/Button'
+import InputLabel from './InputLabel'
 
-export default function CheckoutInformationForm() {
+export default function CheckoutInformationForm({ onBack }) {
     // State quản lý giá trị input
     const [formData, setFormData] = useState({
         accountHolder: '',
@@ -302,11 +302,18 @@ export default function CheckoutInformationForm() {
                 </div>
             </div>
 
-            <Button
-                className="btn btn-default primary-background white-color w-100 mb-80"
-                text="Lưu"
-                onClick={handleSubmit}
-            />
+            <div className="row">
+                <div className="col col-lg-6"><button
+                    onClick={onBack}
+                    className="btn btn-default main-background white-color w-100 mb-50"
+                >Quay lại</button></div>
+                <div className="col col-lg-6">
+                    <button
+                        className="btn btn-default primary-background white-color w-100 mb-50"
+                        onClick={handleSubmit}
+                    >Lưu</button>
+                </div>
+            </div>
         </div>
     )
 }
