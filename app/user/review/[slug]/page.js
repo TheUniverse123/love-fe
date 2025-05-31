@@ -28,6 +28,7 @@ export default function ReviewDetail({ params }) {
                 buttonText="Đặt ngay"
                 mode="review"
                 isButtonVisible={false}
+                workshopId={workshopDetail?.workshopId}
             />
             <section className="box-section box-content-tour-detail main-background" style={{ paddingBottom: "290px" }}>
                 <div className="container">

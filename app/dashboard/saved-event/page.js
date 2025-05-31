@@ -1,6 +1,6 @@
 'use client';
 import styles from "./SavedEventPage.module.css"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SavedEvent from '@/components/dashboard/SavedEvent';
 import InputSearch from '@/components/search/InputSearch';
 import { fetchWorkshopsSaved } from "@/app/api/saved-workshops";
@@ -12,6 +12,7 @@ const userInfo = getUserInfo()
 export default function SavedEventPage() {
   const [selectedTab, setSelectedTab] = useState('upcoming'); // Default tab is 'Sắp diễn ra'
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const { data: workshopSaved, isLoading, isError } = useQuery({
     queryKey: ['workshop-saved', currentPage],
@@ -55,14 +56,25 @@ export default function SavedEventPage() {
     pageNumbers.push(totalPages);
   }
 
-  // Select the events based on the selected tab
-  const eventsToShow = selectedTab === 'upcoming' ? upcomingEvents : pastEvents;
+  // Lọc theo tab
+  const rawEvents = selectedTab === 'upcoming' ? upcomingEvents : pastEvents;
+
+  // Lọc theo từ khóa (title hoặc location)
+  const keyword = searchKeyword.toLowerCase();
+  const eventsToShow = rawEvents.filter((event) =>
+    event.title.toLowerCase().includes(keyword) ||
+    event.location.toLowerCase().includes(keyword)
+  );
+  
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchKeyword, selectedTab]);
 
   return (
     <div className={styles.myEvent}>
       <div className="flex-space pb-20 border-1px-bottom">
         <h4 className="white-color">Sự kiện đã lưu</h4>
-        <InputSearch />
+        <InputSearch onSearch={setSearchKeyword} />
       </div>
 
       <div className="mt-25">

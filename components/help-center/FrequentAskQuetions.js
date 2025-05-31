@@ -17,11 +17,11 @@ export default function FrequentAskQuetions() {
     useEffect(() => {
         const fetchAnswers = async () => {
             if (data) {
-                const answers = await Promise.all(data.slice(0, 5).map(async (item) => {
+                const answers = await Promise.all(data.slice(0, 10).map(async (item) => {
                     const response = await fetchAnswerList(item.faqQuestionId);
                     return {
                         id: item.faqQuestionId,
-                        question: item.title,
+                        question: item.description,
                         answer: response[0]?.answerContent || '',
                     };
                 }));
@@ -46,7 +46,7 @@ export default function FrequentAskQuetions() {
                         <div className="col-lg-6">
                             <div className="block-faqs">
                                 <div className="accordion main-background" id="accordionFAQ">
-                                    {faqAnswers.map((faq, index) => (
+                                    {faqAnswers.slice(0, 5).map((faq, index) => (
                                         <div key={faq.id} className="accordion-item wow fadeInUp main-background border-color">
                                             <h5 className="accordion-header" id={`heading${faq.id}`}>
                                                 <button
@@ -76,7 +76,7 @@ export default function FrequentAskQuetions() {
                         <div className="col-lg-6">
                             <div className="block-faqs wow fadeInUp">
                                 <div className="accordion wow fadeInUp main-background" id="accordionFAQ2">
-                                    {faqAnswers.map((faq, index) => (
+                                    {faqAnswers.slice(6, 10).map((faq, index) => (
                                         <div key={faq.id} className="accordion-item wow fadeInUp main-background border-color">
                                             <h5 className="accordion-header" id={`heading${faq.id + 100}`}>
                                                 <button

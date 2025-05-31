@@ -1,10 +1,31 @@
+'use client'
 import styles from "./ReportContent.module.css"
 
 import { eventRecent } from '@/data'
 import MyEvent from './MyEvent'
 import ChartComponent from './ChartComponent'
+import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { fetchWorkshopOfUsers } from "@/app/api/workshop"
+import CalendarSidebarCanvas from "../calendar/CalendarSidebarCanvas"
 
 export default function ReportContent() {
+    const [dataDates, setDataDates] = useState([])
+    const { data: workshopDates } = useQuery({
+        queryKey: ['workshop-dates'],
+        queryFn: ({ signal }) => fetchWorkshopOfUsers({ signal, userId: userInfo.id }),
+        staleTime: 1000 * 60 * 5,
+        refetchInterval: 1000 * 60 * 5,
+    })
+
+    useEffect(() => {
+        if (workshopDates) {
+            if (workshopDates.statusCode === 200) {
+                setDataDates(workshopDates.result)
+            }
+        }
+    }, [workshopDates])
+
     return (
         <div className="row">
             <div className="col-xxxl-8 col-xxl-7 col-xl-12 mb-200">
@@ -163,15 +184,7 @@ export default function ReportContent() {
                 <div className="section-box main-background border-1px border-radius-10 mb-25">
                     <div className="container p-0">
                         <div className="panel-white">
-                            <div className={`panel-head flex-space border-1px-bottom ${styles.sectionStyle}`}>
-                                <h6 className="text-xl-bold white-color">Th3 2025</h6><a className="menudrop" id="dropdownMenu5" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static" />
-                                <img src='/assets/icon/toggle.svg' />
-                            </div>
-                            <div className={`panel-body ${styles.panelBody}`}>
-                                <div className="box-calendar-events">
-                                    <div className='p-0 transparent-background border-none' id="calendar-events" data-provide="datepicker-inline" />
-                                </div>
-                            </div>
+                            <CalendarSidebarCanvas dataDates={dataDates} background="none"/>
                         </div>
                     </div>
                 </div>

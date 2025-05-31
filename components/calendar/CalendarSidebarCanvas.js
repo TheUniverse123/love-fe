@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from './Calendar.module.css';
 
-const CalendarSidebarCanvas = ({ dataDates }) => {
+const CalendarSidebarCanvas = ({ dataDates, background }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedHour, setSelectedHour] = useState("00");
@@ -54,7 +54,8 @@ const CalendarSidebarCanvas = ({ dataDates }) => {
     return (
         <div className={styles.calendarContainer}>
             <div className="d-flex">
-                <div className={styles.calendarSidebarCanvas}>
+                <div className={background === "none" ? styles.calendarTransparent
+                    : styles.calendarSidebarCanvas}>
                     <div className={`${styles.calendarHeader} mb-30`}>
                         <button onClick={prevMonth}>
                             <img src="/assets/icon/arrows-left.svg" />

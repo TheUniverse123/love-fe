@@ -286,19 +286,6 @@ export const events = {
             isSuccess: "waiting",
         },
     ],
-    draft: [
-        {
-            title: "WORKSHOP NAME: Lorem ipsW Lorem ipsu dolor sit ametum dolor sit amet 4",
-            time: "10:00 - 11:30, 27 tháng 02, 2025",
-            address: "53/104 Trần Khánh Dư, phường Tân Định, Quận 1, Thành Phố Hồ Chí Minh",
-            price: "100.000",
-            imageSrc: "/assets/workshop/explore/detail/1.png",
-            link: "room-detail-2.html",
-            buttonText: "Đặt ngay",
-            isButtonVisible: false,
-            isSuccess: "draft",
-        },
-    ],
 };
 
 export const eventRecent = [

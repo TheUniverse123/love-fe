@@ -7,7 +7,11 @@ export default function MyTicket({
     link,
     buttonText,
     isButtonVisible = true,
-    isSuccess = "pending"
+    isSuccess = "pending",
+    fullName,
+    bookingCode,
+    email,
+    quantity,
 }) {
     let buttonIsSuccessStyle = "btn btn-default danger-button-background hover-opacity black-color"
     if (isSuccess === "success") {
@@ -57,12 +61,11 @@ export default function MyTicket({
                     <div className="col-lg-6 pl-30">
                         <div className="row justify-content-between">
                             <div className="col-lg-8">
-                                <p className="white-color text-lg-bold mb-20">Họ và tên: Nguyễn Văn A</p>
-                                <p className="white-color text-lg-bold mb-20">Mã đặt chỗ: SUV354</p>
-                                <p className="white-color text-lg-bold mb-20">Email: nguyenvana@gmail.com</p>
-                                <p className="white-color text-lg-bold mb-20">Số lượng: 3</p>
+                                <p className="white-color text-lg-bold mb-20">Họ và tên: {fullName}</p>
+                                <p className="white-color text-lg-bold mb-20">Mã đặt chỗ: #{bookingCode}</p>
+                                <p className="white-color text-lg-bold mb-20">Email: {email}</p>
+                                <p className="white-color text-lg-bold mb-20">Số lượng: {quantity}</p>
                             </div>
-
                             <div className="col-lg-4 row flex-column flex-end">
                                 <button className={`${buttonIsSuccessStyle} ${styleMain.buttonStyle} mb-15`}>{statusText}</button>
                                 <button className={`btn btn-default border-1px main-secondary-background primary-color hover-opacity mb-15 ${styleMain.buttonStyle}`}>Xem chi tiết</button>

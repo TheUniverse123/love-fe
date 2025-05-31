@@ -6,6 +6,7 @@ import styles from "./UserHeader.module.css"
 import Button from "../button/Button";
 import { getUserInfo } from "@/app/util/auth";
 import { usePopup } from "@/contexts/PopupContext";
+import { fetchLogout } from "@/app/api/account";
 export default function UserHeader() {
     const { openPopup } = usePopup()
     function handleResetActiveItem() {
@@ -31,9 +32,15 @@ export default function UserHeader() {
                             {getUserInfo() &&
                                 <Button onClick={handleResetActiveItem} link="/dashboard/create-event" text="Tạo sự kiện" color="primary" style={{ marginRight: "21px" }} />
                             }
-                            <button className="btn btn-default grey-background btn-normal" onClick={openPopup}>
-                                Đăng nhập
+
+                            {getUserInfo() ? <button className="btn btn-default grey-background btn-normal" onClick={fetchLogout}>
+                                Đăng xuất
                             </button>
+                                : <button className="btn btn-default grey-background btn-normal" onClick={openPopup}>
+                                    Đăng nhập
+                                </button>
+                            }
+
                         </div>
                         {getUserInfo() && <div className={`burger-icon-2 burger-icon-white ${styles.primaryBackground}`}>
                             <img src="/assets/lib/user/imgs/template/icons/menu.svg" alt="icon menu" />

@@ -1,4 +1,11 @@
+'use client'
+
+import { useMutation } from "@tanstack/react-query";
 import styles from "./TicketDetail.module.css";
+import { fetchApproveWorkshop, fetchDeclineWorkshop } from "@/app/api/manage-workshop";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { queryClient } from "@/app/util/providers";
 
 export default function TicketDetail({
     discount,
@@ -12,8 +19,58 @@ export default function TicketDetail({
     link,
     buttonText,
     isButtonVisible = true,
-    mode = "ticket"
+    mode = "ticket",
+    workshopId
 }) {
+    const [showModal, setShowModal] = useState(false)
+    const [showModalApprove, setShowModalApprove] = useState(false)
+
+    const { mutate } = useMutation({
+        mutationKey: ['decline-workshop'],
+        mutationFn: (workshopId) => fetchDeclineWorkshop(workshopId),
+        onSuccess: (response) => {
+            if (response.statusCode === 200) {
+                toast.success("Đã từ chối yêu cầu duyệt workshop");
+                queryClient.invalidateQueries({ queryKey: ['workshops-review'] })
+                setTimeout(() => {
+                    window.location.href = "/dashboard/review"
+                }, 2000)
+            } else {
+                toast.error(response[0])
+            }
+        },
+        onError: () => {
+            toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+        },
+    });
+
+    const { mutate: mutateApprove } = useMutation({
+        mutationKey: ['approve-workshop'],
+        mutationFn: (workshopId) => fetchApproveWorkshop(workshopId),
+        onSuccess: (response) => {
+            if (response.statusCode === 200) {
+                toast.success("Đã chấp nhận yêu cầu duyệt workshop");
+                queryClient.invalidateQueries({ queryKey: ['workshops-review'] })
+                setTimeout(() => {
+                    window.location.href = "/dashboard/review"
+                }, 2000)
+            } else {
+                toast.error(response[0])
+            }
+        },
+        onError: () => {
+            toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+        },
+    });
+
+    const handleDecline = () => {
+        mutate(workshopId)
+    }
+
+    const handleApprove = () => {
+        mutateApprove(workshopId)
+    }
+
     return (
         <section className="box-section block-content-tourlist main-background">
             <div className={styles.ticketWrapper}>
@@ -70,11 +127,11 @@ export default function TicketDetail({
                                         </div>}
 
                                         {mode === "review" && <div className={`tour-rate col-lg-12 d-flex mt-30 flex-space`}>
-                                            <a href={mode === "review" && "/dashboard/review/1"}
+                                            <a onClick={() => mode === "review" ? setShowModalApprove(true) : {}}
                                                 className={`btn btn-default primary-background white-color hover-opacity mr-20 
                                             ${styles.buttonReview}`}>
                                                 Chấp nhận</a>
-                                            <a className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonReview}`}>
+                                            <a onClick={() => setShowModal(true)} className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonReview}`}>
                                                 Từ chối</a>
                                         </div>}
                                     </div>
@@ -84,6 +141,44 @@ export default function TicketDetail({
                     </div>
                 </div>
             </div>
+
+            {/* Modal for confirmation */}
+            {showModal && (
+                <div className="modal fade show flex-center" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content p-30">
+                            <div className="modal-body flex-center flex-column">
+                                <img src="/assets/icon/fail-icon.svg" />
+                                <h6 className="modal-title text-center mb-10 mt-10" id="exampleModalLabel">Xác nhận từ chối</h6>
+                                Bạn có chắc chắn muốn từ chối workshop này không?
+                            </div>
+                            <div className="modal-footer border-0px flex-center">
+                                <button type="button" className="btn btn-default border-background" data-bs-dismiss="modal" onClick={() => setShowModal(false)}>Hủy</button>
+                                <button type="button" className="btn btn-default primary-background" onClick={handleDecline}>Từ chối</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal for confirmation */}
+            {showModalApprove && (
+                <div className="modal fade show flex-center" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content p-30">
+                            <div className="modal-body flex-center flex-column">
+                                <img src="/assets/icon/success-icon.svg" />
+                                <h6 className="modal-title text-center mb-10 mt-10" id="exampleModalLabel">Xác nhận đồng ý</h6>
+                                Bạn có chắc chắn muốn chấp nhận workshop này không?
+                            </div>
+                            <div className="modal-footer border-0px flex-center">
+                                <button type="button" className="btn btn-default border-background" data-bs-dismiss="modal" onClick={() => setShowModalApprove(true)}>Hủy</button>
+                                <button type="button" className="btn btn-default primary-background" onClick={handleApprove}>Đồng ý</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     )
 }

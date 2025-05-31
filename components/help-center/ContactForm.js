@@ -28,15 +28,10 @@ export default function ContactForm() {
         // Validate first name
         if (!formData.firstName) {
             newErrors.firstName = 'Tên không được để trống';
-        } else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
-            newErrors.firstName = 'Tên chỉ được chứa chữ cái và khoảng trắng';
         }
-
         // Validate last name
         if (!formData.lastName) {
             newErrors.lastName = 'Họ không được để trống';
-        } else if (!/^[a-zA-Z\s]+$/.test(formData.lastName)) {
-            newErrors.lastName = 'Họ chỉ được chứa chữ cái và khoảng trắng';
         }
 
         // Validate email

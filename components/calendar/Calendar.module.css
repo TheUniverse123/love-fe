@@ -47,6 +47,13 @@
     width: 100%;
 }
 
+.calendarTransparent {
+    background-color: transparent;
+    padding: 20px;
+    border-radius: 25px;
+    width: 100%;
+}
+
 .calendarHeader {
     display: flex;
     justify-content: space-between;
