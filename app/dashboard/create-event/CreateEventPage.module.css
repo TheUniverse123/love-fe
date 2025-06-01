@@ -3,3 +3,13 @@
         margin-right: 100px !important;
     }
 }
+
+.tab {
+    padding: 11px 27px !important;
+}
+
+.seperator {
+    width: 58px;
+    height: 1px;
+    background-color: #E0E0E0;
+}

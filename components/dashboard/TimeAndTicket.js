@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Calendar from "../calendar/Calendar";
 import InputLabel from "./InputLabel";
 
-export default function TimeAndTicket({ onContinue, onBack }) {
+export default function TimeAndTicket({ onContinue, onBack, formRef }) {
     const [isChecked, setIsChecked] = useState(false);
     const [ticketFile, setTicketFile] = useState(null);
     const [eventStartDate, setEventStartDate] = useState(null);
@@ -19,12 +19,56 @@ export default function TimeAndTicket({ onContinue, onBack }) {
     const [ticketPrice, setTicketPrice] = useState(0);
     const [eventDescription, setEventDescription] = useState('');
     const [errors, setErrors] = useState({});
-
+    const [eventStartTime, setEventStartTime] = useState({ hour: 0, minute: 0 }); // giờ, phút
+    const [ticketPath, setTicketImagePath] = useState(null)
     useEffect(() => {
         if (ticketPrice === 0) {
             setIsChecked(true)
         }
     }, [ticketPrice])
+
+    useEffect(() => {
+        if (formRef) {
+            formRef.current = {
+                getData: () => ({
+                    isChecked,
+                    ticketPath,
+                    eventStartDate,
+                    eventEndDate,
+                    ticketSaleStartDate,
+                    ticketSaleEndDate,
+                    ticketName,
+                    totalTickets,
+                    minTickets,
+                    maxTickets,
+                    ticketPrice,
+                    eventDescription
+                })
+            };
+        }
+    }, [
+        isChecked,
+        ticketFile,
+        eventStartDate,
+        eventEndDate,
+        ticketSaleStartDate,
+        ticketSaleEndDate,
+        ticketName,
+        totalTickets,
+        minTickets,
+        maxTickets,
+        ticketPrice,
+        eventDescription
+    ]);
+
+    const applyTimeToDate = (date, hour, minute) => {
+        const newDate = new Date(date);
+        newDate.setHours(hour);
+        newDate.setMinutes(minute);
+        newDate.setSeconds(0);
+        newDate.setMilliseconds(0);
+        return newDate;
+    };
 
     const clearError = (field) => {
         if (errors[field]) {
@@ -50,6 +94,7 @@ export default function TimeAndTicket({ onContinue, onBack }) {
 
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
+        setTicketImagePath(file)
         if (file) {
             setTicketFile(URL.createObjectURL(file));
             clearError('ticketFile');
@@ -95,26 +140,73 @@ export default function TimeAndTicket({ onContinue, onBack }) {
         clearError('eventDescription');
     };
 
-    // Hàm nhận giá trị từ Calendar
     const handleEventStartDateChange = (date) => {
-        setEventStartDate(date);
+        const fullDate = applyTimeToDate(date, eventStartTime.hour, eventStartTime.minute);
+        setEventStartDate(fullDate);
         clearError('eventStartDate');
     };
 
+    const handleEventStartTimeChange = (hour, minute) => {
+        setEventStartTime({ hour, minute });
+        if (eventStartDate) {
+            const fullDate = applyTimeToDate(eventStartDate, hour, minute);
+            setEventStartDate(fullDate);
+        }
+        clearError('eventStartDate');
+    };
+
+    const [eventEndTime, setEventEndTime] = useState({ hour: 0, minute: 0 });
+
     const handleEventEndDateChange = (date) => {
-        setEventEndDate(date);
+        const fullDate = applyTimeToDate(date, eventEndTime.hour, eventEndTime.minute);
+        setEventEndDate(fullDate);
         clearError('eventEndDate');
     };
 
+    const handleEventEndTimeChange = (hour, minute) => {
+        setEventEndTime({ hour, minute });
+        if (eventEndDate) {
+            const fullDate = applyTimeToDate(eventEndDate, hour, minute);
+            setEventEndDate(fullDate);
+        }
+        clearError('eventEndDate');
+    };
+
+
+    const [ticketSaleStartTime, setTicketSaleStartTime] = useState({ hour: 0, minute: 0 });
+
     const handleTicketSaleStartDateChange = (date) => {
-        setTicketSaleStartDate(date);
+        const fullDate = applyTimeToDate(date, ticketSaleStartTime.hour, ticketSaleStartTime.minute);
+        setTicketSaleStartDate(fullDate);
         clearError('ticketSaleStartDate');
     };
 
+    const handleTicketSaleStartTimeChange = (hour, minute) => {
+        setTicketSaleStartTime({ hour, minute });
+        if (ticketSaleStartDate) {
+            const fullDate = applyTimeToDate(ticketSaleStartDate, hour, minute);
+            setTicketSaleStartDate(fullDate);
+        }
+        clearError('ticketSaleStartDate');
+    };
+
+    const [ticketSaleEndTime, setTicketSaleEndTime] = useState({ hour: 0, minute: 0 });
+
     const handleTicketSaleEndDateChange = (date) => {
-        setTicketSaleEndDate(date);
+        const fullDate = applyTimeToDate(date, ticketSaleEndTime.hour, ticketSaleEndTime.minute);
+        setTicketSaleEndDate(fullDate);
         clearError('ticketSaleEndDate');
     };
+
+    const handleTicketSaleEndTimeChange = (hour, minute) => {
+        setTicketSaleEndTime({ hour, minute });
+        if (ticketSaleEndDate) {
+            const fullDate = applyTimeToDate(ticketSaleEndDate, hour, minute);
+            setTicketSaleEndDate(fullDate);
+        }
+        clearError('ticketSaleEndDate');
+    };
+
 
     const validateTimeRange = (start, end) => {
         if (start && end) {
@@ -128,7 +220,7 @@ export default function TimeAndTicket({ onContinue, onBack }) {
         const newErrors = {};
 
         if (!ticketName.trim()) newErrors.ticketName = "Vui lòng nhập tên vé";
-        if (isNaN(totalTickets) || Number(totalTickets) < 0 || Number(totalTickets) > 999) newErrors.totalTickets = "Vui lòng nhập tổng số lượng vé hợp lệ (0-999)";
+        if (isNaN(totalTickets) || Number(totalTickets) < 1 || Number(totalTickets) > 999) newErrors.totalTickets = "Vui lòng nhập tổng số lượng vé hợp lệ (1-999)";
         if (isNaN(minTickets) || Number(minTickets) < 0 || Number(minTickets) > 999) newErrors.minTickets = "Vui lòng nhập số vé tối thiểu hợp lệ (0-999)";
         if (isNaN(maxTickets) || Number(maxTickets) < 0 || Number(maxTickets) > 999) newErrors.maxTickets = "Vui lòng nhập số vé tối đa hợp lệ (0-999)";
         else if (Number(minTickets) > Number(maxTickets)) newErrors.maxTickets = "Số vé tối đa phải lớn hơn hoặc bằng số vé tối thiểu";
@@ -193,17 +285,19 @@ export default function TimeAndTicket({ onContinue, onBack }) {
                 <div className="row mt-45 p-20 pt-30 border-1px-color4 border-radius-10 flex-space-start">
                     <div className="col-xxl-6 col-lg-12 mb-20 pr-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian bắt đầu</p>
-                        <Calendar onDateChange={handleEventStartDateChange} onTimeChange={(hour, minute) => {
-                            // Xử lý giờ và phút, ví dụ như cập nhật giờ/phút
-                        }} />
+                        <Calendar
+                            onDateChange={handleEventStartDateChange}
+                            onTimeChange={handleEventStartTimeChange}
+                        />
                         {errors.eventStartDate && <p className="error-message-validate font-12">{errors.eventStartDate}</p>}
                     </div>
 
                     <div className="col-xxl-6 col-lg-12 mb-20 pl-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian kết thúc</p>
-                        <Calendar onDateChange={handleEventEndDateChange} onTimeChange={(hour, minute) => {
-                            // Xử lý giờ và phút, ví dụ như cập nhật giờ/phút
-                        }} />
+                        <Calendar
+                            onDateChange={handleEventEndDateChange}
+                            onTimeChange={handleEventEndTimeChange}
+                        />
                         {errors.eventEndDate && <p className="error-message-validate font-12">{errors.eventEndDate}</p>}
                     </div>
                 </div>
@@ -334,13 +428,19 @@ export default function TimeAndTicket({ onContinue, onBack }) {
                 <div className="row p-20 pt-30 border-1px-color4 border-radius-10 flex-space-start">
                     <div className="col-xxl-6 col-lg-12 mb-20 pr-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian bắt đầu bán vé</p>
-                        <Calendar onDateChange={handleTicketSaleStartDateChange} />
+                        <Calendar
+                            onDateChange={handleTicketSaleStartDateChange}
+                            onTimeChange={handleTicketSaleStartTimeChange}
+                        />
                         {errors.ticketSaleStartDate && <p className="error-message-validate font-12">{errors.ticketSaleStartDate}</p>}
                     </div>
 
                     <div className="col-xxl-6 col-lg-12 mb-20 pl-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian kết thúc bán vé</p>
-                        <Calendar onDateChange={handleTicketSaleEndDateChange} />
+                        <Calendar
+                            onDateChange={handleTicketSaleEndDateChange}
+                            onTimeChange={handleTicketSaleEndTimeChange}
+                        />
                         {errors.ticketSaleEndDate && <p className="error-message-validate font-12">{errors.ticketSaleEndDate}</p>}
                     </div>
                 </div>

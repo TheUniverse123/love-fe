@@ -8,6 +8,7 @@ import styles from "./Profile.module.css";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import { queryClient } from "@/app/util/providers";
+import { uploadImageToFirebase } from "@/app/util/uploadImage";
 
 const userInfo = getUserInfo()
 export default function ProfilePage() {
@@ -21,6 +22,8 @@ export default function ProfilePage() {
         userName: '',
         avatarUrl: ''
     });
+    const [imageUrl, setImageUrl] = useState(null);
+    const [fileUpload, setFileUpload] = useState()
     const dateInputRef = useRef(null);
     const { data } = useQuery({
         queryKey: ['user-info'],
@@ -67,7 +70,6 @@ export default function ProfilePage() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
     const { mutate, isPending } = useMutation({
         mutationKey: ['update-user'],
         mutationFn: (userInfo) => updateUserInfo(userInfo),
@@ -83,23 +85,44 @@ export default function ProfilePage() {
             toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
         },
     });
-    const handleUpdateProfile = (e) => {
+    const handleUpdateProfile = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
+        const avatarUrl = await handleUploadFileToFirebase();
+        console.log(data?.result.avatarUrl, avatarUrl)
         const dataSubmit = {
             id: getUserInfo().id,
             ...formData,
             dateOfBirth: convertToISOString(dateInputRef.current.value),
-            avatarUrl: "",
+            avatarUrl: avatarUrl ? avatarUrl : data?.avatarUrl,
         };
-
-        console.log(dataSubmit, convertToISOString(dateInputRef.current.value))
         mutate(dataSubmit);
     };
+    const handleUploadFileToFirebase = async () => {
+        console.log(fileUpload)
 
-    const [imageUrl, setImageUrl] = useState(null);
+        if (!fileUpload) return null;
+        try {
+            const url = await uploadImageToFirebase(fileUpload, "avatar");
+            return url
+        } catch (error) {
+            toast.error("Tải ảnh lên server bị lỗi, vui lòng thử lại sau")
+        }
+    };
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
+        if (!file) return;
+        const validTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+        if (!validTypes.includes(file.type)) {
+            toast.error("Định dạng ảnh không hợp lệ. Chỉ chấp nhận JPG, PNG, SVG.");
+            return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error("Kích thước ảnh phải nhỏ hơn 2MB.");
+            return;
+        }
+
+        setFileUpload(file)
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -111,7 +134,6 @@ export default function ProfilePage() {
     const triggerFileInput = () => {
         document.getElementById('file-upload').click();
     };
-
     const handleResetForm = async () => {
         if (data?.result) {
             const { fullName, email, phoneNumber, dateOfBirth, gender, address, userName } = data.result;
@@ -257,7 +279,7 @@ export default function ProfilePage() {
                                         style={{
                                             backgroundImage: imageUrl ? `url(${imageUrl})` : 'none'
                                         }}
-                                    ></div>
+                                    />
                                     <p className='text-md-bold white-color ml-20'>Ảnh đại diện</p>
                                 </div>
                             </div>
@@ -275,7 +297,7 @@ export default function ProfilePage() {
                                         <span className="primary-color text-sm-bold">Bấm vào đây </span>
                                         <span style={{ color: "#475569" }}>để tải tệp hình ảnh hoặc kéo thả.</span>
                                     </div>
-                                    <p style={{ color: "#94A3B8" }}>Định dạng hỗ trợ: SVG, JPG, PNG (tối đa 10MB mỗi tệp)</p>
+                                    <p style={{ color: "#94A3B8" }}>Định dạng hỗ trợ: SVG, JPG, PNG (tối đa 2MB mỗi tệp)</p>
                                     <input
                                         type="file"
                                         onChange={handleImageUpload}

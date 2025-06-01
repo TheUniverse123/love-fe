@@ -30,7 +30,7 @@ export default function DashboardSidebar() {
         <div className={styles.sidebar}>
             <div className={styles.profile}>
                 <div className='flex-space'>
-                    <img className={styles.avatar} src="/assets/icon/avatar.png" alt="User Avatar" />
+                    <img className={styles.avatar} src={data?.result.avatarUrl} alt="User Avatar" />
                     <span className={styles.userName}>{data ? data?.result.userName : 'Tên người dùng'}</span>
                 </div>
                 <div className='pb-15 w-100 flex-center border-1px-bottom'>

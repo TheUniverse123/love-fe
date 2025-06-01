@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '../button/Button'
 import InputLabel from './InputLabel'
 
-export default function CheckoutInformationForm({ onBack }) {
+export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
     // State quản lý giá trị input
     const [formData, setFormData] = useState({
         accountHolder: '',
@@ -17,6 +17,16 @@ export default function CheckoutInformationForm({ onBack }) {
         taxCode: '',
         confirmationMessage: '',
     })
+
+    useEffect(() => {
+        if (formRef) {
+            formRef.current = {
+                getData: () => ({
+                    ...formData
+                })
+            };
+        }
+    }, [formData]);
 
     // State lỗi validate
     const [errors, setErrors] = useState({})
@@ -79,7 +89,7 @@ export default function CheckoutInformationForm({ onBack }) {
     const handleSubmit = () => {
         if (validate()) {
             alert("Thông tin hợp lệ, tiến hành lưu dữ liệu")
-            // Xử lý lưu hoặc gửi dữ liệu ở đây
+            onCreate()
         } else {
             window.scrollTo({ top: 0, behavior: "smooth" })
         }

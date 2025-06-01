@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react"
 import styles from "./MyEvent.module.css"
+import { useMutation } from "@tanstack/react-query"
+import { fetchDeclineWorkshop } from "@/app/api/manage-workshop"
+import { toast } from "react-toastify"
+import { queryClient } from "@/app/util/providers"
 
 export default function MyEvent({
     title,
@@ -30,11 +34,26 @@ export default function MyEvent({
         }
     }, [mode, tab])
 
-    const handleDecline = () => {
-        setShowModal(false); // Close modal after decline
-        console.log("Workshop has been declined.");
-    }
+    const { mutate } = useMutation({
+        mutationKey: ['decline-workshop'],
+        mutationFn: (workshopId) => fetchDeclineWorkshop(workshopId),
+        onSuccess: (response) => {
+            if (response.statusCode === 200) {
+                toast.success("Đã từ chối yêu cầu duyệt workshop");
+                queryClient.invalidateQueries({ queryKey: ['workshops-review'] })
+                setShowModal(false)
+            } else {
+                toast.error(response[0])
+            }
+        },
+        onError: () => {
+            toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+        },
+    });
 
+    const handleDecline = () => {
+        mutate(workshopId)
+    }
     return (
         <div className="box-content-main-detail pb-0 pt-20">
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">

@@ -3,10 +3,11 @@
 import useDistricts from "@/app/hooks/useDistricts";
 import useProvinces from "@/app/hooks/useProvinces";
 import useWards from "@/app/hooks/useWards";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
+import styles from "./EventInformationForm.module.css";
 import InputLabel from "./InputLabel";
 
-export default function EventInformationForm({ onContinue }) {
+export default function EventInformationForm({ onContinue, formRef }) {
     const [logoFile, setLogoFile] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [organizerLogo, setOrganizerLogo] = useState(null);
@@ -26,12 +27,47 @@ export default function EventInformationForm({ onContinue }) {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [errors, setErrors] = useState({});
 
+    const [eventLogoPath, setEventLogoPath] = useState(null)
+    const [imagePath, setImagePath] = useState(null)
+    const [organizationLogoPath, setOrganizationLogoPath] = useState(null)
+
+    const [province, setProvince] = useState('')
+    const [district, setDistrict] = useState('')
+    const [ward, setWard] = useState('')
+    const [categoryId, setCategoryId] = useState(1)
     const categories = [
         "Nghệ thuật & Thủ công",
         "Ẩm thực & Pha chế",
         "Sức khỏe",
         "Phát triển kỹ năng"
     ];
+
+    useEffect(() => {
+        if (formRef) {
+            formRef.current = {
+                getData: () => ({
+                    eventLogoPath,
+                    imagePath,
+                    eventName,
+                    paymentMethod,
+                    eventAddressName,
+                    province,
+                    district,
+                    ward,
+                    houseNumber,
+                    categoryId,
+                    eventDescription,
+                    organizationLogoPath,
+                    organizerName,
+                    organizerInfo
+                }),
+            };
+        }
+    }, [
+        logoFile, backgroundImage, eventName, paymentMethod, eventAddressName,
+        selectedProvince, selectedDistrict, selectedWard, houseNumber,
+        selectedCategory, eventDescription, organizerLogo, organizerName, organizerInfo
+    ]);
 
     // Hàm giúp xóa lỗi theo key
     const clearError = (field) => {
@@ -47,6 +83,10 @@ export default function EventInformationForm({ onContinue }) {
     const handleProvinceChange = (event) => {
         const val = event.target.value;
         setSelectedProvince(val);
+        const selectedOption = event.target.selectedOptions[0];
+        const dataKey = selectedOption.getAttribute("data-key");
+        setProvince(dataKey)
+
         setSelectedDistrict(''); // Reset quận/huyện khi tỉnh thay đổi
         setSelectedWard(''); // Reset phường/xã khi tỉnh thay đổi
         clearError('selectedProvince');
@@ -57,6 +97,9 @@ export default function EventInformationForm({ onContinue }) {
     const handleDistrictChange = (event) => {
         const val = event.target.value;
         setSelectedDistrict(val);
+        const selectedOption = event.target.selectedOptions[0];
+        const dataKey = selectedOption.getAttribute("data-key");
+        setDistrict(dataKey)
         setSelectedWard(''); // Reset phường/xã khi huyện thay đổi
         clearError('selectedDistrict');
         clearError('selectedWard');
@@ -65,12 +108,16 @@ export default function EventInformationForm({ onContinue }) {
     const handleWardChange = (event) => {
         const val = event.target.value;
         setSelectedWard(val);
+        const selectedOption = event.target.selectedOptions[0];
+        const dataKey = selectedOption.getAttribute("data-key");
+        setWard(dataKey)
         clearError('selectedWard');
     };
 
     // Hàm xử lý tải tệp logo sự kiện
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
+        setEventLogoPath(file)
         if (file) {
             setLogoFile(URL.createObjectURL(file)); // Lưu trữ URL của tệp để hiển thị hình ảnh
             clearError('logoFile');
@@ -80,6 +127,7 @@ export default function EventInformationForm({ onContinue }) {
     // Hàm xử lý tải tệp ảnh nền sự kiện
     const handleBackgroundImageUpload = (e) => {
         const file = e.target.files[0];
+        setImagePath(file)
         if (file) {
             setBackgroundImage(URL.createObjectURL(file)); // Lưu trữ URL của tệp để hiển thị hình ảnh
             clearError('backgroundImage');
@@ -89,6 +137,7 @@ export default function EventInformationForm({ onContinue }) {
     // Hàm xử lý tải tệp logo ban tổ chức
     const handleOrganizerLogoUpload = (e) => {
         const file = e.target.files[0];
+        setOrganizationLogoPath(file)
         if (file) {
             setOrganizerLogo(URL.createObjectURL(file)); // Lưu trữ URL của tệp để hiển thị hình ảnh
             clearError('organizerLogo');
@@ -96,8 +145,9 @@ export default function EventInformationForm({ onContinue }) {
     };
 
     // Handle chọn thể loại sự kiện (chỉ 1)
-    const handleCategoryClick = (category) => {
+    const handleCategoryClick = (category, id) => {
         setSelectedCategory(category);
+        setCategoryId(id)
         clearError('selectedCategory');
     };
 
@@ -176,12 +226,11 @@ export default function EventInformationForm({ onContinue }) {
                     <InputLabel label="Tải hình" />
                     <div className='col-md-5 mb-20'>
                         <div
-                            className="flex-center form-input-background border-dash-white"
-                            style={{ width: "100%", height: "381px", borderRadius: "32px", flexDirection: "column" }}
+                            className={`${styles.uploadBox} flex-center form-input-background border-dash-white`}
                             onClick={() => document.getElementById('logo-upload').click()}
                         >
                             {logoFile ? (
-                                <img src={logoFile} alt="Logo Sự kiện" className="w-100 h-100" style={{ borderRadius: "32px", objectFit: "cover" }} />
+                                <img src={logoFile} alt="Logo Sự kiện" className={`w-100 h-100 ${styles.uploadPreview}`} />
                             ) : (
                                 <>
                                     <img src="/assets/icon/upload-icon.svg" alt="Icon" />
@@ -204,12 +253,11 @@ export default function EventInformationForm({ onContinue }) {
                     {/* Input Tải ảnh nền sự kiện */}
                     <div className='col-md-7 mb-20'>
                         <div
-                            className="flex-center form-input-background border-dash-white"
-                            style={{ width: "100%", height: "381px", borderRadius: "32px", flexDirection: "column" }}
+                            className={`${styles.uploadBox} flex-center form-input-background border-dash-white`}
                             onClick={() => document.getElementById('background-upload').click()} // Mở hộp thoại chọn tệp khi bấm vào khung
                         >
                             {backgroundImage ? (
-                                <img src={backgroundImage} alt="Background Sự kiện" className="w-100 h-100" style={{ borderRadius: "32px", objectFit: "cover" }} />
+                                <img src={backgroundImage} alt="Background Sự kiện" className={`w-100 h-100 ${styles.uploadPreview}`} />
                             ) : (
                                 <>
                                     <img src="/assets/icon/upload-icon.svg" alt="Icon" />
@@ -233,8 +281,7 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Tên sự kiện" />
                             <input
-                                style={{ padding: "16px 25px" }}
-                                className="form-control form-input-background border-none border-radius-31"
+                                className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
                                 type="text"
                                 placeholder="Tên sự kiện"
                                 value={eventName}
@@ -315,8 +362,7 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Tên địa điểm" isMarginLeft />
                             <input
-                                style={{ padding: "16px 25px" }}
-                                className="form-control form-input-background border-none border-radius-31"
+                                className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
                                 type="text"
                                 placeholder="Tên địa điểm"
                                 value={eventAddressName}
@@ -330,14 +376,14 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Tỉnh/Thành phố" isMarginLeft />
                             <select
-                                style={{ padding: "16px 25px", color: "white", backgroundColor: "#333", maxHeight: "250px", overflowY: "auto" }}
-                                className="form-control form-input-background border-none border-radius-31"
+
+                                className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                 value={selectedProvince}
                                 onChange={handleProvinceChange}
                             >
                                 <option value="" disabled>Chọn Tỉnh/Thành phố</option>
                                 {provinces.map(province => (
-                                    <option key={province.code} value={province.code}>
+                                    <option data-key={province.name} key={province.name} value={province.code}>
                                         {province.name}
                                     </option>
                                 ))}
@@ -350,15 +396,15 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Quận/Huyện" isMarginLeft />
                             <select
-                                style={{ padding: "16px 25px", color: "white", backgroundColor: "#333", maxHeight: "250px", overflowY: "auto" }}
-                                className="form-control form-input-background border-none border-radius-31"
+
+                                className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                 value={selectedDistrict}
                                 onChange={handleDistrictChange}
                                 disabled={!selectedProvince}
                             >
                                 <option value="">Chọn Quận/Huyện</option>
                                 {districts.map(district => (
-                                    <option key={district.code} value={district.code}>
+                                    <option data-key={district.name} key={district.name} value={district.code}>
                                         {district.name}
                                     </option>
                                 ))}
@@ -371,15 +417,15 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Phường/Xã" isMarginLeft />
                             <select
-                                style={{ padding: "16px 25px", color: "white", backgroundColor: "#333", maxHeight: "250px", overflowY: "auto" }}
-                                className="form-control form-input-background border-none border-radius-31"
+
+                                className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                 value={selectedWard}
                                 onChange={handleWardChange}
                                 disabled={!selectedDistrict}
                             >
                                 <option value="">Chọn Phường/Xã</option>
                                 {wards.map(ward => (
-                                    <option key={ward.code} value={ward.code}>
+                                    <option data-key={ward.name} key={ward.name} value={ward.code}>
                                         {ward.name}
                                     </option>
                                 ))}
@@ -392,8 +438,7 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Số nhà, đường" isMarginLeft />
                             <input
-                                style={{ padding: "16px 25px" }}
-                                className="form-control form-input-background border-none border-radius-31"
+                                className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
                                 type="text"
                                 placeholder="Số nhà, đường"
                                 value={houseNumber}
@@ -410,11 +455,11 @@ export default function EventInformationForm({ onContinue }) {
                 <InputLabel label="Thể loại sự kiện" isMarginLeft />
                 <div className="row mt-10 d-flex">
                     <div className="form-group d-flex flex-wrap gap-3">
-                        {categories.map(category => (
+                        {categories.map((category, index) => (
                             <button
                                 type="button"
                                 key={category}
-                                onClick={() => handleCategoryClick(category)}
+                                onClick={() => handleCategoryClick(category, index + 1)}
                                 style={{
                                     padding: "16px 25px",
                                     borderRadius: "31px",
@@ -486,8 +531,7 @@ export default function EventInformationForm({ onContinue }) {
                         <div className="form-group">
                             <InputLabel label="Tên Ban Tổ chức" isMarginLeft />
                             <input
-                                style={{ padding: "16px 25px" }}
-                                className="form-control form-input-background border-none border-radius-31 ml-20"
+                                className={`form-control form-input-background border-none border-radius-31 ml-20 ${styles.inputPadding}`}
                                 type="text"
                                 placeholder="Tên Ban Tổ chức"
                                 value={organizerName}

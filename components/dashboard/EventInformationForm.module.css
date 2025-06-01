@@ -1,0 +1,30 @@
+.uploadBox {
+    width: 100% !important;
+    height: 381px !important;
+    border-radius: 32px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.uploadPreview {
+    border-radius: 32px !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.inputPadding {
+    padding: 16px 25px !important;
+}
+
+.selectBox {
+    padding: 16px 25px !important;
+    color: white !important;
+    background-color: var(--bg-main-color) !important;
+    max-height: 250px !important;
+    overflow-y: auto !important;
+    border-radius: 31px !important;
+    border: none !important;
+}
