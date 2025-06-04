@@ -1,37 +1,46 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Button from '../button/Button'
 import InputLabel from './InputLabel'
 
 export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
-    // State quản lý giá trị input
     const [formData, setFormData] = useState({
         accountHolder: '',
         accountNumber: '',
         bankName: '',
         branch: '',
-        businessType: '', // 'personal' hoặc 'business'
+        businessType: '',
         fullName: '',
         address: '',
         taxCode: '',
         confirmationMessage: '',
     })
+    console.log(formData)
 
     useEffect(() => {
         if (formRef) {
             formRef.current = {
                 getData: () => ({
                     ...formData
-                })
+                }),
+                prefillData: (data) => {
+                    console.log(data)
+                    setFormData({
+                        accountHolder: data.accountHolder || '',
+                        accountNumber: data.accountNumber || '',
+                        bankName: data.bankName || '',
+                        branch: data.branch || '',
+                        businessType: data.isBusiness ? 'business' : 'personal',
+                        fullName: data.invoiceName || '',
+                        address: data.invoiceAddress || '',
+                        taxCode: data.taxCode !== 'none' ? data.taxCode : '',
+                        confirmationMessage: data.confirmationMessage || ''
+                    });
+                }
             };
         }
     }, [formData]);
-
-    // State lỗi validate
     const [errors, setErrors] = useState({})
-
-    // Xử lý thay đổi input
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData(prev => ({
@@ -47,7 +56,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
         }
     }
 
-    // Xử lý chọn loại hình kinh doanh
     const handleBusinessTypeChange = (e) => {
         const { value } = e.target
         setFormData(prev => ({
@@ -63,10 +71,8 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
         }
     }
 
-    // Validate form
     const validate = () => {
         const newErrors = {}
-
         if (!formData.accountHolder.trim()) newErrors.accountHolder = "Vui lòng nhập chủ tài khoản";
         if (!formData.accountNumber.trim()) newErrors.accountNumber = "Vui lòng nhập số tài khoản";
         else if (!/^\d{6,20}$/.test(formData.accountNumber.trim())) newErrors.accountNumber = "Số tài khoản phải gồm 6-20 chữ số";
@@ -88,7 +94,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
 
     const handleSubmit = () => {
         if (validate()) {
-            alert("Thông tin hợp lệ, tiến hành lưu dữ liệu")
             onCreate()
         } else {
             window.scrollTo({ top: 0, behavior: "smooth" })
@@ -112,7 +117,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.accountHolder}
                                 onChange={handleChange}
-                                placeholder="Nhập chủ tài khoản"
                             />
                         </div>
                         {errors.accountHolder && <p className="error-message-validate font-12">{errors.accountHolder}</p>}
@@ -129,7 +133,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.accountNumber}
                                 onChange={handleChange}
-                                placeholder="Nhập số tài khoản"
                             />
                         </div>
                         {errors.accountNumber && <p className="error-message-validate font-12">{errors.accountNumber}</p>}
@@ -146,7 +149,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.bankName}
                                 onChange={handleChange}
-                                placeholder="Nhập tên ngân hàng"
                             />
                         </div>
                         {errors.bankName && <p className="error-message-validate font-12">{errors.bankName}</p>}
@@ -163,7 +165,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.branch}
                                 onChange={handleChange}
-                                placeholder="Nhập chi nhánh"
                             />
                         </div>
                         {errors.branch && <p className="error-message-validate font-12">{errors.branch}</p>}
@@ -248,7 +249,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.fullName}
                                 onChange={handleChange}
-                                placeholder="Nhập họ tên"
                             />
                         </div>
                         {errors.fullName && <p className="error-message-validate font-12">{errors.fullName}</p>}
@@ -265,7 +265,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.address}
                                 onChange={handleChange}
-                                placeholder="Nhập địa chỉ"
                             />
                         </div>
                         {errors.address && <p className="error-message-validate font-12">{errors.address}</p>}
@@ -282,7 +281,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                                 type="text"
                                 value={formData.taxCode}
                                 onChange={handleChange}
-                                placeholder="Nhập mã số thuế"
                                 disabled={formData.businessType !== 'business'}
                             />
                         </div>
@@ -300,7 +298,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                             <p className='ml-25 mb-15 white-color'>Tin nhắn xác nhận này sẽ được gửi đến cho người tham gia sau khi đặt vé thành công</p>
                             <textarea
                                 name="confirmationMessage"
-                                placeholder='Nhập tại đây'
                                 style={{ padding: "16px 25px", height: "333px" }}
                                 className="form-control form-input-background border-none border-radius-31"
                                 value={formData.confirmationMessage}

@@ -10,8 +10,6 @@ const CalendarSidebarCanvas = ({ dataDates, background }) => {
     const [inputValue, setInputValue] = useState("");
     const [hoursList, setHoursList] = useState(generateTimeList("hour"));
     const [minutesList, setMinutesList] = useState(generateTimeList("minute"));
-
-    console.log(dataDates)
     useEffect(() => {
         setInputValue("Chọn ngày, giờ");
     }, [selectedHour, selectedMinute]);
@@ -95,8 +93,6 @@ const CalendarSidebarCanvas = ({ dataDates, background }) => {
         </div>
     );
 };
-
-// Tạo danh sách giờ hoặc phút
 function generateTimeList(type) {
     const list = [];
     if (type === "hour") {

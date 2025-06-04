@@ -8,9 +8,6 @@ const useDistricts = (provinceCode) => {
 
     useEffect(() => {
         if (!provinceCode) return;
-
-        console.log(provinceCode);
-
         fetch(`https://provinces.open-api.vn/api/d/`)
             .then(response => response.json())
             .then(data => {

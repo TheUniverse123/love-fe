@@ -109,3 +109,41 @@ export function getTimeFromISO(isoString) {
     const m = date.getMinutes().toString().padStart(2, "0");
     return `${h}:${m}`;
 }
+
+export function extractHourMinuteFromISO(datetimeString) {
+    const date = new Date(datetimeString);
+    const pad = (num) => String(num).padStart(2, '0');
+    return {
+        selectedHour: pad(date.getHours()),      // giờ local
+        selectedMinute: pad(date.getMinutes())   // phút local
+    };
+}
+
+export function getTop5RecentBookings(bookings) {
+    // Helper function to format and sort the dates
+    const formatDate = (dateStr) => new Date(dateStr);
+
+    // Step 1: Group bookings by email
+    const groupedBookings = bookings.reduce((acc, booking) => {
+        const email = booking.userEmail;
+
+        if (!acc[email]) {
+            acc[email] = [];
+        }
+
+        acc[email].push(booking);
+        return acc;
+    }, {});
+
+    // Step 2: Sort each group by bookingDate (most recent first)
+    const recentBookings = Object.values(groupedBookings).map(group => {
+        // Sort the group by bookingDate (most recent first)
+        group.sort((a, b) => formatDate(b.bookingDate) - formatDate(a.bookingDate));
+
+        // Keep the most recent booking
+        return group[0];
+    });
+
+    // Step 3: Limit to 5 items (take the top 5 most recent)
+    return recentBookings.slice(0, 5);
+}

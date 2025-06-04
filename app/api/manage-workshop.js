@@ -6,7 +6,7 @@ export const fetchDeclineWorkshop = async (workshopId) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -20,19 +20,19 @@ export const fetchApproveWorkshop = async (workshopId) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
 }
 
 export const fetchWorkshopByUsers = async ({ signal, pageNumber, pageSize, userId }) => {
-    const data = await axiosInstanceJson.get(`/api/Workshops/user/${userId}/workshops?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+    const data = await axiosInstanceJson.get(`/api/Workshops/creator/${userId}?pageNumber=${pageNumber}&pageSize=${pageSize}`)
         .then((response) => {
             return response.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -44,7 +44,7 @@ export const fetchOrderedTickets = async ({ signal, pageNumber, pageSize, userId
             return response.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -56,7 +56,7 @@ export const fetchCreateWorkshop = async (workshopInfo) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -68,7 +68,53 @@ export const fetchCreateTicket = async (ticketInfo) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export async function fetchUpdateWorkshop(workshopId, updatedData) {
+    const data = await axiosInstanceJson.put(`/api/Workshops/update-json/${workshopId}`, updatedData)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            return error
+        })
+    return data
+}
+
+export async function fetchUpdateTicket(ticketId, updatedData) {
+    const data = await axiosInstanceJson.put(`/api/WorkshopTicketInfo/${ticketId}`, updatedData)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            return error
+        })
+    return data
+}
+
+export const fetchWorkshopDetail = async ({ signal, workshopId }) => {
+    const data = await axiosInstanceJson.get(`/api/Workshops/get-by-id/${workshopId}`)
+        .then((response) => {
+            return response.data.result
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchTicketDetail = async ({ signal, workshopId = 1 }) => {
+    const data = await axiosInstanceJson.get(`/api/WorkshopTicketInfo/${workshopId}`)
+        .then((response) => {
+            return response.data.result
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data

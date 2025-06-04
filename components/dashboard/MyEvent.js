@@ -91,6 +91,7 @@ export default function MyEvent({
                                     {tabText}</a>
                                 {(tab !== "past" && tab !== "waiting") &&
                                     <a
+                                        href={`/dashboard/edit/${workshopId}`}
                                         onClick={() => mode === "review" ? setShowModal(true) : {}}
                                         className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>
                                         {mode === "manage" ? 'Chỉnh sửa' : "Từ chối"}</a>
@@ -100,8 +101,6 @@ export default function MyEvent({
                     </div>
                 </div>
             </div>
-
-            {/* Modal for confirmation */}
             {showModal && (
                 <div className="modal fade show flex-center" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">

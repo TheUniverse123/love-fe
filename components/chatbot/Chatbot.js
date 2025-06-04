@@ -57,6 +57,7 @@ export default function Chatbot() {
             setChatValue(prevValue => [...prevValue, { type: 'ai', message: response.text, time: getCurrentTime() }])
             generateSuggestions(response.text);
         } catch (error) {
+            console.log(error)
             setChatValue(prevValue => [...prevValue, { type: 'error', message: "Có lỗi xảy ra, vui lòng thử lại sau ⚠", time: getCurrentTime() }])
         } finally {
             setChatValue(prevValue => prevValue.filter(item => item.type !== 'delay').slice(-3))

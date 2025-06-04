@@ -5,7 +5,7 @@ export const fetchWorkshops = async ({ signal, pageNumber, pageSize }) => {
             return response.data.result.items
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -17,7 +17,7 @@ export const fetchWorkshopsExploreAll = async ({ signal, pageNumber, pageSize })
             return response.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -29,7 +29,7 @@ export const fetchWorkshopsNumber = async () => {
             return response.data.result.totalCount
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -41,7 +41,7 @@ export const fetchMostBookedWorkshops = async ({ signal, pageNumber, pageSize })
             return response.data.result.items
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -53,7 +53,7 @@ export const fetchComingSoonWorkshops = async ({ signal, pageNumber, pageSize })
             return response.data.result.items
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -65,7 +65,7 @@ export const fetchWorkshopsCount = async () => {
             return response.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -78,7 +78,7 @@ export const fetchSearchWorkshops = async ({ signal, pageNumber, pageSize, searc
             return response.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -90,7 +90,7 @@ export const fetchWorkshopOfUsers = async ({ signal, userId }) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -102,7 +102,7 @@ export const fetchWorkshopDetail = async ({ signal, workshopId }) => {
             return response.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data

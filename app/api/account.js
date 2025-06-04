@@ -18,7 +18,7 @@ export const fetchLogin = async (email, password) => {
         return response.data
     }
     ).catch((error) => {
-        const errors = error.response.data.errorMessages || error.response.data.errors || []
+        const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
         return errors
     })
     return data
@@ -37,7 +37,7 @@ export const fetchLoginGoogle = async (token) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -49,7 +49,7 @@ export const fetchUserInfoVer2 = async (userId) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -61,7 +61,7 @@ export const fetchUserInfo = async ({ signal, userId }) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -73,7 +73,7 @@ export const updateUserInfo = async (userUpdate) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -85,7 +85,7 @@ export const fetchRegister = async (userRegister) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -97,7 +97,7 @@ export const fetchConfirmEmail = async (email, token) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -111,7 +111,7 @@ export const fetchForgotPassword = async (email) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -123,7 +123,7 @@ export const fetchResetPassword = async (request) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data

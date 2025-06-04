@@ -6,7 +6,7 @@ export const fetchRatingByWorkshop = async (pageNumber, pageSize, workshopId) =>
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
@@ -18,7 +18,7 @@ export const fetchPostReview = async (post) => {
             return response.data
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data

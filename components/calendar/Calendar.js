@@ -1,26 +1,37 @@
 'use client';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from './Calendar.module.css';
 
-const Calendar = ({ onDateChange, onTimeChange }) => {
+const Calendar = ({ onDateChange, onTimeChange, initialDate }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState();
     const [selectedHour, setSelectedHour] = useState("00");
-    const [selectedMinute, setSelectedMinute] = useState("00");
-    const [inputValue, setInputValue] = useState("");
+    const [selectedMinute, setSelectedMinute] = useState("");
+    const [inputValue, setInputValue] = useState("Chọn ngày, giờ");
     const [hoursList, setHoursList] = useState(generateTimeList("hour"));
     const [minutesList, setMinutesList] = useState(generateTimeList("minute"));
-
-    // State quản lý việc đóng/mở lịch
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
+    const initialDateSet = useRef(false);
     useEffect(() => {
-        setInputValue("Chọn ngày, giờ");
-        if (onTimeChange) onTimeChange(selectedHour, selectedMinute); // Truyền giờ phút lên
+        if (initialDate && !initialDateSet.current) {
+            const parsedDate = new Date(initialDate);
+            if (!isNaN(parsedDate.getTime())) {
+                setSelectedDate(parsedDate);
+                const h = String(parsedDate.getHours()).padStart(2, "0");
+                const m = String(parsedDate.getMinutes()).padStart(2, "0");
+                setSelectedHour(h);
+                setSelectedMinute(m);
+                setInputValue(`${parsedDate.toLocaleDateString('en-GB')} ${h}:${m}`);
+                initialDateSet.current = true; // Đánh dấu đã set rồi
+            }
+        }
+    }, [initialDate]);
+    useEffect(() => {
+        if (onTimeChange) onTimeChange(selectedHour, selectedMinute);
     }, [selectedHour, selectedMinute]);
 
     useEffect(() => {
-        if (onDateChange) onDateChange(selectedDate); // Truyền ngày lên
+        if (onDateChange) onDateChange(selectedDate);
     }, [selectedDate]);
 
     const generateCalendar = (month) => {
@@ -38,13 +49,11 @@ const Calendar = ({ onDateChange, onTimeChange }) => {
 
         return days;
     };
-
     const handleDateClick = (day) => {
         if (day) {
             setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day));
         }
     };
-
     const handleSave = () => {
         const dateToSave = selectedDate || new Date();
         const hourToSave = selectedHour || dateToSave.getHours();
@@ -65,14 +74,11 @@ const Calendar = ({ onDateChange, onTimeChange }) => {
         setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)));
     };
 
-    // Hàm toggle đóng/mở lịch
     const toggleCalendar = () => {
         setIsCalendarOpen(!isCalendarOpen);
     };
-
     return (
         <div className={styles.calendarContainer}>
-            {/* Thanh input */}
             <div className={`${styles.inputContainer} col-md-12 w-100 main-fourth-background border-radius-25`}>
                 <input
                     type="text"

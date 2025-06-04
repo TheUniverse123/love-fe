@@ -11,6 +11,7 @@ import { formatDateRange } from "@/app/util/convert";
 
 const PAGE_SIZE = 2;
 const userInfo = getUserInfo();
+
 export default function MyEvents() {
   const [selectedTab, setSelectedTab] = useState('upcoming');
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -27,17 +28,16 @@ export default function MyEvents() {
 
   const { data } = useQuery({
     queryKey: ['workshop-user'],
-    queryFn: ({ signal }) => fetchWorkshopByUsers({ signal, pageNumber: 1, pageSize: 1000, userId: userInfo?.id }),
+    queryFn: ({ signal }) => fetchWorkshopByUsers(
+      { signal, pageNumber: 1, pageSize: 1000, userId: userInfo?.id }),
   });
 
   const filteredEvents = useMemo(() => {
-    if (!data?.items) return { upcoming: [], past: [], waiting: [] };
-
+    if (!data?.workshops) return { upcoming: [], past: [], waiting: [] };
     const now = Date.now();
-    const upcoming = data.items.filter(item => new Date(item.startDate).getTime() > now && item.status === 1);
-    const past = data.items.filter(item => new Date(item.startDate).getTime() < now && item.status === 1);
-    const waiting = data.items.filter(item => item.status === 0);
-
+    const upcoming = data.workshops.filter(item => new Date(item.startDate).getTime() > now);
+    const past = data.workshops.filter(item => new Date(item.startDate).getTime() < now);
+    const waiting = data.workshops.filter(item => item.status === 0);
     return { upcoming, past, waiting };
   }, [data]);
 
@@ -69,6 +69,104 @@ export default function MyEvents() {
     setPagination(prev => ({ ...prev, [selectedTab]: page }));
   };
 
+  // Hàm render phân trang với dấu ...
+  const renderPaginationItems = () => {
+    const pages = [];
+    const total = totalPages;
+    const current = pagination[selectedTab];
+    const delta = 2; // số trang trước và sau trang hiện tại được hiển thị
+
+    if (total <= 5) {
+      // Nếu tổng trang <=5 thì hiển thị hết
+      for (let i = 1; i <= total; i++) {
+        pages.push(
+          <li key={i} className="page-item">
+            <a
+              href="#"
+              className={`page-link ${current === i ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
+              onClick={e => { e.preventDefault(); handlePageChange(i); }}
+            >
+              {i}
+            </a>
+          </li>
+        );
+      }
+      return pages;
+    }
+
+    // Với trang > 5 thì hiển thị rút gọn
+    let left = current - delta;
+    let right = current + delta;
+
+    if (left < 2) {
+      right += 2 - left;
+      left = 2;
+    }
+    if (right > total - 1) {
+      left -= right - (total - 1);
+      right = total - 1;
+    }
+
+    left = Math.max(left, 2);
+    right = Math.min(right, total - 1);
+
+    pages.push(
+      <li key={1} className="page-item">
+        <a
+          href="#"
+          className={`page-link ${current === 1 ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
+          onClick={e => { e.preventDefault(); handlePageChange(1); }}
+        >
+          1
+        </a>
+      </li>
+    );
+
+    if (left > 2) {
+      pages.push(
+        <li key="left-ellipsis" className="page-item">
+          <a className="page-link main-third-background white-color">...</a>
+        </li>
+      );
+    }
+
+    for (let i = left; i <= right; i++) {
+      pages.push(
+        <li key={i} className="page-item">
+          <a
+            href="#"
+            className={`page-link ${current === i ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
+            onClick={e => { e.preventDefault(); handlePageChange(i); }}
+          >
+            {i}
+          </a>
+        </li>
+      );
+    }
+
+    if (right < total - 1) {
+      pages.push(
+        <li key="right-ellipsis" className="page-item">
+          <a className="page-link main-third-background white-color">...</a>
+        </li>
+      );
+    }
+
+    pages.push(
+      <li key={total} className="page-item">
+        <a
+          href="#"
+          className={`page-link ${current === total ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
+          onClick={e => { e.preventDefault(); handlePageChange(total); }}
+        >
+          {total}
+        </a>
+      </li>
+    );
+
+    return pages;
+  };
+
   return (
     <div className={styles.myEvent}>
       <div className="flex-space pb-20 border-1px-bottom">
@@ -96,6 +194,7 @@ export default function MyEvents() {
       <div className="pt-40 pb-200">
         {currentEvents.map((event, index) => (
           <MyEvent
+            workshopId={event.workshopId}
             key={index}
             title={event.title}
             time={formatDateRange(event.startDate, event.endDate)}
@@ -111,12 +210,18 @@ export default function MyEvents() {
           />
         ))}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <nav aria-label="Page navigation example">
             <ul className="pagination">
               <li className="page-item">
-                <a className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageChange(Math.max(pagination[selectedTab] - 1, 1))}>
+                <a
+                  className="page-link main-third-background white-color-4"
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    handlePageChange(Math.max(pagination[selectedTab] - 1, 1));
+                  }}
+                >
                   <span aria-hidden="true">
                     <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" strokeLinecap="round" strokeLinejoin="round" />
@@ -125,20 +230,17 @@ export default function MyEvents() {
                 </a>
               </li>
 
-              {[...Array(totalPages)].map((_, idx) => (
-                <li key={idx} className="page-item">
-                  <a
-                    className={`page-link ${pagination[selectedTab] === idx + 1 ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
-                    href="#"
-                    onClick={() => handlePageChange(idx + 1)}
-                  >
-                    {idx + 1}
-                  </a>
-                </li>
-              ))}
+              {renderPaginationItems()}
 
               <li className="page-item">
-                <a className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageChange(Math.min(pagination[selectedTab] + 1, totalPages))}>
+                <a
+                  className="page-link main-third-background white-color-4"
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    handlePageChange(Math.min(pagination[selectedTab] + 1, totalPages));
+                  }}
+                >
                   <span aria-hidden="true">
                     <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" strokeLinecap="round" strokeLinejoin="round" />

@@ -6,7 +6,7 @@ export const fetchCountConfirmTicket = async (userId) => {
             return response.data.result.confirmedTicketCount
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data

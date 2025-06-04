@@ -1,9 +1,8 @@
 import { axiosInstanceJson } from './axiosInstance';
-
-export const fetchFAQList = async () => {
-    const data = await axiosInstanceJson.get("/api/Faq/question/list")
+export const fetchDashboardWidget = async () => {
+    const data = await axiosInstanceJson.get("/api/Analytics/my-dashboard")
         .then((response) => {
-            return response.data.result
+            return response.data.result.stats
         }
         ).catch((error) => {
             const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
@@ -12,10 +11,11 @@ export const fetchFAQList = async () => {
     return data
 }
 
-export const fetchAnswerList = async (questionId) => {
-    const data = await axiosInstanceJson.get(`/api/Faq/answer/list?questionId=${questionId}`)
+export const fetchMonthlyStats = async () => {
+    const currentYear = (new Date()).getFullYear()
+    const data = await axiosInstanceJson.get(`/api/Analytics/my-monthly-stats?year=${currentYear}`)
         .then((response) => {
-            return response.data.result
+            return response.data.result.monthlyStats
         }
         ).catch((error) => {
             const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
@@ -24,8 +24,8 @@ export const fetchAnswerList = async (questionId) => {
     return data
 }
 
-export const fetchCreateQuestion = async (question) => {
-    const data = await axiosInstanceJson.post("/api/Faq/question/create", question)
+export const fetchNewRegisterUsers = async (userId) => {
+    const data = await axiosInstanceJson.get(`/api/UserBookings/getAll-UserBooking?pageNumber=1&pageSize=1000`)
         .then((response) => {
             return response.data
         }

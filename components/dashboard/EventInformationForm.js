@@ -3,7 +3,7 @@
 import useDistricts from "@/app/hooks/useDistricts";
 import useProvinces from "@/app/hooks/useProvinces";
 import useWards from "@/app/hooks/useWards";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./EventInformationForm.module.css";
 import InputLabel from "./InputLabel";
 
@@ -11,11 +11,11 @@ export default function EventInformationForm({ onContinue, formRef }) {
     const [logoFile, setLogoFile] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [organizerLogo, setOrganizerLogo] = useState(null);
-    const { provinces, loading: loadingProvinces, error: errorProvinces } = useProvinces();
+    const { provinces } = useProvinces();
     const [selectedProvince, setSelectedProvince] = useState('');
-    const { districts, loading: loadingDistricts, error: errorDistricts } = useDistricts(selectedProvince);
+    const { districts } = useDistricts(selectedProvince);
     const [selectedDistrict, setSelectedDistrict] = useState('');
-    const { wards, loading: loadingWards, error: errorWards } = useWards(selectedDistrict);
+    const { wards } = useWards(selectedDistrict);
     const [selectedWard, setSelectedWard] = useState('');
     const [eventName, setEventName] = useState('');
     const [eventAddressName, setEventAddressName] = useState('');
@@ -26,11 +26,9 @@ export default function EventInformationForm({ onContinue, formRef }) {
     const [paymentMethod, setPaymentMethod] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [errors, setErrors] = useState({});
-
     const [eventLogoPath, setEventLogoPath] = useState(null)
     const [imagePath, setImagePath] = useState(null)
     const [organizationLogoPath, setOrganizationLogoPath] = useState(null)
-
     const [province, setProvince] = useState('')
     const [district, setDistrict] = useState('')
     const [ward, setWard] = useState('')
@@ -41,7 +39,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
         "Sức khỏe",
         "Phát triển kỹ năng"
     ];
-
     useEffect(() => {
         if (formRef) {
             formRef.current = {
@@ -61,6 +58,27 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     organizerName,
                     organizerInfo
                 }),
+                prefillData: (data) => {
+                    console.log(data)
+                    setEventName(data.title || '');
+                    setPaymentMethod(data.eventType || '');
+                    setEventAddressName(data.placeName || '');
+                    setProvince(data.province || '');
+                    setDistrict(data.district || '');
+                    setWard(data.ward || '');
+                    setHouseNumber(data.street || '');
+                    setCategoryId(data.categoryId || 1);
+                    setSelectedCategory(categories[data.categoryId - 1] || '')
+                    setEventDescription(data.description || '');
+                    setOrganizerName(data.organizationName || '');
+                    setOrganizerInfo(data.organizationInfo || '');
+                    setEventLogoPath(data.eventLogoPath);
+                    setImagePath(data.imagePath);
+                    setOrganizationLogoPath(data.organizationLogoPath);
+                    setLogoFile(data.eventLogoPath);
+                    setBackgroundImage(data.imagePath);
+                    setOrganizerLogo(data.organizationLogoPath);
+                }
             };
         }
     }, [
@@ -68,8 +86,37 @@ export default function EventInformationForm({ onContinue, formRef }) {
         selectedProvince, selectedDistrict, selectedWard, houseNumber,
         selectedCategory, eventDescription, organizerLogo, organizerName, organizerInfo
     ]);
+    useEffect(() => {
+        async function prefillLocations() {
+            if (!province) return;
+            // Load province list (nếu chưa có)
+            const provincesData = await fetch("https://provinces.open-api.vn/api/p").then(res => res.json());
+            const provinceObj = provincesData.find(p => p.name === province);
+            if (provinceObj) {
+                setSelectedProvince(provinceObj.code);
+                const districtsData = await fetch(`https://provinces.open-api.vn/api/p/${provinceObj.code}?depth=2`)
+                    .then(res => res.json())
+                    .then(data => data.districts);
+                if (district) {
+                    const districtObj = districtsData.find(d => d.name === district);
+                    if (districtObj) {
+                        setSelectedDistrict(districtObj.code);
+                        const wardsData = await fetch(`https://provinces.open-api.vn/api/d/${districtObj.code}?depth=2`)
+                            .then(res => res.json())
+                            .then(data => data.wards);
+                        if (ward) {
+                            const wardObj = wardsData.find(w => w.name === ward);
+                            if (wardObj) {
+                                setSelectedWard(wardObj.code);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        prefillLocations();
+    }, [province, district, ward]);
 
-    // Hàm giúp xóa lỗi theo key
     const clearError = (field) => {
         if (errors[field]) {
             setErrors(prevErrors => {
@@ -79,7 +126,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
             });
         }
     };
-
     const handleProvinceChange = (event) => {
         const val = event.target.value;
         setSelectedProvince(val);
@@ -93,7 +139,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
         clearError('selectedDistrict');
         clearError('selectedWard');
     };
-
     const handleDistrictChange = (event) => {
         const val = event.target.value;
         setSelectedDistrict(val);
@@ -104,7 +149,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
         clearError('selectedDistrict');
         clearError('selectedWard');
     };
-
     const handleWardChange = (event) => {
         const val = event.target.value;
         setSelectedWard(val);
@@ -114,17 +158,14 @@ export default function EventInformationForm({ onContinue, formRef }) {
         clearError('selectedWard');
     };
 
-    // Hàm xử lý tải tệp logo sự kiện
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
         setEventLogoPath(file)
         if (file) {
-            setLogoFile(URL.createObjectURL(file)); // Lưu trữ URL của tệp để hiển thị hình ảnh
+            setLogoFile(URL.createObjectURL(file));
             clearError('logoFile');
         }
     };
-
-    // Hàm xử lý tải tệp ảnh nền sự kiện
     const handleBackgroundImageUpload = (e) => {
         const file = e.target.files[0];
         setImagePath(file)
@@ -133,8 +174,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
             clearError('backgroundImage');
         }
     };
-
-    // Hàm xử lý tải tệp logo ban tổ chức
     const handleOrganizerLogoUpload = (e) => {
         const file = e.target.files[0];
         setOrganizationLogoPath(file)
@@ -143,51 +182,39 @@ export default function EventInformationForm({ onContinue, formRef }) {
             clearError('organizerLogo');
         }
     };
-
-    // Handle chọn thể loại sự kiện (chỉ 1)
     const handleCategoryClick = (category, id) => {
         setSelectedCategory(category);
         setCategoryId(id)
         clearError('selectedCategory');
     };
-
-    // Handle radio payment method
     const handlePaymentMethodChange = (e) => {
         setPaymentMethod(e.target.id);
         clearError('paymentMethod');
     };
-
     const handleEventNameChange = (e) => {
         setEventName(e.target.value);
         clearError('eventName');
     };
-
     const handleEventAddressNameChange = (e) => {
         setEventAddressName(e.target.value);
         clearError('eventAddressName');
     };
-
     const handleHouseNumberChange = (e) => {
         setHouseNumber(e.target.value);
         clearError('houseNumber');
     };
-
     const handleEventDescriptionChange = (e) => {
         setEventDescription(e.target.value);
         clearError('eventDescription');
     };
-
     const handleOrganizerNameChange = (e) => {
         setOrganizerName(e.target.value);
         clearError('organizerName');
     };
-
     const handleOrganizerInfoChange = (e) => {
         setOrganizerInfo(e.target.value);
         clearError('organizerInfo');
     };
-
-    // Validate form
     const validate = () => {
         const newErrors = {};
 
@@ -210,7 +237,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
 
         return Object.keys(newErrors).length === 0;
     };
-
     const handleSubmit = () => {
         if (validate()) {
             onContinue()
@@ -218,7 +244,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
             window.scrollTo({ top: 0, behavior: "smooth" })
         }
     };
-
     return (
         <div className="mt-30">
             <div className="secondary-background border-radius-25 mb-35" style={{ padding: "20px 40px" }}>
@@ -376,7 +401,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
                         <div className="form-group">
                             <InputLabel label="Tỉnh/Thành phố" isMarginLeft />
                             <select
-
                                 className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                 value={selectedProvince}
                                 onChange={handleProvinceChange}
@@ -417,7 +441,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
                         <div className="form-group">
                             <InputLabel label="Phường/Xã" isMarginLeft />
                             <select
-
                                 className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                 value={selectedWard}
                                 onChange={handleWardChange}

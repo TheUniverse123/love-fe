@@ -1,14 +1,14 @@
 'use client';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EventInformationForm from "@/components/dashboard/EventInformationForm";
 import CheckoutInformationForm from "@/components/dashboard/CheckoutInformationForm";
 import TimeAndTicket from "@/components/dashboard/TimeAndTicket";
 import styles from "./CreateEventPage.module.css"
-import { fetchCreateTicket, fetchCreateWorkshop } from "@/app/api/manage-workshop";
+import { fetchCreateTicket, fetchCreateWorkshop, fetchUpdateTicket, fetchUpdateWorkshop } from "@/app/api/manage-workshop";
 import { uploadImageToFirebase } from "@/app/util/uploadImage";
 import { toast } from "react-toastify";
 
-export default function CreateEventPage() {
+export default function CreateEventPage({ mode = 'create', initialWorkshop = null, initialTicket = null }) {
     const [activeTab, setActiveTab] = useState(1);
     const eventFormRef = useRef();
     const ticketFormRef = useRef();
@@ -16,6 +16,19 @@ export default function CreateEventPage() {
     const handleContinue = () => {
         setActiveTab(prevTab => prevTab + 1)
     }
+    useEffect(() => {
+        if (mode === 'edit' && initialWorkshop && eventFormRef.current) {
+            eventFormRef.current.prefillData(initialWorkshop);
+        }
+
+        if (mode === 'edit' && initialTicket && ticketFormRef.current) {
+            ticketFormRef.current.prefillData({ ...initialWorkshop });
+        }
+
+        if (mode === 'edit' && initialWorkshop && checkoutFormRef.current) {
+            checkoutFormRef.current.prefillData(initialWorkshop);
+        }
+    }, [mode, initialWorkshop, initialTicket]);
     const handleCreateWorkshopAndTicket = async () => {
         try {
             const eventData = eventFormRef.current?.getData();
@@ -67,8 +80,9 @@ export default function CreateEventPage() {
 
             const workshopResponse = await fetchCreateWorkshop(workshopInfo);
 
-            if (!workshopResponse?.result.workshopId) {
-                throw new Error("Tạo workshop thất bại hoặc không trả về ID.");
+            if (workshopResponse.statusCode !== 201) {
+                toast.error(workshopResponse[0])
+                return
             }
 
             // Gọi API tạo ticket
@@ -83,19 +97,57 @@ export default function CreateEventPage() {
             await fetchCreateTicket(ticketInfo);
             toast.success("🎉 Tạo sự kiện và vé thành công!");
         } catch (err) {
-            console.error("❌ Lỗi khi tạo workshop/ticket:", err);
             toast.error("Đã có lỗi xảy ra, vui lòng thử lại.");
         }
     };
 
+    const handleUpdateWorkshopAndTicket = async () => {
+        try {
+            const eventData = eventFormRef.current.getData();
+            const ticketData = ticketFormRef.current.getData();
+            const checkoutData = checkoutFormRef.current.getData();
 
+            console.log('ticketFormRef:', ticketFormRef.current);
+            console.log('getData func:', ticketFormRef.current?.getData);
+            console.log('ticketData:', ticketFormRef.current?.getData?.());
+
+            const updatedWorkshop = {
+                ...eventData,
+                ...checkoutData,
+                startDate: ticketData.eventStartDate,
+                endDate: ticketData.eventEndDate,
+                isFree: ticketData.isChecked,
+                price: Number(ticketData.ticketPrice),
+                totalTickets: Number(ticketData.totalTickets),
+                ticketImagePath: ticketData.ticketPath,
+                workshopId: initialWorkshop.workshopId
+            };
+
+            await fetchUpdateWorkshop(initialWorkshop.workshopId, updatedWorkshop);
+            console.log(initialTicket)
+            const updatedTicket = {
+                workshopTicketInfoId: initialTicket.workshopTicketInfoId,
+                workshopId: initialWorkshop.workshopId,
+                ticketName: ticketData.ticketName,
+                minQuantityPerOrder: ticketData.minTickets,
+                maxQuantityPerOrder: ticketData.maxTickets,
+                saleStartDate: ticketData.ticketSaleStartDate,
+                saleEndDate: ticketData.ticketSaleEndDate
+            };
+            await fetchUpdateTicket(initialTicket.workshopTicketInfoId, updatedTicket);
+            toast.success("🎉 Cập nhật thành công!");
+        } catch (err) {
+            console.log(err)
+            toast.error("❌ Có lỗi xảy ra khi cập nhật.");
+        }
+    };
     const handleBack = () => {
         setActiveTab(prevTab => prevTab - 1)
     }
     return (
         <div className={styles.container} style={{ marginRight: activeTab === 2 ? "100px" : "380px", paddingLeft: "35px", paddingTop: "20px" }}>
             <div className="flex-space pb-20 border-1px-bottom">
-                <h4 className="white-color">Tạo sự kiện</h4>
+                <h4 className="white-color">{mode === 'edit' ? "Cập nhật sự kiện" : "Tạo sự kiện"}</h4>
             </div>
 
             <div className="tab-buttons">
@@ -132,7 +184,7 @@ export default function CreateEventPage() {
                     <TimeAndTicket formRef={ticketFormRef} onContinue={handleContinue} onBack={handleBack} />
                 </div>
                 <div className={`tab-pane ${activeTab === 3 ? 'show' : 'hide'}`}>
-                    <CheckoutInformationForm formRef={checkoutFormRef} onBack={handleBack} onCreate={handleCreateWorkshopAndTicket} />
+                    <CheckoutInformationForm formRef={checkoutFormRef} onBack={handleBack} onCreate={mode === "create" ? handleCreateWorkshopAndTicket : handleUpdateWorkshopAndTicket} />
                 </div>
             </div>
         </div>

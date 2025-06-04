@@ -27,6 +27,8 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
         }
     }, [ticketPrice])
 
+    console.log(eventStartDate, eventEndDate)
+
     useEffect(() => {
         if (formRef) {
             formRef.current = {
@@ -37,30 +39,30 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     eventEndDate,
                     ticketSaleStartDate,
                     ticketSaleEndDate,
-                    ticketName,
                     totalTickets,
                     minTickets,
                     maxTickets,
                     ticketPrice,
-                    eventDescription
-                })
+                    description: eventDescription,
+                }),
+                prefillData: (data) => {
+                    setTicketName(data.workshopTicketInfo.ticketName || '');
+                    setTotalTickets(data.totalTickets || 0);
+                    setMinTickets(data.workshopTicketInfo.minQuantityPerOrder);
+                    setMaxTickets(data.workshopTicketInfo.maxQuantityPerOrder);
+                    setTicketSaleStartDate(data.workshopTicketInfo.saleStartDate);
+                    setTicketSaleEndDate(data.workshopTicketInfo.saleEndDate);
+                    setEventStartDate(data.startDate);
+                    setEventEndDate(data.endDate);
+                    setIsChecked(data.isFree === true);
+                    setTicketPrice(Number(data.price) || 0);
+                    setEventDescription(data.description || '');
+                    setTicketImagePath(data.ticketImagePath);
+                    setTicketFile(data.ticketImagePath);
+                }
             };
         }
-    }, [
-        isChecked,
-        ticketFile,
-        eventStartDate,
-        eventEndDate,
-        ticketSaleStartDate,
-        ticketSaleEndDate,
-        ticketName,
-        totalTickets,
-        minTickets,
-        maxTickets,
-        ticketPrice,
-        eventDescription
-    ]);
-
+    }, [isChecked, ticketPath, eventStartDate, eventEndDate, ticketSaleStartDate, ticketSaleEndDate, totalTickets, minTickets, maxTickets, ticketPrice, eventDescription]);
     const applyTimeToDate = (date, hour, minute) => {
         const newDate = new Date(date);
         newDate.setHours(hour);
@@ -83,9 +85,9 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
     const handleChange = () => {
         setIsChecked(prevState => {
             if (!prevState) {
-                setTicketPrice(0);  // Nếu chọn miễn phí, giá vé sẽ là 0
+                setTicketPrice(0);
             } else {
-                setTicketPrice("");  // Khi bỏ chọn, giá vé có thể nhập lại
+                setTicketPrice("");
             }
             return !prevState;
         });
@@ -131,7 +133,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
             setTicketPrice(e.target.value);
             clearError('ticketPrice');
         } else {
-            setTicketPrice(0);  // Nếu checkbox được chọn, giá vé sẽ là 0 và không thay đổi
+            setTicketPrice(0);
         }
     };
 
@@ -221,8 +223,8 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
 
         if (!ticketName.trim()) newErrors.ticketName = "Vui lòng nhập tên vé";
         if (isNaN(totalTickets) || Number(totalTickets) < 1 || Number(totalTickets) > 999) newErrors.totalTickets = "Vui lòng nhập tổng số lượng vé hợp lệ (1-999)";
-        if (isNaN(minTickets) || Number(minTickets) < 0 || Number(minTickets) > 999) newErrors.minTickets = "Vui lòng nhập số vé tối thiểu hợp lệ (0-999)";
-        if (isNaN(maxTickets) || Number(maxTickets) < 0 || Number(maxTickets) > 999) newErrors.maxTickets = "Vui lòng nhập số vé tối đa hợp lệ (0-999)";
+        if (isNaN(minTickets) || Number(minTickets) < 1 || Number(minTickets) > 999) newErrors.minTickets = "Vui lòng nhập số vé tối thiểu hợp lệ (1-999)";
+        if (isNaN(maxTickets) || Number(maxTickets) < 1 || Number(maxTickets) > 999) newErrors.maxTickets = "Vui lòng nhập số vé tối đa hợp lệ (1-999)";
         else if (Number(minTickets) > Number(maxTickets)) newErrors.maxTickets = "Số vé tối đa phải lớn hơn hoặc bằng số vé tối thiểu";
         if (isNaN(ticketPrice) || Number(ticketPrice) < 0) newErrors.ticketPrice = "Vui lòng nhập giá vé hợp lệ";
         if (!eventStartDate) newErrors.eventStartDate = "Vui lòng chọn thời gian bắt đầu sự kiện";
@@ -286,6 +288,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     <div className="col-xxl-6 col-lg-12 mb-20 pr-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian bắt đầu</p>
                         <Calendar
+                            initialDate={eventStartDate}
                             onDateChange={handleEventStartDateChange}
                             onTimeChange={handleEventStartTimeChange}
                         />
@@ -295,6 +298,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     <div className="col-xxl-6 col-lg-12 mb-20 pl-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian kết thúc</p>
                         <Calendar
+                            initialDate={eventEndDate}
                             onDateChange={handleEventEndDateChange}
                             onTimeChange={handleEventEndTimeChange}
                         />
@@ -429,6 +433,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     <div className="col-xxl-6 col-lg-12 mb-20 pr-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian bắt đầu bán vé</p>
                         <Calendar
+                            initialDate={ticketSaleStartDate}
                             onDateChange={handleTicketSaleStartDateChange}
                             onTimeChange={handleTicketSaleStartTimeChange}
                         />
@@ -438,6 +443,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     <div className="col-xxl-6 col-lg-12 mb-20 pl-30">
                         <p className="text-md-bold white-color text-center mb-10">Thời gian kết thúc bán vé</p>
                         <Calendar
+                            initialDate={ticketSaleEndDate}
                             onDateChange={handleTicketSaleEndDateChange}
                             onTimeChange={handleTicketSaleEndTimeChange}
                         />
@@ -448,7 +454,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                 <div className="row mt-20">
                     <div className="col-md-8 mb-20">
                         <div className="form-group">
-                            <InputLabel label="Mô tả sự kiện" isMarginLeft />
+                            <InputLabel label="Mô tả vé" isMarginLeft />
                             <textarea
                                 style={{ padding: "16px 25px", height: "193px" }}
                                 className="form-control form-input-background border-none border-radius-31"

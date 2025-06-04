@@ -6,7 +6,7 @@ export const fetchCategoryCount = async () => {
             return response?.data.result
         }
         ).catch((error) => {
-            const errors = error.response.data.errorMessages || error.response.data.errors || []
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
             return errors
         })
     return data
