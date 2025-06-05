@@ -7,6 +7,7 @@ import WorkshopDetailItem from "@/components/explore/detail/WorkshopDetailItem"
 import PopularPostsSidebar from "@/components/explore/PopularPostsSidebar"
 import TicketDetail from "@/components/explore/TicketDetail"
 import { useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 
 export default function WorkshopDetailPage({ params }) {
     const { data: remarkedWorkshops } = useQuery({
@@ -18,18 +19,24 @@ export default function WorkshopDetailPage({ params }) {
         queryKey: ['workshop-detail'],
         queryFn: ({ signal }) => fetchWorkshopDetail({ signal, workshopId: params?.slug }),
     });
+    const [workshopDetailItem, setWorkshopDetailItem] = useState({})
+    useEffect(() => {
+        setWorkshopDetailItem(workshopDetail)
+    }, [workshopDetail])
+
     const result = shuffleArray(remarkedWorkshops || []);
     return (
         <main className="main main-background">
             <TicketDetail
                 discount={25}
-                rating={workshopDetail?.averageRating}
-                reviews={workshopDetail?.approvedReviewCount}
-                title={workshopDetail?.title}
-                time={formatDateRange(workshopDetail?.startDate, workshopDetail?.endDate)}
-                address={workshopDetail?.location}
-                price={formatPrice(workshopDetail?.price)}
-                imageSrc={workshopDetail?.imagePath}
+                rating={workshopDetailItem?.averageRating}
+                reviews={workshopDetailItem?.approvedReviewCount}
+                title={workshopDetailItem?.title}
+                time={formatDateRange(workshopDetailItem?.startDate,
+                    workshopDetailItem?.endDate)}
+                address={workshopDetailItem?.location}
+                price={formatPrice(workshopDetailItem?.price)}
+                imageSrc={workshopDetailItem?.imagePath}
                 link="#"
                 buttonText="Đặt ngay"
             />
@@ -37,10 +44,10 @@ export default function WorkshopDetailPage({ params }) {
                 <div className="container">
                     <div className="row mt-30">
                         <div className="col-lg-8 col-md-6 col-md-12">
-                            <WorkshopDetailItem workshopDetail={workshopDetail} />
+                            <WorkshopDetailItem workshopDetail={workshopDetailItem} />
                         </div>
                         <div className="col-lg-4 col-md-6 col-md-12">
-                            <BookingForm workshopDetail={workshopDetail}/>
+                            <BookingForm workshopDetail={workshopDetailItem} />
                             <PopularPostsSidebar title="Có thể bạn sẽ thích" posts={convertRemarkedWorkshop(result)} />
                         </div>
                     </div>

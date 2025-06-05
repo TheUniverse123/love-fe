@@ -1,5 +1,6 @@
 'use client'
 
+import { getUserInfo } from '@/app/util/auth'
 import ExploreBanner from '@/components/banner/ExploreBanner'
 import ExploreSidebar from '@/components/explore/ExploreSidebar'
 import ExploreWorkshops from '@/components/explore/ExploreWorkshops'
@@ -18,7 +19,6 @@ export default function ExplorePage() {
         }));
     };
     useEffect(() => {
-        // Kiểm tra window có tồn tại (chỉ client)
         if (typeof window !== "undefined") {
             const params = new URLSearchParams(window.location.search);
             const v = params.get("value");

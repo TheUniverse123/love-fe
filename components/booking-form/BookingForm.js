@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdditionalService from "./AdditionalService";
 import TicketTypeLine from "./TicketTypeLine";
 import TimePicker from "./TimePicker";
-import { getTimeFromISO } from "@/app/util/convert";
+import { formatDate, getTimeFromISO } from "@/app/util/convert";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-
+import { getUserInfo } from "@/app/util/auth";
 const services = [
     { title: "Bữa ăn nhẹ (Snack)", price: "50.000 đ" },
     { title: "Nước uống (Nước suối, cà phê)", price: "15.000 đ" },
@@ -20,7 +20,7 @@ function formatPriceVN(price) {
 }
 export default function BookingForm({ workshopDetail, mode }) {
     const [adultQty, setAdultQty] = useState(1);
-    const [childQty, setChildQty] = useState(0);
+    const [workshopStartDate, setWorkshopStartDate] = useState("")
     const [selectedServices, setSelectedServices] = useState([]);
     const router = useRouter();
     const adultPriceNum = workshopDetail?.isFree
@@ -28,9 +28,12 @@ export default function BookingForm({ workshopDetail, mode }) {
         : workshopDetail?.price > 0
             ? workshopDetail.price
             : 100000;
-
-    const childPriceNum = Math.round(adultPriceNum / 2);
-
+    useEffect(() => {
+        if (workshopDetail && workshopDetail.startDate) {
+            console.log(workshopDetail?.startDate)
+            setWorkshopStartDate(formatDate(workshopDetail.startDate))
+        }
+    }, [workshopDetail])
     const toggleService = (title, priceStr) => {
         const priceNum = parseInt(priceStr.replace(/[^\d]/g, ""));
         setSelectedServices((prev) => {
@@ -43,18 +46,36 @@ export default function BookingForm({ workshopDetail, mode }) {
         });
     };
 
+    const totalServicePrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
+    const totalPrice = adultQty * adultPriceNum + totalServicePrice;
     const handleBooking = (e) => {
         e.preventDefault();
-        if (adultQty === 0 && childQty === 0) {
-            toast.error("Vui lòng chọn ít nhất 1 vé người lớn hoặc trẻ em để tiếp tục đặt vé.")
+        if (!getUserInfo()) {
+            toast.error("Vui lòng đăng nhập để đặt vé")
             return;
         }
-        router.push("/user/ticket/1");
+
+        if (adultQty === 0) {
+            toast.error("Vui lòng chọn ít nhất 1 vé")
+            return;
+        }
+        let serviceDescription = "";
+        selectedServices.forEach(item => {
+            serviceDescription = serviceDescription.concat(item.title);
+        });
+
+        localStorage.removeItem("booking-info")
+        localStorage.setItem("booking-info", JSON.stringify({
+            quantity: adultQty,
+            price: workshopDetail.price,
+            totalPrice: totalPrice,
+            addtionalService: totalServicePrice,
+            description: serviceDescription,
+            name: workshopDetail.title,
+            id: workshopDetail.workshopId
+        }))
+        router.push(`/user/ticket/${workshopDetail.workshopId}`);
     };
-
-    const totalServicePrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
-
-    const totalPrice = adultQty * adultPriceNum + childQty * childPriceNum + totalServicePrice;
 
     return (
         <div className="booking-form border-color">
@@ -63,17 +84,15 @@ export default function BookingForm({ workshopDetail, mode }) {
             </div>
 
             <div className="content-booking-form">
-                {/* Chọn ngày */}
                 <div className="item-line-booking border-color">
-                    <strong className="text-lg-bold white-color">Chọn ngày</strong>
+                    <strong className="text-lg-bold white-color">Ngày diễn ra</strong>
                     <div className="input-calendar w-50">
                         <input
-                            className="form-control calendar-date main-background border-color white-color pl-30 pb-10"
+                            disabled
+                            className="form-control calendar-date main-background border-color white-color p-15"
                             type="text"
-                            defaultValue="17/02/2025"
-                            readOnly
+                            defaultValue={workshopStartDate}
                         />
-                        {/* Calendar icon */}
                         <svg
                             width={18}
                             height={18}
@@ -105,12 +124,12 @@ export default function BookingForm({ workshopDetail, mode }) {
                             quantity={100}
                             onQuantityChange={setAdultQty}
                         />
-                        <TicketTypeLine
+                        {/* <TicketTypeLine
                             title="Trẻ em"
                             price={formatPriceVN(childPriceNum)}
                             quantity={100}
                             onQuantityChange={setChildQty}
-                        />
+                        /> */}
                     </div>
                 </div>
                 <div className="item-line-booking border-color">

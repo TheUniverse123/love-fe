@@ -119,3 +119,15 @@ export const fetchTicketDetail = async ({ signal, workshopId = 1 }) => {
         })
     return data
 }
+
+export const fetchCheckout = async (bookingInfo) => {
+    const data = await axiosInstanceJson.post(`/api/UserBookings/book-ticket`, bookingInfo)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}

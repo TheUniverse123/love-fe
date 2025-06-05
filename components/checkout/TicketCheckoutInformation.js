@@ -1,6 +1,32 @@
+'use client'
+
+import { formatPrice } from "@/app/util/convert"
 import styles from "./TicketCheckoutInformation.module.css"
+import { fetchCheckout } from "@/app/api/manage-workshop"
+import { toast } from "react-toastify"
 
 export default function TicketCheckoutInformation() {
+    const workshopBookingInfo = JSON.parse(localStorage.getItem("booking-info"))
+    console.log(workshopBookingInfo)
+
+    async function handleCheckout() {
+        const bookingInfo = {
+            workshopId: workshopBookingInfo.id,
+            quantity: workshopBookingInfo.quantity,
+            includeAdditionalService: workshopBookingInfo.addtionalService > 0 ? true : false,
+            additionalServicePrice: workshopBookingInfo.addtionalService,
+            additionalServiceDescription: workshopBookingInfo.description
+        }
+
+        const response = await fetchCheckout(bookingInfo)
+        if (response.statusCode === 201) {
+            toast.success("Đang chuyển đến trang thanh toán")
+            setTimeout(() => {
+                window.location.href = response.result.paymentUrl
+            }, 2000)
+        }
+    }
+
     return (
         <section className="main-background box-section pt-20">
             <div className="secondary-background border-radius-25 p-20 mb-35">
@@ -10,20 +36,20 @@ export default function TicketCheckoutInformation() {
                 </div>
 
                 <div className="form-title pt-20 pb-5">
-                    <p className="white-color text-md-bold">WORKSHOP NAME: Lorem ipsu m dolm ipsu m dolor sit am ipsu m dolmet</p>
+                    <p className="white-color text-md-bold mb-15">{workshopBookingInfo.name}</p>
                 </div>
 
                 <div className="flex-space pb-20 border-1px-white-2-bottom">
                     <div className="flex-center">
                         <img src="/assets/icon/ticket.svg" alt="icon ticket" />
-                        <p className="primary-color">x1</p>
+                        <p className="primary-color">x{workshopBookingInfo.quantity}</p>
                     </div>
-                    <p className="white-color text-md-bold font-20">100.000 đ</p>
+                    <p className="white-color text-md-bold font-20">{formatPrice(workshopBookingInfo.price)}</p>
                 </div>
                 <div className="row mt-25 pb-20 border-1px-white-2-bottom">
                     <div className="flex-space mb-5">
                         <p className="white-color font-16">Tạm tính</p>
-                        <p className="white-color font-16">100.000 đ</p>
+                        <p className="white-color font-16">{formatPrice(workshopBookingInfo.quantity * workshopBookingInfo.price)}</p>
                     </div>
                     <div className="flex-space mb-5">
                         <p className="white-color font-16">Giảm giá</p>
@@ -31,19 +57,19 @@ export default function TicketCheckoutInformation() {
                     </div>
                     <div className="flex-space">
                         <p className="white-color font-16">Dịch vụ bổ sung</p>
-                        <p className="white-color font-16">0 đ</p>
+                        <p className="white-color font-16">{formatPrice(workshopBookingInfo.addtionalService)}</p>
                     </div>
                 </div>
 
                 <div className="pb-20 pt-20 flex-space pb-20">
                     <h6 className="white-color">Tổng tiền</h6>
-                    <h6 className="primary-color">100.000 đ</h6>
+                    <h6 className="primary-color">{formatPrice(workshopBookingInfo.totalPrice)}</h6>
                 </div>
 
                 <div className="box-button-book mt-10 mr-20 ml-20 mb-25" >
                     <a
-                        className={`btn btn-book primary-background white-color hover-primary ${styles.buttonPayment}`}
-                        href="/user/ticket/1">
+                        onClick={handleCheckout}
+                        className={`btn btn-book primary-background white-color hover-primary ${styles.buttonPayment}`}>
                         Thanh toán
                     </a>
                 </div>

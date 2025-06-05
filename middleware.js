@@ -21,7 +21,6 @@ export function middleware(request) {
         console.log('accessToken không tồn tại trong userInfo')
         return NextResponse.redirect(new URL('/', request.url))
     }
-
     console.log('accessToken:', accessToken)
 
     return NextResponse.next()

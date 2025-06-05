@@ -29,6 +29,7 @@ export default function RatingForm() {
             if (response.statusCode === 200) {
                 toast.success("Gửi đánh giá thành công");
                 queryClient.invalidateQueries({ queryKey: ['ratings'] });
+                queryClient.invalidateQueries({ queryKey: ['workshop-detail'] });
                 setSelectedStar(0);
                 setReviewText("");
                 setErrors({ rating: "", review: "" });
