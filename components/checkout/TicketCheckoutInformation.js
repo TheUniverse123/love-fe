@@ -20,13 +20,16 @@ export default function TicketCheckoutInformation() {
 
         const response = await fetchCheckout(bookingInfo)
         if (response.statusCode === 201) {
-            toast.success("Đang chuyển đến trang thanh toán")
             setTimeout(() => {
-                window.location.href = response.result.paymentUrl
+                if (workshopBookingInfo.totalPrice > 0) {
+                    toast.success("Đang chuyển đến trang thanh toán")
+                    window.location.href = response.result.paymentUrl
+                } else {
+                    toast.success("Đặt vé thành công")
+                }
             }, 2000)
         }
     }
-
     return (
         <section className="main-background box-section pt-20">
             <div className="secondary-background border-radius-25 p-20 mb-35">

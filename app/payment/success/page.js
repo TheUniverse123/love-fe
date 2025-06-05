@@ -1,4 +1,4 @@
-export default function SuccessPage() {
+export default function CancelPage() {
     const styles = {
         page: {
             display: 'flex',
@@ -45,7 +45,6 @@ export default function SuccessPage() {
             fontSize: '16px'
         }
     }
-
     return (
         <main className="main">
             <div style={styles.page}>
@@ -57,9 +56,9 @@ export default function SuccessPage() {
                             style={{ width: '50%', display: 'inline-block' }}
                         />
                     </div>
-                    <div style={styles.header}>Thanh toán thất bại</div>
+                    <div style={styles.header}>Thanh toán thành công</div>
                     <p style={styles.message}>
-                        Giao dịch thất bại, vui lòng thử lại sau!
+                        Thanh toán thành công, vé đã được gửi trong email của bạn
                     </p>
                     <a href='/' style={styles.button}>
                         Quay về trang chủ
