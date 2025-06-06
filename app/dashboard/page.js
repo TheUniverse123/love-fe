@@ -67,7 +67,7 @@ export default function BookedTicketPage() {
   const displayedTickets = filteredTickets.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
-  );
+  ).sort((a, b) => Number(b.userBookingId) - Number(a.userBookingId));
 
   const generatePageNumbers = () => {
     const pages = [];

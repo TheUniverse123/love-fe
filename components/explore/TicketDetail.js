@@ -21,7 +21,8 @@ export default function TicketDetail({
     buttonText,
     isButtonVisible = true,
     mode = "ticket",
-    workshopId
+    workshopId,
+    onClick
 }) {
     const [showModal, setShowModal] = useState(false)
     const [showModalApprove, setShowModalApprove] = useState(false)
@@ -122,9 +123,9 @@ export default function TicketDetail({
                                             <h6 className="heading-6 primary-color">{price}</h6>
                                         </div>}
                                         {isButtonVisible && <div className="card-button">
-                                            <Link className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
+                                            <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} onClick={onClick}>
                                                 {buttonText}
-                                            </Link>
+                                            </a>
                                         </div>}
 
                                         {mode === "review" && <div className={`tour-rate col-lg-12 d-flex mt-30 flex-space`}>

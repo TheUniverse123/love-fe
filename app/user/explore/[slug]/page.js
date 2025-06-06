@@ -7,7 +7,7 @@ import WorkshopDetailItem from "@/components/explore/detail/WorkshopDetailItem"
 import PopularPostsSidebar from "@/components/explore/PopularPostsSidebar"
 import TicketDetail from "@/components/explore/TicketDetail"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export default function WorkshopDetailPage({ params }) {
     const { data: remarkedWorkshops } = useQuery({
@@ -24,6 +24,11 @@ export default function WorkshopDetailPage({ params }) {
         setWorkshopDetailItem(workshopDetail)
     }, [workshopDetail])
 
+    const bookingFormRef = useRef(null);
+    const scrollToBookingForm = () => {
+        bookingFormRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+
     const result = shuffleArray(remarkedWorkshops || []);
     return (
         <main className="main main-background">
@@ -39,6 +44,7 @@ export default function WorkshopDetailPage({ params }) {
                 imageSrc={workshopDetailItem?.imagePath}
                 link="#"
                 buttonText="Đặt ngay"
+                onClick={scrollToBookingForm}
             />
             <section className="box-section box-content-tour-detail main-background" style={{ paddingBottom: "290px" }}>
                 <div className="container">
@@ -47,7 +53,7 @@ export default function WorkshopDetailPage({ params }) {
                             <WorkshopDetailItem workshopDetail={workshopDetailItem} />
                         </div>
                         <div className="col-lg-4 col-md-6 col-md-12">
-                            <BookingForm workshopDetail={workshopDetailItem} />
+                            <BookingForm ref={bookingFormRef} workshopDetail={workshopDetailItem} />
                             <PopularPostsSidebar title="Có thể bạn sẽ thích" posts={convertRemarkedWorkshop(result)} />
                         </div>
                     </div>

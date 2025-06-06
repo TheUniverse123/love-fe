@@ -19,7 +19,7 @@ const services = [
 function formatPriceVN(price) {
     return price === 0 ? "Miễn phí" : price.toLocaleString("vi-VN") + " đ";
 }
-export default function BookingForm({ workshopDetail, mode }) {
+export default function BookingForm({ workshopDetail, mode, ref }) {
     const [adultQty, setAdultQty] = useState(1);
     const [workshopStartDate, setWorkshopStartDate] = useState("")
     const [selectedServices, setSelectedServices] = useState([]);
@@ -79,7 +79,7 @@ export default function BookingForm({ workshopDetail, mode }) {
     };
 
     return (
-        <div className="booking-form border-color">
+        <div className="booking-form border-color" ref={ref}>
             <div className="head-booking-form border-background">
                 <p className="text-xl-bold white-color">Chọn vé</p>
             </div>
