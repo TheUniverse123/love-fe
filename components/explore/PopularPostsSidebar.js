@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const PopularPostsSidebar = ({ title, posts }) => {
     return (
         <div className="sidebar-left border-1 main-secondary-background border-color mt-20 pb-25 mb-10">
@@ -8,17 +10,17 @@ const PopularPostsSidebar = ({ title, posts }) => {
                         <li key={index}>
                             <div className="card-post">
                                 <div className="card-image">
-                                    <a href={post.link || "#"}>
-                                        <img src={post.imageSrc} alt="Travila" />
-                                    </a>
+                                    <Link href={post?.link.toString() || "#"}>
+                                        <img src={post?.imageSrc} alt="Travila" />
+                                    </Link>
                                 </div>
                                 <div className="card-info">
-                                    <a className="text-xs-bold white-color" href={post.link || "#"}>
-                                        {post.title}
-                                    </a>
-                                    <span className="price text-sm-bold white-color">{post.price}</span>
-                                    {post.oldPrice && (
-                                        <span className="price-through text-sm-bold neutral-500">{post.oldPrice}</span>
+                                    <Link className="text-xs-bold white-color" href={post?.link.toString() || "#"}>
+                                        {post?.title}
+                                    </Link>
+                                    <span className="price text-sm-bold white-color">{post?.price}</span>
+                                    {post?.oldPrice && (
+                                        <span className="price-through text-sm-bold neutral-500">{post?.oldPrice}</span>
                                     )}
                                 </div>
                             </div>

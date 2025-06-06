@@ -7,6 +7,7 @@ import { fetchWorkshopsSaved } from "@/app/api/saved-workshops";
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "@/app/util/auth";
 import { formatDate, formatPrice } from "@/app/util/convert";
+import Link from "next/link";
 const userInfo = getUserInfo()
 
 export default function SavedEventPage() {
@@ -121,31 +122,31 @@ export default function SavedEventPage() {
           <ul className="pagination">
             {/* Prev Button */}
             <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-              <a className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageClick(currentPage - 1)} aria-label="Previous">
+              <Link className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageClick(currentPage - 1)} aria-label="Previous">
                 <span aria-hidden="true">
                   <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" stroke strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
 
             {/* Page Numbers */}
             {pageNumbers.map((page, index) => (
               <li key={index} className={`page-item ${page === currentPage ? 'active' : ''} ${page === '...' ? 'disabled' : ''}`}>
-                <a className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageClick(page)}>{page}</a>
+                <Link className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageClick(page)}>{page}</Link>
               </li>
             ))}
 
             {/* Next Button */}
             <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-              <a className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageClick(currentPage + 1)} aria-label="Next">
+              <Link className="page-link main-third-background white-color-4" href="#" onClick={() => handlePageClick(currentPage + 1)} aria-label="Next">
                 <span aria-hidden="true">
                   <svg className={styles.whiteTextsvg} width={12} height={12} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" stroke strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

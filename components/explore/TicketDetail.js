@@ -6,6 +6,7 @@ import { fetchApproveWorkshop, fetchDeclineWorkshop } from "@/app/api/manage-wor
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { queryClient } from "@/app/util/providers";
+import Link from "next/link";
 
 export default function TicketDetail({
     discount,
@@ -80,15 +81,15 @@ export default function TicketDetail({
                         </div>
                         <div className="card-flight card-hotel main-background">
                             <div className={`card-image ${styles.cardImage}`}>
-                                <a className={`wish flex-center main-background ${styles.discount}`} href="#">
+                                <Link className={`wish flex-center main-background ${styles.discount}`} href="#">
                                     <svg style={{ stroke: "white" }} width={40} height={40} viewBox="0 0 20 18"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M17.071 10.1422L11.4141 15.7991C10.6331 16.5801 9.36672 16.5801 8.58568 15.7991L2.92882 10.1422C0.9762 8.1896 0.9762 5.02378 2.92882 3.07116C4.88144 1.11853 8.04727 1.11853 9.99989 3.07116C11.9525 1.11853 15.1183 1.11853 17.071 3.07116C19.0236 5.02378 19.0236 8.1896 17.071 10.1422Z" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                </a>
-                                <a href={link} className={styles.image}>
+                                </Link>
+                                <Link href={link} className={styles.image}>
                                     <img src={imageSrc} alt="Travila" />
-                                </a>
+                                </Link>
                             </div>
                             <div className={`card-info main-background border-color ${styles.cardInfo}`}>
                                 {discount && <label className="sale-lbl label-discount">-{discount}%</label>}
@@ -100,9 +101,9 @@ export default function TicketDetail({
                                     </div>
                                 </div>
                                 <div className="card-title">
-                                    <a className="heading-6 white-color font-20"
+                                    <Link className="heading-6 white-color font-20"
                                         href={link}>{title}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-program">
                                     <div className="card-duration-tour mb-15">
@@ -121,18 +122,18 @@ export default function TicketDetail({
                                             <h6 className="heading-6 primary-color">{price}</h6>
                                         </div>}
                                         {isButtonVisible && <div className="card-button">
-                                            <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
+                                            <Link className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
                                                 {buttonText}
-                                            </a>
+                                            </Link>
                                         </div>}
 
                                         {mode === "review" && <div className={`tour-rate col-lg-12 d-flex mt-30 flex-space`}>
-                                            <a onClick={() => mode === "review" ? setShowModalApprove(true) : {}}
+                                            <Link onClick={() => mode === "review" ? setShowModalApprove(true) : {}}
                                                 className={`btn btn-default primary-background white-color hover-opacity mr-20 
                                             ${styles.buttonReview}`}>
-                                                Chấp nhận</a>
-                                            <a onClick={() => setShowModal(true)} className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonReview}`}>
-                                                Từ chối</a>
+                                                Chấp nhận</Link>
+                                            <Link onClick={() => setShowModal(true)} className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonReview}`}>
+                                                Từ chối</Link>
                                         </div>}
                                     </div>
                                 </div>

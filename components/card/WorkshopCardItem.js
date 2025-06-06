@@ -5,6 +5,7 @@ import styles from "./WorkshopCardItem.module.css";
 import { getUserInfo } from "@/app/util/auth";
 import { toast } from "react-toastify";
 import { fetchCheckWorkshop, fetchRemoveFavouriteWorkshops, fetchSaveFavouriteWorkshops } from "@/app/api/saved-workshops";
+import Link from "next/link";
 
 const userId = getUserInfo()?.id
 export default function WorkshopCardItem({ item = {
@@ -90,7 +91,7 @@ export default function WorkshopCardItem({ item = {
                             </span>
                         </div>
                     </div>
-                    <div className="card-title"> <a className={`heading-6 white-color ${styles.title}`} href={`/user/explore/${item.id || 0}`}>{item.title}</a></div>
+                    <div className="card-title"> <Link className={`heading-6 white-color ${styles.title}`} href={`/user/explore/${item.id || 0}`}>{item.title}</Link></div>
                     <div className="card-program">
                         <div className={`card-location ${styles.cardLocation}`}>
                             <img src="/assets/icon/ClockIcon.svg" alt="Clock Icon" />
@@ -102,9 +103,9 @@ export default function WorkshopCardItem({ item = {
                                 <h6 className="heading-6 white-color">{item.price}</h6>
                             </div>
                             <div className="card-button white-color">
-                                <a className={`btn btn-gray ${styles.button} ${styles.whiteColor} ${styles.whiteText}`} href={`/user/explore/${item.id || 0}`}>
+                                <Link className={`btn btn-gray ${styles.button} ${styles.whiteColor} ${styles.whiteText}`} href={`/user/explore/${item.id || 0}`}>
                                     Tìm hiểu thêm
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ import { formatDate, getTimeFromISO } from "@/app/util/convert";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { getUserInfo } from "@/app/util/auth";
+import Link from "next/link";
 const services = [
     { title: "Bữa ăn nhẹ (Snack)", price: "50.000 đ" },
     { title: "Nước uống (Nước suối, cà phê)", price: "15.000 đ" },
@@ -177,7 +178,7 @@ export default function BookingForm({ workshopDetail, mode }) {
                         </button>
                     </div>
                     <div className="box-need-help">
-                        <a href="/user/help-center">
+                        <Link href="/user/help-center">
                             <svg
                                 width={12}
                                 height={14}
@@ -191,7 +192,7 @@ export default function BookingForm({ workshopDetail, mode }) {
                                 />
                             </svg>
                             Cần hỗ trợ?
-                        </a>
+                        </Link>
                     </div>
                 </>}
             </div>

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import MyTicket from "@/components/dashboard/MyTicket";
 import InputSearch from "@/components/search/InputSearch";
@@ -8,6 +8,7 @@ import { fetchOrderedTickets } from "../api/manage-workshop";
 import { getUserInfo } from "../util/auth";
 import { formatDateRange } from "../util/convert";
 import styles from "./BookedTicketPage.module.css";
+import Link from "next/link";
 
 const PAGE_SIZE = 3;
 const userInfo = getUserInfo();
@@ -68,10 +69,26 @@ export default function BookedTicketPage() {
     currentPage * PAGE_SIZE
   );
 
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  const generatePageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // If there are more than 5 pages, show a limited number of pages
+      if (currentPage <= 3) {
+        pages.push(1, 2, 3, 4, '...');
+      } else if (currentPage >= totalPages - 2) {
+        pages.push('...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push('...', currentPage - 1, currentPage, currentPage + 1, '...');
+      }
+    }
+    return pages;
+  };
+
+  const pageNumbers = generatePageNumbers();
 
   return (
     <div className={styles.myEvent}>
@@ -162,32 +179,36 @@ export default function BookedTicketPage() {
           <nav aria-label="Page navigation example">
             <ul className="pagination">
               <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                <a
+                <Link
                   className="page-link main-third-background white-color-4"
                   href="#"
                   onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 >
                   &laquo;
-                </a>
+                </Link>
               </li>
-              {pageNumbers.map((page) => (
+              {pageNumbers.map((page, index) => (
                 <li
-                  key={page}
-                  className={`page-item ${currentPage === page ? "active" : ""}`}
+                  key={index}
+                  className={`page-item ${currentPage === page ? "active" : ""} ${page === '...' ? 'disabled' : ''}`}
                 >
-                  <a
+                  <Link
                     className="page-link main-third-background white-color-4"
                     href="#"
-                    onClick={() => setCurrentPage(page)}
+                    onClick={() => {
+                      if (page !== '...') {
+                        setCurrentPage(page);
+                      }
+                    }}
                   >
                     {page}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li
                 className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
               >
-                <a
+                <Link
                   className="page-link main-third-background white-color-4"
                   href="#"
                   onClick={() =>
@@ -195,7 +216,7 @@ export default function BookedTicketPage() {
                   }
                 >
                   &raquo;
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

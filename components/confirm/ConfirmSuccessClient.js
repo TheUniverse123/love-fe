@@ -1,6 +1,7 @@
 'use client'
 
 import { fetchConfirmEmail } from '@/app/api/account'
+import Link from 'next/link'
 import { useEffect } from 'react'
 
 export default function ConfirmSuccessClient() {
@@ -87,9 +88,9 @@ export default function ConfirmSuccessClient() {
                     <p style={styles.message}>
                         Tài khoản của bạn đã được xác thực thành công! Bạn có thể đăng nhập vào tài khoản của mình ngay bây giờ.
                     </p>
-                    <a href='/' style={styles.button}>
+                    <Link href='/' style={styles.button}>
                         Quay về trang chủ
-                    </a>
+                    </Link>
                 </div>
             </div>
         </main>

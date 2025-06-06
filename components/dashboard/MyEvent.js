@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query"
 import { fetchDeclineWorkshop } from "@/app/api/manage-workshop"
 import { toast } from "react-toastify"
 import { queryClient } from "@/app/util/providers"
+import Link from "next/link"
 
 export default function MyEvent({
     title,
@@ -59,16 +60,16 @@ export default function MyEvent({
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">
                 <div className="card-flight card-hotel main-background border-1px">
                     <div className={`card-image ${styles.cardImage} ${smallImage ? styles.smallImage : styles.largeImage}`}>
-                        <a href={link}>
+                        <Link href={link ? link.toString() : ""}>
                             <img src={imageSrc} alt="Travila" />
-                        </a>
+                        </Link>
                     </div>
                     <div className={`card-info main-background row border-none ${styles.cardInfoEvent}`}>
                         <div className={`tour-detail-ticket ${styles.tourDetail} ${isButtonVisible ? " col-md-8" : " col-md-12"}`}>
                             <div className="mt-10 mb-5">
-                                <a className="heading-6 white-color font-18"
-                                    href={link}>{title}
-                                </a>
+                                <Link className="heading-6 white-color font-18"
+                                    href={link ? link.toString() : ""}>{title}
+                                </Link>
                             </div>
                             <div className="card-program">
                                 <div className="card-duration-tour mb-15">
@@ -86,15 +87,15 @@ export default function MyEvent({
                         </div>
                         {isButtonVisible &&
                             <div className={`tour-rate col-lg-4 d-flex ${styles.tourRate}`}>
-                                <a href={(mode === "review" && tab === "upcoming") && `/user/review/${workshopId}`}
+                                <Link href={(mode === "review" && tab === "upcoming") ? `/user/review/${workshopId}` : ""}
                                     className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>
-                                    {tabText}</a>
+                                    {tabText}</Link>
                                 {(tab !== "past" && tab !== "waiting") &&
-                                    <a
+                                    <Link
                                         href={`/dashboard/edit/${workshopId}`}
                                         onClick={() => mode === "review" ? setShowModal(true) : {}}
                                         className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>
-                                        {mode === "manage" ? 'Chỉnh sửa' : "Từ chối"}</a>
+                                        {mode === "manage" ? 'Chỉnh sửa' : "Từ chối"}</Link>
                                 }
                             </div>
                         }

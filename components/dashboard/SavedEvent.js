@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../explore/TicketDetail.module.css";
 import styleMain from "./SavedEvent.module.css"
 export default function SavedEvent({
@@ -17,16 +18,16 @@ export default function SavedEvent({
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">
                 <div className="card-flight card-hotel main-background">
                     <div className={`card-image ${styleMain.cardImage}`}>
-                        <a href={link}>
+                        <Link href={link}>
                             <img src={imageSrc} alt="image" />
-                        </a>
+                        </Link>
                     </div>
                     <div className={`card-info main-background border-color row ${styleMain.cardInfo}`}>
                         <div className={`tour-detail-ticket col-lg-8 ${styleMain.maxHeight}`}>
                             <div className="card-title">
-                                <a className={`heading-6 white-color font-18 ${styleMain.title} ${styleMain.titleResponsive} ${styleMain.titleSmall}`}
+                                <Link className={`heading-6 white-color font-18 ${styleMain.title} ${styleMain.titleResponsive} ${styleMain.titleSmall}`}
                                     href={link}>{title}
-                                </a>
+                                </Link>
                             </div>
                             <div className="card-program">
                                 <div className="card-duration-tour mb-15">
@@ -55,11 +56,11 @@ export default function SavedEvent({
                                     <h3 className={`heading-6 primary-color font-30 ${styleMain.titlePrice}`}>{price}</h3>
                                 </div>
                                 {isButtonVisible && <div className="card-button">
-                                    <a
+                                    <Link
                                         className={`btn btn-gray ${styles.button} ${styleMain.buttonTicket} ${styleMain.greyText} ${styleMain.greyColor}`}
                                         href="/user/ticket/1">
                                         {buttonText}
-                                    </a>
+                                    </Link>
                                 </div>}
                             </div>
                         </div>

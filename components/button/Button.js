@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from "./Button.module.css"
+import Link from 'next/link'
 export default function Button({ text, link = "#", icon, color = "primary",
     textColor = "white", size = "normal", isSignIn = false, ...props }) {
     let sizeClass = styles.btnNormal
@@ -30,11 +31,11 @@ export default function Button({ text, link = "#", icon, color = "primary",
 
     return (
         <>
-            <a
+            <Link
                 className={`btn btn-default ${isSignIn ? 'btn-signin' : ''} ${styles.button} ${sizeClass} ${colorClass} ${textColorClass}`}
                 href={link ? link : ""} {...props}>
                 {text} {icon}
-            </a>
+            </Link>
         </>
     )
 }

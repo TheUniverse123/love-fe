@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Slider from "react-slick"; // Import Slider from react-slick
 import styles from "./WorkshopListType.module.css";
 import WorkshopTypeItem from "./WorkshopTypeItem";
+import Link from "next/link";
 
 const items = [
     {
@@ -111,12 +112,12 @@ export default function WorkshopListType() {
 
                 <div className="col-md-4">
                     <div className="d-flex justify-content-start">
-                        <a className={`btn btn-black-lg ${styles.button}`} href="/user/explore">
+                        <Link className={`btn btn-black-lg ${styles.button}`} href="/user/explore">
                             Xem thêm
                             <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

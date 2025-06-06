@@ -1,7 +1,60 @@
-.buttonArrow {
-    background-image: url('/assets/lib/user/imgs/template/icons/arrow-down-white.svg') !important
-}
-
 .whiteTextsvg {
     stroke: var(--bg-white-color-4) !important;
+}
+
+.customSelectContainer {
+    position: relative;
+}
+
+.customSelect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--bg-main-color) !important;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.arrow {
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-main-color) !important;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10000000000000000000000;
+}
+
+.option {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+    transition: background-color 0.2s ease;
+    z-index: 10000000000000000000000;
+    text-align: left;
+}
+
+.option:hover {
+    background-color: var(--bg-main-color) !important;
+}
+
+.option:active {
+    background-color: var(--bg-main-color) !important;
 }

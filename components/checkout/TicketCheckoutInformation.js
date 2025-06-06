@@ -4,6 +4,7 @@ import { formatPrice } from "@/app/util/convert"
 import styles from "./TicketCheckoutInformation.module.css"
 import { fetchCheckout } from "@/app/api/manage-workshop"
 import { toast } from "react-toastify"
+import Link from "next/link"
 
 export default function TicketCheckoutInformation() {
     const workshopBookingInfo = JSON.parse(localStorage.getItem("booking-info"))
@@ -17,17 +18,16 @@ export default function TicketCheckoutInformation() {
             additionalServicePrice: workshopBookingInfo.addtionalService,
             additionalServiceDescription: workshopBookingInfo.description
         }
-
         const response = await fetchCheckout(bookingInfo)
         if (response.statusCode === 201) {
-            setTimeout(() => {
-                if (workshopBookingInfo.totalPrice > 0) {
-                    toast.success("Đang chuyển đến trang thanh toán")
-                    window.location.href = response.result.paymentUrl
-                } else {
-                    toast.success("Đặt vé thành công")
-                }
-            }, 2000)
+            if (workshopBookingInfo.totalPrice > 0) {
+                toast.success("Đang chuyển đến trang thanh toán")
+                window.location.href = response.result.paymentUrl
+            } else {
+                toast.success("Đặt vé thành công")
+            }
+        } else {
+            toast.error(response[0])
         }
     }
     return (
@@ -35,7 +35,7 @@ export default function TicketCheckoutInformation() {
             <div className="secondary-background border-radius-25 p-20 mb-35">
                 <div className="form-title pb-20 border-1px-white-2-bottom flex-space">
                     <h5 className="white-color">Thông tin đặt vé</h5>
-                    <a href="#" className="primary-color">Chọn lại vé</a>
+                    <Link href="#" className="primary-color">Chọn lại vé</Link>
                 </div>
 
                 <div className="form-title pt-20 pb-5">
@@ -70,11 +70,12 @@ export default function TicketCheckoutInformation() {
                 </div>
 
                 <div className="box-button-book mt-10 mr-20 ml-20 mb-25" >
-                    <a
+                    <Link
+                        href=""
                         onClick={handleCheckout}
                         className={`btn btn-book primary-background white-color hover-primary ${styles.buttonPayment}`}>
                         Thanh toán
-                    </a>
+                    </Link>
                 </div>
             </div>
         </section>

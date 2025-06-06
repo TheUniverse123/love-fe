@@ -6,6 +6,7 @@ import ReviewProgress from "./ReviewProgress";
 import { fetchRatingByWorkshop } from "@/app/api/rating";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function WorkshopRating({ progressData, workshopDetail }) {
     const { slug } = useParams();
@@ -51,7 +52,7 @@ export default function WorkshopRating({ progressData, workshopDetail }) {
         }
         return pages.map((page) => (
             <li key={page} className={`page-item ${page === dataRating?.currentPage ? "active" : ""}`}>
-                <a
+                <Link
                     className={`page-link ${page === dataRating?.currentPage ? "secondary-background white-color" : "main-third-background white-color-4"}`}
                     href="#"
                     onClick={(e) => {
@@ -60,7 +61,7 @@ export default function WorkshopRating({ progressData, workshopDetail }) {
                     }}
                 >
                     {page}
-                </a>
+                </Link>
             </li>
         ));
     };
@@ -136,7 +137,7 @@ export default function WorkshopRating({ progressData, workshopDetail }) {
                     {(dataRating?.items && dataRating?.items.length > 0) && <nav aria-label="Page navigation example">
                         <ul className="pagination">
                             <li className={`page-item ${dataRating?.currentPage === 1 ? "disabled" : ""}`}>
-                                <a
+                                <Link
                                     className="page-link main-third-background white-color-4"
                                     href="#"
                                     aria-label="Previous"
@@ -161,13 +162,13 @@ export default function WorkshopRating({ progressData, workshopDetail }) {
                                             />
                                         </svg>
                                     </span>
-                                </a>
+                                </Link>
                             </li>
 
                             {renderPagination()}
 
                             <li className={`page-item ${dataRating?.currentPage === dataRating?.totalPages ? "disabled" : ""}`}>
-                                <a
+                                <Link
                                     className="page-link main-third-background white-color-4"
                                     href="#"
                                     aria-label="Next"
@@ -192,7 +193,7 @@ export default function WorkshopRating({ progressData, workshopDetail }) {
                                             />
                                         </svg>
                                     </span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </nav>}

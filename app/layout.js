@@ -3,7 +3,6 @@ import ClientLoader from "@/components/ClientLoader";
 import Footer from "@/components/footer/Footer";
 import UserHeader from "@/components/header/UserHeader";
 import InjectCSS from "@/components/lib-loader/InjectCSS";
-import MenuHeader from "@/components/menu-header/MenuHeader";
 import PopupSignin from "@/components/popup/PopupSignin";
 import { Geist, Geist_Mono } from "next/font/google";
 import Head from "next/head";
@@ -13,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
 import Providers from "./util/providers";
 import { PopupProvider } from "@/contexts/PopupContext";
+import SidebarCanvas from "@/components/menu-header/SidebarCanvas";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,12 +55,12 @@ export default async function RootLayout({ children }) {
               <div className="spinner"></div>
             </div>
             <InjectCSS url="/assets/lib/user/css/style.css?v=1.0.0" />
-            <MenuHeader />
             <UserHeader />
             {children}
             <Footer />
             <PopupSignin />
             <Chatbot />
+            <SidebarCanvas />
             <ClientLoader />
             <ToastContainer />
           </PopupProvider>

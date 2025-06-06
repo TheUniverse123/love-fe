@@ -7,6 +7,7 @@ import InputSearch from '@/components/search/InputSearch';
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from 'react';
 import styles from "../my-event/MyEvents.module.css";
+import Link from "next/link";
 
 export default function MyEvents() {
   const [selectedTab, setSelectedTab] = useState('upcoming');
@@ -156,7 +157,7 @@ export default function MyEvents() {
           <ul className="pagination">
             {/* Previous Button */}
             <li className="page-item">
-              <a
+              <Link
                 className="page-link main-third-background white-color-4"
                 href="#"
                 aria-label="Previous"
@@ -167,29 +168,29 @@ export default function MyEvents() {
                     <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" stroke strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
 
             {/* Render số trang */}
             {pageNumbers.map((page, index) => (
               <li key={index} className="page-item">
                 {page === '...' ? (
-                  <a className="page-link main-third-background white-color-4">...</a>
+                  <Link className="page-link main-third-background white-color-4">...</Link>
                 ) : (
-                  <a
+                  <Link
                     className={`page-link ${page === currentPages[selectedTab] ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
                     href="#"
                     onClick={() => handlePageChange(page)}
                   >
                     {page}
-                  </a>
+                  </Link>
                 )}
               </li>
             ))}
 
             {/* Next Button */}
             <li className="page-item">
-              <a
+              <Link
                 className="page-link main-third-background white-color-4"
                 href="#"
                 aria-label="Next"
@@ -200,7 +201,7 @@ export default function MyEvents() {
                     <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" stroke strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

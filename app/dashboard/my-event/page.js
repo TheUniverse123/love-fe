@@ -8,14 +8,13 @@ import { fetchWorkshopByUsers } from "@/app/api/manage-workshop";
 import { getUserInfo } from "@/app/util/auth";
 import { useQuery } from "@tanstack/react-query";
 import { formatDateRange } from "@/app/util/convert";
+import Link from "next/link";
 
 const PAGE_SIZE = 2;
 const userInfo = getUserInfo();
-
 export default function MyEvents() {
   const [selectedTab, setSelectedTab] = useState('upcoming');
   const [searchKeyword, setSearchKeyword] = useState('');
-
   const [pagination, setPagination] = useState({
     upcoming: 1,
     past: 1,
@@ -68,8 +67,6 @@ export default function MyEvents() {
   const handlePageChange = (page) => {
     setPagination(prev => ({ ...prev, [selectedTab]: page }));
   };
-
-  // Hàm render phân trang với dấu ...
   const renderPaginationItems = () => {
     const pages = [];
     const total = totalPages;
@@ -81,13 +78,13 @@ export default function MyEvents() {
       for (let i = 1; i <= total; i++) {
         pages.push(
           <li key={i} className="page-item">
-            <a
+            <Link
               href="#"
               className={`page-link ${current === i ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
               onClick={e => { e.preventDefault(); handlePageChange(i); }}
             >
               {i}
-            </a>
+            </Link>
           </li>
         );
       }
@@ -112,20 +109,20 @@ export default function MyEvents() {
 
     pages.push(
       <li key={1} className="page-item">
-        <a
+        <Link
           href="#"
           className={`page-link ${current === 1 ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
           onClick={e => { e.preventDefault(); handlePageChange(1); }}
         >
           1
-        </a>
+        </Link>
       </li>
     );
 
     if (left > 2) {
       pages.push(
         <li key="left-ellipsis" className="page-item">
-          <a className="page-link main-third-background white-color">...</a>
+          <Link href="#" className="page-link main-third-background white-color">...</Link>
         </li>
       );
     }
@@ -133,13 +130,13 @@ export default function MyEvents() {
     for (let i = left; i <= right; i++) {
       pages.push(
         <li key={i} className="page-item">
-          <a
+          <Link
             href="#"
             className={`page-link ${current === i ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
             onClick={e => { e.preventDefault(); handlePageChange(i); }}
           >
             {i}
-          </a>
+          </Link>
         </li>
       );
     }
@@ -147,26 +144,25 @@ export default function MyEvents() {
     if (right < total - 1) {
       pages.push(
         <li key="right-ellipsis" className="page-item">
-          <a className="page-link main-third-background white-color">...</a>
+          <Link href="#" className="page-link main-third-background white-color">...</Link>
         </li>
       );
     }
 
     pages.push(
       <li key={total} className="page-item">
-        <a
+        <Link
           href="#"
           className={`page-link ${current === total ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}
           onClick={e => { e.preventDefault(); handlePageChange(total); }}
         >
           {total}
-        </a>
+        </Link>
       </li>
     );
 
     return pages;
   };
-
   return (
     <div className={styles.myEvent}>
       <div className="flex-space pb-20 border-1px-bottom">
@@ -214,7 +210,7 @@ export default function MyEvents() {
           <nav aria-label="Page navigation example">
             <ul className="pagination">
               <li className="page-item">
-                <a
+                <Link
                   className="page-link main-third-background white-color-4"
                   href="#"
                   onClick={e => {
@@ -227,13 +223,13 @@ export default function MyEvents() {
                       <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                </a>
+                </Link>
               </li>
 
               {renderPaginationItems()}
 
               <li className="page-item">
-                <a
+                <Link
                   className="page-link main-third-background white-color-4"
                   href="#"
                   onClick={e => {
@@ -246,7 +242,7 @@ export default function MyEvents() {
                       <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

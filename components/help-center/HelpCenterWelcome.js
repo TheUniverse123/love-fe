@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 export default function HelpCenterWelcome() {
@@ -22,13 +23,13 @@ export default function HelpCenterWelcome() {
                                 </div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Account Management</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Account Management</Link>
                                     <p className="text-xs-medium neutral-500">For help with a current product or service or refer to FAQs and developer tools</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -45,13 +46,13 @@ export default function HelpCenterWelcome() {
                                 </div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Booking and Reservations</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Booking and Reservations</Link>
                                     <p className="text-xs-medium neutral-500">Call us to speak to a member of our team.</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -73,13 +74,13 @@ export default function HelpCenterWelcome() {
                                 </div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Booking and Reservations</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Booking and Reservations</Link>
                                     <p className="text-xs-medium neutral-500">Contact the sales department about cooperation projects</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -93,13 +94,13 @@ export default function HelpCenterWelcome() {
                                 </div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Activity Information</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Activity Information</Link>
                                     <p className="text-xs-medium neutral-500">Contact us to open our branches globally.</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -109,13 +110,13 @@ export default function HelpCenterWelcome() {
                                 <div className="card-icon border-1px-white"> <img src="/assets/icon/cancel.svg" alt="Travilla" /></div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Cancellations and Refunds</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Cancellations and Refunds</Link>
                                     <p className="text-xs-medium neutral-500">Contact us to open our branches globally.</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -125,13 +126,13 @@ export default function HelpCenterWelcome() {
                                 <div className="card-icon border-1px-white"> <img src="/assets/icon/technical.svg" alt="Travilla" /></div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Technical Support</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Technical Support</Link>
                                     <p className="text-xs-medium neutral-500">Contact us to open our branches globally.</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -145,13 +146,13 @@ export default function HelpCenterWelcome() {
                                 </div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Policies and Guidelines</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Policies and Guidelines</Link>
                                     <p className="text-xs-medium neutral-500">Contact us to open our branches globally.</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>
@@ -165,13 +166,13 @@ export default function HelpCenterWelcome() {
                                 </div>
                             </div>
                             <div className="card-info">
-                                <div className="card-title"> <a className="title text-lg-bold white-color" href="#">Safety and Security</a>
+                                <div className="card-title"> <Link className="title text-lg-bold white-color" href="#">Safety and Security</Link>
                                     <p className="text-xs-medium neutral-500">Contact us to open our branches globally.</p>
                                 </div>
-                                <div className="card-method-contact"> <a className="email text-md-bold white-color-4" href="#">Details
+                                <div className="card-method-contact"> <Link className="email text-md-bold white-color-4" href="#">Details
                                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 15L15 8L8 1M15 8L1 8" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg></a></div>
+                                    </svg></Link></div>
                             </div>
                         </div>
                     </div>

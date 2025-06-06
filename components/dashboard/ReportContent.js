@@ -12,6 +12,7 @@ import CalendarSidebarCanvas from "../calendar/CalendarSidebarCanvas"
 import ChartComponent from './ChartComponent'
 import MyEvent from './MyEvent'
 import { getUserInfo } from "@/app/util/auth"
+import Link from "next/link"
 const userInfo = getUserInfo()
 
 export default function ReportContent() {
@@ -138,7 +139,7 @@ export default function ReportContent() {
                                     <ul className="pagination">
                                         {/* Nút Previous */}
                                         <li className="page-item">
-                                            <a
+                                            <Link
                                                 className="page-link main-third-background white-color-4"
                                                 href="#"
                                                 onClick={handlePreviousPage}
@@ -151,20 +152,20 @@ export default function ReportContent() {
                                                         <path d="M6.00016 1.33325L1.3335 5.99992M1.3335 5.99992L6.00016 10.6666M1.3335 5.99992H10.6668" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
                                                     </svg>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         {/* Các trang */}
                                         {generatePagination().map((page, index) => (
                                             <li key={index} className={`page-item ${page === currentPage ? 'active' : ''}`}>
-                                                <a className="page-link main-third-background white-color-4 flex-center" href="#"
+                                                <Link className="page-link main-third-background white-color-4 flex-center" href="#"
                                                     onClick={() => handlePageChange(page)}>
                                                     {page}
-                                                </a>
+                                                </Link>
                                             </li>
                                         ))}
                                         {/* Nút Next */}
                                         <li className="page-item">
-                                            <a
+                                            <Link
                                                 className="page-link main-third-background white-color-4"
                                                 href="#"
                                                 onClick={handleNextPage}
@@ -177,7 +178,7 @@ export default function ReportContent() {
                                                         <path d="M5.99967 10.6666L10.6663 5.99992L5.99968 1.33325M10.6663 5.99992L1.33301 5.99992" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
                                                     </svg>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </nav>
@@ -208,11 +209,11 @@ export default function ReportContent() {
                                             </div>
                                         </div>
                                         <div className="card-phone col-3 flex-center pl-0">
-                                            <a className="text-xs-medium phone white-color" href="#">{formatDate(item.bookingDate)}</a>
+                                            <Link className="text-xs-medium phone white-color" href="#">{formatDate(item.bookingDate)}</Link>
                                         </div>
                                         <div className="card-email col-4 pr-0 flex-start">
                                             <img src='/assets/icon/email-dashboard.svg' className='mr-5' />
-                                            <a className={`email white-color ${styles.emailText}`} href="#">{item.userEmail}</a>
+                                            <Link className={`email white-color ${styles.emailText}`} href="#">{item.userEmail}</Link>
                                         </div>
                                     </div>
                                 ))}

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ExploreBoxViewResult from "./ExploreBoxViewResult";
 import ExploreWorkshopItem from "./ExploreWorkshopItem";
 import styles from "./ExploreWorkshops.module.css";
+import Link from "next/link";
 
 const categoryMap = {
     art: 1,
@@ -21,13 +22,15 @@ export default function ExploreWorkshops({ filtersSelected }) {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [selected, setSelected] = useState("Mới nhất");
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleDropdown = () => setIsOpen(!isOpen);
     const pageSize = 15;
 
     useEffect(() => {
         setPage(1);
     }, [filtersSelected]);
 
-    const { data, isLoading, refetch } = useQuery({
+    const { data } = useQuery({
         queryKey: ["workshop-filtered", filtersSelected, page, selected],
         queryFn: async ({ signal }) => {
             // Kiểm tra có filter hay không
@@ -185,7 +188,7 @@ export default function ExploreWorkshops({ filtersSelected }) {
                     </div>
                     <div className="col-xl-8 col-md-8 mb-10 text-lg-end text-center">
                         <div className="box-item-sort">
-                            <a className="btn btn-sort" href="#">
+                            <Link className="btn btn-sort" href="#">
                                 <svg
                                     style={{ stroke: "white" }}
                                     width={18}
@@ -209,35 +212,34 @@ export default function ExploreWorkshops({ filtersSelected }) {
                                         strokeLinejoin="round"
                                     />
                                 </svg>
-                            </a>
+                            </Link>
 
-                            <div className="item-sort border-1 border-color px-15 py-7">
-                                <span className="text-xs-medium neutral-500 mr-5">Sắp xếp theo:</span>
-                                <div className="dropdown dropdown-sort border-1-right">
-                                    <button
-                                        className={`btn dropdown-toggle ${styles.buttonArrow}`}
-                                        type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
+                            <div className="item-sort border-1 border-color px-15 py-7 flex-space">
+                                <span className="neutral-500 mr-20">Sắp xếp theo:</span>
+
+                                {/* Custom Select */}
+                                <div className={styles.customSelectContainer}>
+                                    <div
+                                        className={styles.customSelect}
+                                        onClick={toggleDropdown}
                                     >
-                                        <span className="white-color">{selected}</span>
-                                    </button>
-                                    <ul className="dropdown-menu dropdown-menu-light m-0" aria-labelledby="dropdownSort">
-                                        {["Mới nhất", "Nổi bật nhất"].map((label) => (
-                                            <li key={label}>
-                                                <a
-                                                    href="#"
-                                                    className={`dropdown-item ${selected === label ? "active" : ""}`}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        handleSelect(label);
-                                                    }}
+                                        <span className="mr-20">{selected}</span>
+                                        <span className={styles.arrow}></span>
+                                    </div>
+
+                                    {isOpen && (
+                                        <div className={`${styles.dropdown} border-1px`}>
+                                            {["Mới nhất", "Nổi bật nhất"].map((label) => (
+                                                <div
+                                                    key={label}
+                                                    className={styles.option}
+                                                    onClick={() => handleSelect(label)}
                                                 >
                                                     {label}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -254,7 +256,7 @@ export default function ExploreWorkshops({ filtersSelected }) {
             <nav aria-label="Page navigation example">
                 <ul className="pagination">
                     <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-                        <a
+                        <Link
                             className="page-link main-third-background white-color-4"
                             href="#"
                             onClick={(e) => {
@@ -268,19 +270,19 @@ export default function ExploreWorkshops({ filtersSelected }) {
                                     <path d="M6 1.33L1.33 6M1.33 6L6 10.67M1.33 6H10.67" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </span>
-                        </a>
+                        </Link>
                     </li>
 
                     {getVisiblePages(page, totalPages).map((num, idx) => (
                         <li key={idx} className="page-item">
                             {num === "..." ? (
                                 <li className="page-item">
-                                    <a className="page-link main-third-background white-color-4" href="#">
+                                    <Link className="page-link main-third-background white-color-4" href="#">
                                         ...
-                                    </a>
+                                    </Link>
                                 </li>
                             ) : (
-                                <a
+                                <Link
                                     href="#"
                                     className={`page-link ${page === num ? "secondary-background white-color active" : "main-third-background white-color-4"
                                         }`}
@@ -290,13 +292,13 @@ export default function ExploreWorkshops({ filtersSelected }) {
                                     }}
                                 >
                                     {num}
-                                </a>
+                                </Link>
                             )}
                         </li>
                     ))}
 
                     <li className={`page-item ${page === totalPages ? "disabled" : ""}`}>
-                        <a
+                        <Link
                             className="page-link main-third-background white-color-4"
                             href="#"
                             onClick={(e) => {
@@ -310,7 +312,7 @@ export default function ExploreWorkshops({ filtersSelected }) {
                                     <path d="M6 10.67L10.67 6L6 1.33M10.67 6H1.33" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </span>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </nav>

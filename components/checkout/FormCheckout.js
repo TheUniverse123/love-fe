@@ -94,68 +94,6 @@ export default function FormCheckout() {
                         </div>
                     </div>
                 </div>
-
-
-                {/* <div className="row">
-                    <div className="col-md-12 mb-20">
-                        <div className="form-group">
-                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="Tên chủ thẻ" />
-                        </div>
-                    </div>
-
-                    <div className="col-md-12 mb-20">
-                        <div className="form-group position-relative">
-                            <input
-                                className={`w-100 form-control form-input-background border-none border-radius-31 ${styles.formInput}`}
-                                type="text"
-                                placeholder="Số thẻ"
-                            />
-                            <div
-                                className={styles.inputNumber}
-                            >
-                                <div
-                                    className={styles.inputNumberLeft}
-                                ></div>
-                                <div
-                                    className={styles.inputNumberRight}
-                                ></div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="col-md-4 mb-20">
-                        <div className="form-group">
-                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="Ngày hết hạn" />
-                        </div>
-                    </div>
-
-                    <div className="col-md-4 mb-20">
-                        <div className="form-group">
-                            <input className={`form-control form-input-background border-none border-radius-31 ${styles.formInput}`} type="text" placeholder="CVC/CVV" />
-                        </div>
-                    </div>
-
-                    <div className="col-md-12">
-                        <div className="form-group">
-                            <div className="remeber-me">
-                                <label className="text-sm-medium neutral-500 flex-center-align">
-                                    <input className="cb-remember inputCheck" type="checkbox" />
-                                    Đồng ý với
-                                    <a
-
-                                        className={`text-sm-bold white-color ${styles.inputLink}`} href="term.html">
-                                        Chính sách </a>
-                                    và
-                                    <a
-
-                                        className={`text-sm-bold white-color ${styles.inputLink}`} href="privacy.html">
-                                        Điều khoản </a> của chúng tôi
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </section>
     )

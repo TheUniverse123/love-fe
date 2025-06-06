@@ -96,6 +96,10 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             };
             await fetchCreateTicket(ticketInfo);
             toast.success("🎉 Tạo sự kiện và vé thành công!");
+            localStorage.setItem("activeItem", "event")
+            setTimeout(() => {
+                window.location.href = "/dashboard/my-event"
+            }, 2000)
         } catch (err) {
             toast.error("Đã có lỗi xảy ra, vui lòng thử lại.");
         }
@@ -106,11 +110,6 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             const eventData = eventFormRef.current.getData();
             const ticketData = ticketFormRef.current.getData();
             const checkoutData = checkoutFormRef.current.getData();
-
-            console.log('ticketFormRef:', ticketFormRef.current);
-            console.log('getData func:', ticketFormRef.current?.getData);
-            console.log('ticketData:', ticketFormRef.current?.getData?.());
-
             const updatedWorkshop = {
                 ...eventData,
                 ...checkoutData,
@@ -124,7 +123,6 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             };
 
             await fetchUpdateWorkshop(initialWorkshop.workshopId, updatedWorkshop);
-            console.log(initialTicket)
             const updatedTicket = {
                 workshopTicketInfoId: initialTicket.workshopTicketInfoId,
                 workshopId: initialWorkshop.workshopId,
@@ -136,8 +134,11 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             };
             await fetchUpdateTicket(initialTicket.workshopTicketInfoId, updatedTicket);
             toast.success("🎉 Cập nhật thành công!");
+            localStorage.setItem("activeItem", "event")
+            setTimeout(() => {
+                window.location.href = "/dashboard/my-event"
+            }, 2000)
         } catch (err) {
-            console.log(err)
             toast.error("❌ Có lỗi xảy ra khi cập nhật.");
         }
     };

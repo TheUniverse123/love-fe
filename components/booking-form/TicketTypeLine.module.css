@@ -2,12 +2,13 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    justify-content: space-between;
 }
 
 .itemTicket {
     display: flex;
     justify-content: space-between;
-    width: 256px;
+    /* width: 256px; */
     align-items: center;
 }
 
@@ -19,47 +20,80 @@
     color: white;
 }
 
-.dropdownIcon {
-    stroke: var(--bg-white-color) !important;
+.customSelectWrapper {
+    position: relative;
+    display: inline-block;
 }
 
-.dropdownMenu {
-    padding: 8px 12px !important;
-    max-height: 300px;
-    overflow-y: auto !important;
-}
-
-.dropdownMenu::-webkit-scrollbar {
-    width: 8px;
-}
-
-.dropdownMenu::-webkit-scrollbar-thumb {
-    background-color: var(--bg-secondary-color);
-    height: 30px;
-    border-radius: 10px;
-    padding: 5px;
-}
-
-.dropdownMenu::-webkit-scrollbar-track {
-    background-color: #444;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.dropdownMenu::-webkit-scrollbar-thumb:hover {
-    background-color: var(--bg-secondary-color);
-}
-
-.inputListItem {
-    padding-bottom: 8px;
-}
-
-.inputQuantity {
+.customSelectInput {
     padding: 4px 8px;
     border-radius: 4px;
-    border: 1px solid #ccc;
     font-size: 1rem;
     text-align: center;
     background-color: #171717;
     color: var(--bg-white-color);
+    cursor: pointer;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.customSelectList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #171717;
+    width: 100%;
+}
+
+.customSelectItem {
+    padding: 8px;
+    cursor: pointer;
+    color: var(--bg-white-color);
+    text-align: center;
+}
+
+.customSelectItem:hover,
+.customSelectItem.selected {
+    background-color: #444;
+}
+
+.inputWrapper {
+    margin-top: 8px;
+}
+
+.inputQuantity {
+    width: 50px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: center;
+    background-color: #171717;
+    color: var(--bg-white-color);
+}
+
+.inputQuantity:focus {
+    outline: none;
+}
+
+.customSelectItem:hover {
+    background-color: #444;
+}
+
+.customSelectInput:hover {
+    background-color: #444;
+}
+
+.arrow {
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    margin-bottom: 3px;
 }

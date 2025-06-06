@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function CancelPage() {
     const styles = {
         page: {
@@ -60,9 +62,9 @@ export default function CancelPage() {
                     <p style={styles.message}>
                         Thanh toán thành công, vé đã được gửi trong email của bạn
                     </p>
-                    <a href='/' style={styles.button}>
+                    <Link href='/' style={styles.button}>
                         Quay về trang chủ
-                    </a>
+                    </Link>
                 </div>
             </div>
         </main>

@@ -7,6 +7,7 @@ import Button from "../button/Button";
 import { getUserInfo } from "@/app/util/auth";
 import { usePopup } from "@/contexts/PopupContext";
 import { fetchLogout } from "@/app/api/account";
+import Link from "next/link";
 export default function UserHeader() {
     const { openPopup } = usePopup()
     function handleResetActiveItem() {
@@ -19,9 +20,9 @@ export default function UserHeader() {
                 <div className={`main-header ${styles.backgroundSecondary}`}>
                     <div className="header-left">
                         <div className="header-logo">
-                            <a className="d-flex" href="/">
+                            <Link className="d-flex" href="/">
                                 <Logo />
-                            </a>
+                            </Link>
                         </div>
                         <div className="header-nav">
                             <UserNavigation />

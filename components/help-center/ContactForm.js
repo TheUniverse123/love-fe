@@ -1,5 +1,6 @@
 'use client'
 import { fetchCreateQuestion } from '@/app/api/faq';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -204,7 +205,7 @@ export default function ContactForm() {
                                                     checked={formData.termsAccepted}
                                                     onChange={handleChange}
                                                 />
-                                                Đồng ý với <a className="text-sm-bold white-color" href="term.html">Chính sách </a>và <a className="text-sm-bold white-color" href="privacy.html">Điều khoản</a> của chúng tôi
+                                                Đồng ý với <Link className="text-sm-bold white-color" href="term.html">Chính sách </Link>và <Link className="text-sm-bold white-color" href="privacy.html">Điều khoản</Link> của chúng tôi
                                             </label>
                                             {errors.termsAccepted && <p className="error-message-validate font-11">{errors.termsAccepted}</p>}
                                         </div>

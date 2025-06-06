@@ -1,6 +1,5 @@
 'use client'
 
-import { getUserInfo } from '@/app/util/auth'
 import ExploreBanner from '@/components/banner/ExploreBanner'
 import ExploreSidebar from '@/components/explore/ExploreSidebar'
 import ExploreWorkshops from '@/components/explore/ExploreWorkshops'

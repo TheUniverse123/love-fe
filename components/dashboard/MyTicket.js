@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../explore/TicketDetail.module.css";
 import styleMain from "./MyEvent.module.css"
 export default function MyTicket({
@@ -32,10 +33,10 @@ export default function MyTicket({
                 <div className={`card-flight card-hotel main-background border-color ${styleMain.cardInfo}`}>
                     <div className="col-lg-6 pr-30 border-white-dash-right">
                         <div className="card-title mb-10">
-                            <a
+                            <Link
                                 className="heading-6 white-color font-18"
                                 href={link}>{title}
-                            </a>
+                            </Link>
                         </div>
                         <div className="card-program">
                             <div className="card-duration-tour mb-15 white-color d-flex">
@@ -51,9 +52,9 @@ export default function MyTicket({
                             </div>
                             <div className="endtime">
                                 {isButtonVisible && <div className="card-button">
-                                    <a className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
+                                    <Link className={`btn btn-gray ${styles.button} ${styles.buttonTicket} ${styles.greyText} ${styles.greyColor}`} href="/user/ticket/1">
                                         {buttonText}
-                                    </a>
+                                    </Link>
                                 </div>}
                             </div>
                         </div>

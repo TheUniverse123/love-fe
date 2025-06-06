@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchWorkshopOfUsers } from "@/app/api/workshop"
 import CalendarSidebarCanvas from "../calendar/CalendarSidebarCanvas"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 const userInfo = getUserInfo()
 export default function SidebarCanvas() {
@@ -44,9 +45,9 @@ export default function SidebarCanvas() {
             <div className="sidebar-canvas-container">
                 <div className="sidebar-canvas-head border-1px-bottom">
                     <div className="sidebar-canvas-logo">
-                        <a className="d-flex" href="/">
+                        <Link className="d-flex" href="/">
                             <img src="/assets/icon/logo.svg" />
-                        </a>
+                        </Link>
                     </div>
                     <div className="sidebar-canvas-lang">
                         <div className="d-inline-block box-dropdown-cart align-middle mr-15">
@@ -55,15 +56,15 @@ export default function SidebarCanvas() {
                             </span>
                             <div className="dropdown-account">
                                 <ul>
-                                    <li><a className="text-sm-medium" href="#">English</a></li>
-                                    <li><a className="text-sm-medium" href="#">French</a></li>
-                                    <li><a className="text-sm-medium" href="#">Chiness</a></li>
+                                    <li><Link className="text-sm-medium" href="#">English</Link></li>
+                                    <li><Link className="text-sm-medium" href="#">French</Link></li>
+                                    <li><Link className="text-sm-medium" href="#">Chiness</Link></li>
                                 </ul>
                             </div>
                         </div>
-                        <a className="close-canvas border-background" href="#">
+                        <Link className="close-canvas border-background" href="#">
                             <img alt="Travila" src="/assets/lib/user/imgs/template/icons/close.png" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 <div className="sidebar-canvas-content">
@@ -89,9 +90,9 @@ export default function SidebarCanvas() {
                                         <Image src={item.icon} alt={item.title} width={24} height={24} />
                                     </div>
                                     <div className="item-info">
-                                        <a onClick={() => handleItemClick(item.link, item.type)}>
-                                            <h6 className="text-md-bold white-color font-15">{item.title}</h6>
-                                        </a>
+                                        <Link href="" onClick={() => handleItemClick(item.link, item.type)}>
+                                            <h6 className="text-md-bold white-color font-14">{item.title}</h6>
+                                        </Link>
                                         <p className={`text-xs neutral-500 ${item.status || ''}`}>
                                             {item.description}
                                         </p>

@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function SuccessPage() {
     const styles = {
         page: {
@@ -61,9 +63,9 @@ export default function SuccessPage() {
                     <p style={styles.message}>
                         Giao dịch thất bại, vui lòng thử lại sau!
                     </p>
-                    <a href='/' style={styles.button}>
+                    <Link href='/' style={styles.button}>
                         Quay về trang chủ
-                    </a>
+                    </Link>
                 </div>
             </div>
         </main>
