@@ -131,3 +131,15 @@ export const fetchCheckout = async (bookingInfo) => {
         })
     return data
 }
+
+export const fetchCancelTicket = async (ticketCode) => {
+    const data = await axiosInstanceJson.put(`/api/UserBookings/cancel/${ticketCode}`)
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}

@@ -1,6 +1,10 @@
 import Link from "next/link";
 import styles from "../explore/TicketDetail.module.css";
 import styleMain from "./MyEvent.module.css"
+import { fetchCancelTicket } from "@/app/api/manage-workshop";
+import { toast } from "react-toastify";
+import { queryClient } from "@/app/util/providers";
+import { useState } from "react";
 export default function MyTicket({
     title,
     time,
@@ -26,6 +30,19 @@ export default function MyTicket({
         statusText = "Thành công"
     } else if (isSuccess === "canceled") {
         statusText = "Đã hủy vé"
+    }
+
+    const [showModal, setShowModal] = useState(false)
+
+    async function handleCancel() {
+        if ((isSuccess !== "success" && isSuccess !== "canceled")) {
+            const response = await fetchCancelTicket(bookingCode)
+            if (response.statusCode === 200) {
+                toast.success("Hủy vé thành công")
+                queryClient.invalidateQueries({ queryKey: ["ordered-tickets"] })
+                setShowModal(false)
+            }
+        }
     }
     return (
         <div className="box-content-main-detail pb-0 pt-20">
@@ -76,7 +93,9 @@ export default function MyTicket({
                                             ? "line-through" : "none"
                                     }}
                                     disabled={(isSuccess === "success" || isSuccess === "canceled")}
-                                    className={`btn btn-default border-1px main-secondary-background neutral700-color hover-opacity ${styleMain.buttonStyle}`}>
+                                    className={`btn btn-default border-1px main-secondary-background neutral700-color hover-opacity ${styleMain.buttonStyle}`}
+                                    onClick={() => setShowModal(true)}
+                                >
                                     Hủy vé
                                 </button>
                             </div>
@@ -84,6 +103,26 @@ export default function MyTicket({
                     </div>
                 </div>
             </div>
+
+            {showModal && (
+                <div className="modal fade show flex-center" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content p-30 main-secondary-background">
+                            <div className="modal-body flex-center flex-column">
+                                <img src="/assets/icon/fail-icon.svg" />
+                                <h6 className="modal-title text-center mb-10 mt-10 white-color" id="exampleModalLabel">Xác nhận hủy vé</h6>
+                                <p className="neutral-500">Bạn chắc chắn muốn hủy vé?</p>
+                            </div>
+                            <div className="modal-footer border-0px flex-center">
+                                <a onClick={handleCancel} className="btn btn-default primary-background">
+                                    Đồng ý
+                                </a>
+                                <button className="btn btn-default" onClick={() => setShowModal(false)}>Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
