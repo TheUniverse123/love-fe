@@ -143,3 +143,17 @@ export const fetchCancelTicket = async (ticketCode) => {
         })
     return data
 }
+
+export const fetchCheckin = async (ticketCode) => {
+    const data = await axiosInstanceJson.post(`/api/Checkin/by-code`, {
+        checkinCode: ticketCode
+    })
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}

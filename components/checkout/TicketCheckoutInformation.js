@@ -5,11 +5,32 @@ import styles from "./TicketCheckoutInformation.module.css"
 import { fetchCheckout } from "@/app/api/manage-workshop"
 import { toast } from "react-toastify"
 import Link from "next/link"
-
+import { Spinner } from "react-bootstrap"
+import { useMutation } from "@tanstack/react-query"
 export default function TicketCheckoutInformation() {
     const workshopBookingInfo = JSON.parse(localStorage.getItem("booking-info"))
-    console.log(workshopBookingInfo)
-
+    const { mutate, isPending } = useMutation({
+        mutationKey: ['checkout'],
+        mutationFn: (bookingInfo) => fetchCheckout(bookingInfo),
+        onSuccess: (response) => {
+            if (response.statusCode === 201) {
+                if (workshopBookingInfo.totalPrice > 0) {
+                    toast.success("Đang chuyển đến trang thanh toán")
+                    window.location.href = response.result.paymentUrl
+                } else {
+                    toast.success("Đặt vé thành công")
+                    setTimeout(() =>
+                        window.location.href = "/payment/success"
+                        , 2000)
+                }
+            } else {
+                toast.error(response[0])
+            }
+        },
+        onError: () => {
+            toast.error("Có lỗi xảy ra, vui lòng thử lại sau!")
+        }
+    })
     async function handleCheckout() {
         const bookingInfo = {
             workshopId: workshopBookingInfo.id,
@@ -18,20 +39,7 @@ export default function TicketCheckoutInformation() {
             additionalServicePrice: workshopBookingInfo.addtionalService,
             additionalServiceDescription: workshopBookingInfo.description
         }
-        const response = await fetchCheckout(bookingInfo)
-        if (response.statusCode === 201) {
-            if (workshopBookingInfo.totalPrice > 0) {
-                toast.success("Đang chuyển đến trang thanh toán")
-                window.location.href = response.result.paymentUrl
-            } else {
-                toast.success("Đặt vé thành công")
-                setTimeout(() =>
-                    window.location.href = "/payment/success"
-                    , 2000)
-            }
-        } else {
-            toast.error(response[0])
-        }
+        mutate(bookingInfo)
     }
     return (
         <section className="main-background box-section pt-20">
@@ -77,7 +85,7 @@ export default function TicketCheckoutInformation() {
                         href=""
                         onClick={handleCheckout}
                         className={`btn btn-book primary-background white-color hover-primary ${styles.buttonPayment}`}>
-                        Thanh toán
+                        {isPending ? <Spinner /> : "Thanh toán"}
                     </Link>
                 </div>
             </div>

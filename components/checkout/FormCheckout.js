@@ -79,6 +79,7 @@ export default function FormCheckout() {
                         <div className="col-md-6 flex-center-align">
                             <div className="item-payment-method flex-center-align">
                                 <input
+                                    checked
                                     type="radio"
                                     id="credit-card-payment"
                                     name="payment-method"
