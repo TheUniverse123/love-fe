@@ -36,9 +36,11 @@ export default function SidebarCanvas() {
             }
         }
     }, [workshopDates])
-    const handleItemClick = (link, type) => {
-        localStorage.setItem("activeItem", type);
-        window.location.href = link
+    const handleItemClick = async (link, type) => {
+        if (typeof window !== undefined) {
+            localStorage.setItem("activeItem", type);
+            window.location.href = link;
+        }
     };
     return (
         <div className="sidebar-canvas-wrapper perfect-scrollbar main-background">

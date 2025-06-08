@@ -35,7 +35,10 @@ export default function TicketDetail({
                 toast.success("Đã từ chối yêu cầu duyệt workshop");
                 queryClient.invalidateQueries({ queryKey: ['workshops-review'] })
                 setTimeout(() => {
-                    window.location.href = "/dashboard/review"
+                    if (typeof window !== undefined) {
+                        localStorage.setItem("activeItem", type);
+                        window.location.href = "/dashboard/review"
+                    }
                 }, 2000)
             } else {
                 toast.error(response[0])
@@ -54,7 +57,9 @@ export default function TicketDetail({
                 toast.success("Đã chấp nhận yêu cầu duyệt workshop");
                 queryClient.invalidateQueries({ queryKey: ['workshops-review'] })
                 setTimeout(() => {
-                    window.location.href = "/dashboard/review"
+                    if (typeof window !== undefined) {
+                        window.location.href = "/dashboard/review"
+                    }
                 }, 2000)
             } else {
                 toast.error(response[0])

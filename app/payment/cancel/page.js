@@ -6,15 +6,15 @@ import { axiosInstanceJson } from "@/app/api/axiosInstance"
 
 export default function CancelPage() {
     const [showModal, setShowModal] = useState(true)
-    const params = new URLSearchParams(window.location.search);
-    const orderCodeParam = params.get('orderCode');
-    function handleCancel() {
-        axiosInstanceJson.get(`/api/Webhook/handle-cancel?orderCode=${orderCodeParam}&status=CANCELLED`)
-    }
     useEffect(() => {
-        handleCancel()
+        if (typeof window !== "undefined") {
+            const searchParams = new URLSearchParams(window.location.search)
+            const orderCodeParam = searchParams.get('orderCode')
+            if (orderCodeParam) {
+                axiosInstanceJson.get(`/api/Webhook/handle-cancel?orderCode=${orderCodeParam}&status=CANCELLED`)
+            }
+        }
     }, [])
-
     return (
         <main className={`main main-background ${styles.main}`}>
             {showModal && (
