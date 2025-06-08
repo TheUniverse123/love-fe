@@ -72,6 +72,11 @@ export default function DashboardSidebar() {
                     <TicketIcon icon="report" />
                     <div className={`ml-10 ${styles.menuItem}`}>Xét duyệt sự kiện</div>
                 </Link>}
+
+                {data?.result.roles.includes("Admin") && <Link href="/dashboard/ticket/checkin" className={`${styles.menuItemContainer} flex-start ${activeItem === 'checkin' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('checkin')}>
+                    <TicketIcon icon="checkin" />
+                    <div className={`ml-10 ${styles.menuItem}`}>Check-in vé</div>
+                </Link>}
             </div>
 
             <div className={`${styles.menu} pb-5 mt-20`}>

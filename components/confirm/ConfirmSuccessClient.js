@@ -31,21 +31,19 @@ export default function ConfirmSuccessClient() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#f4f6f9',
             fontFamily: 'Arial, sans-serif',
             minHeight: '100vh',
         },
         card: {
             borderRadius: '10px',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#313131',
             padding: '30px',
             textAlign: 'center'
         },
         header: {
             fontSize: '24px',
             fontWeight: 'bold',
-            color: '#007bff',
             marginBottom: '20px'
         },
         iconLarge: {
@@ -58,12 +56,11 @@ export default function ConfirmSuccessClient() {
         },
         message: {
             fontSize: '16px',
-            color: '#555555',
+            color: '#fff',
             marginBottom: '30px'
         },
         button: {
             padding: '10px 20px',
-            backgroundColor: '#007bff',
             color: '#ffffff',
             border: 'none',
             borderRadius: '5px',
@@ -74,7 +71,7 @@ export default function ConfirmSuccessClient() {
     }
 
     return (
-        <main className="main">
+        <main className="main main-background">
             <div style={styles.page}>
                 <div style={styles.card}>
                     <div style={styles.iconLarge}>
@@ -84,11 +81,11 @@ export default function ConfirmSuccessClient() {
                             style={{ width: '50%', display: 'inline-block' }}
                         />
                     </div>
-                    <div style={styles.header}>Tài Khoản Đã Được Xác Thực</div>
+                    <div style={styles.header} className='primary-color'>Tài Khoản Đã Được Xác Thực</div>
                     <p style={styles.message}>
                         Tài khoản của bạn đã được xác thực thành công! Bạn có thể đăng nhập vào tài khoản của mình ngay bây giờ.
                     </p>
-                    <Link href='/' style={styles.button}>
+                    <Link href='/' style={styles.button} className='primary-background'>
                         Quay về trang chủ
                     </Link>
                 </div>
