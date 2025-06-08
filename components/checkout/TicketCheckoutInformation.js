@@ -25,6 +25,9 @@ export default function TicketCheckoutInformation() {
                 window.location.href = response.result.paymentUrl
             } else {
                 toast.success("Đặt vé thành công")
+                setTimeout(() => {
+                    window.location.href = "/payment/success"
+                }, 2000)
             }
         } else {
             toast.error(response[0])
