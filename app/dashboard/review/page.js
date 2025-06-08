@@ -175,7 +175,7 @@ export default function MyEvents() {
             {pageNumbers.map((page, index) => (
               <li key={index} className="page-item">
                 {page === '...' ? (
-                  <Link className="page-link main-third-background white-color-4">...</Link>
+                  <Link href="" className="page-link main-third-background white-color-4">...</Link>
                 ) : (
                   <Link
                     className={`page-link ${page === currentPages[selectedTab] ? 'secondary-background white-color active' : 'main-third-background white-color-4'}`}

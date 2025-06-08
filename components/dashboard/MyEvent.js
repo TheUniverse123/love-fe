@@ -92,7 +92,7 @@ export default function MyEvent({
                                     {tabText}</Link>
                                 {(tab !== "past" && tab !== "waiting") &&
                                     <Link
-                                        href={`/dashboard/edit/${workshopId}`}
+                                        href={mode !== "review" ? `/dashboard/edit/${workshopId}` : "#"}
                                         onClick={() => mode === "review" ? setShowModal(true) : {}}
                                         className={`btn btn-default border-1px main-background primary-color hover-opacity ${styles.buttonManage}`}>
                                         {mode === "manage" ? 'Chỉnh sửa' : "Từ chối"}</Link>
