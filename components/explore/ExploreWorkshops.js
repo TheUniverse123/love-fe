@@ -214,8 +214,8 @@ export default function ExploreWorkshops({ filtersSelected }) {
                                 </svg>
                             </Link>
 
-                            <div className="item-sort border-1 border-color px-15 py-7 flex-space">
-                                <span className="neutral-500 mr-20">Sắp xếp theo:</span>
+                            <div className="item-sort border-1 border-color flex-space p0 pl-15">
+                                <span className="neutral-500 mr-10">Sắp xếp theo:</span>
 
                                 {/* Custom Select */}
                                 <div className={styles.customSelectContainer}>

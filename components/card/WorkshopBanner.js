@@ -71,14 +71,14 @@ export default function WorkshopBanner() {
                     <div className="col-lg-6 mb-30">
                         <div className="card-banner">
                             <div className="card-image">
-                                <img style={{ height: "222px", width: "600px", objectFit: "cover" }} src="/assets/workshop/home/5.png" alt="banenr1" />
+                                <img style={{ height: "222px", width: "600px", objectFit: "cover" }} src="/assets/banner/banner3.png" alt="banenr1" />
                             </div>
                         </div>
                     </div>
                     <div className="col-lg-6 mb-30">
                         <div className="card-banner">
                             <div className="card-image">
-                                <img style={{ height: "222px", width: "600px", objectFit: "cover" }} src="/assets/workshop/home/6.jpg" alt="banenr2" />
+                                <img style={{ height: "222px", width: "600px", objectFit: "cover" }} src="/assets/banner/banner4.png" alt="banenr2" />
                             </div>
                         </div>
                     </div>

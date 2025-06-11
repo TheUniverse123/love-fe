@@ -12,7 +12,11 @@ export default function FrequentAskQuetions() {
     });
 
     const [faqAnswers, setFaqAnswers] = useState([]);
-    console.log(faqAnswers);
+    const [expandedQuestionId, setExpandedQuestionId] = useState(null);
+
+    const toggleQuestion = (id) => {
+        setExpandedQuestionId(expandedQuestionId === id ? null : id);
+    };
 
     useEffect(() => {
         const fetchAnswers = async () => {
@@ -52,21 +56,17 @@ export default function FrequentAskQuetions() {
                                                 <button
                                                     className="accordion-button text-heading-5 main-background border-color"
                                                     type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target={`#collapse${faq.id}`}
-                                                    aria-expanded="false"
-                                                    aria-controls={`collapse${faq.id}`}
+                                                    onClick={() => toggleQuestion(faq.id)}
                                                 >
                                                     <p className="white-color">{faq.question}</p>
+                                                    <span className={`arrow-icon ${expandedQuestionId === faq.id ? 'arrow-down' : 'arrow-right'}`}></span>
                                                 </button>
                                             </h5>
                                             <div
-                                                className="accordion-collapse collapse main-background border-color"
-                                                id={`collapse${faq.id}`}
-                                                aria-labelledby={`heading${faq.id}`}
-                                                data-bs-parent="#accordionFAQ"
+                                                className="main-background border-color"
+                                                style={{ display: expandedQuestionId === faq.id ? 'block' : 'none' }}
                                             >
-                                                <div className="accordion-body">{faq.answer}</div>
+                                                <div className="accordion-body white-color">{faq.answer}</div>
                                             </div>
                                         </div>
                                     ))}
@@ -82,21 +82,17 @@ export default function FrequentAskQuetions() {
                                                 <button
                                                     className="accordion-button text-heading-5 main-background border-color"
                                                     type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target={`#collapse${faq.id + 100}`}
-                                                    aria-expanded="false"
-                                                    aria-controls={`collapse${faq.id + 100}`}
+                                                    onClick={() => toggleQuestion(faq.id)}
                                                 >
                                                     <p className="white-color">{faq.question}</p>
+                                                    <span className={`arrow-icon ${expandedQuestionId === faq.id ? 'arrow-down' : 'arrow-right'}`}></span>
                                                 </button>
                                             </h5>
                                             <div
-                                                className="accordion-collapse collapse main-background border-color"
-                                                id={`collapse${faq.id + 100}`}
-                                                aria-labelledby={`heading${faq.id + 100}`}
-                                                data-bs-parent="#accordionFAQ2"
+                                                className="main-background border-color"
+                                                style={{ display: expandedQuestionId === faq.id ? 'block' : 'none' }}
                                             >
-                                                <div className="accordion-body">{faq.answer}</div>
+                                                <div className="accordion-body white-color">{faq.answer}</div>
                                             </div>
                                         </div>
                                     ))}

@@ -24,6 +24,19 @@ export const fetchLogin = async (email, password) => {
     return data
 }
 
+export const fetchRefreshToken = async (refreshToken) => {
+    const data = await axiosInstanceJson.post('/api/Auth/refresh-token', {
+        refreshToken
+    }).then((response) => { 
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}
+
 export const fetchLogout = () => {
     Cookies.remove('userInfo', { secure: true, sameSite: 'Strict' })
     Cookies.remove('token', { secure: true, sameSite: 'Strict' })

@@ -225,26 +225,15 @@ export default function ContactForm() {
                         <div className="banner-contact">
                             <div className="row">
                                 <div className="col-lg-12">
-                                    <div className="banner-img-contact"> <img className="bdrd-16" src="/assets/lib/user/imgs/page/pages/banner-contact.png" alt="Travilla" /></div>
+                                    <div className="banner-img-contact"> <img className="bdrd-16" src="https://firebasestorage.googleapis.com/v0/b/love-fe-71303.firebasestorage.app/o/helpCenter%2Fhelp1.png?alt=media&token=b22da993-5151-4a91-b291-1a1a2e47ddb1" alt="Travilla" /></div>
                                 </div>
                                 <div className="col-sm-6">
-                                    <div className="banner-img-contact">
-                                        <div className="box-traveled-in">
-                                            <p className="text-xl-medium mb-20">1684 people used <strong>Travila </strong>in the last <strong>24 hours</strong></p>
-                                            <div className="box-authors-partner wow fadeInUp">
-                                                <div className="authors-partner-left"><img src="/assets/lib/user/imgs/page/homepage5/author.png" alt="Travila" /><img src="/assets/lib/user/imgs/page/homepage5/author2.png" alt="Travila" /><img src="/assets/lib/user/imgs/page/homepage5/author3.png" alt="Travila" /><span className="item-author">
-                                                    <svg width={18} height={18} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <rect x="0.5" y="7.448" width={17} height="2.31818" fill="black" />
-                                                        <rect x="7.84082" y="17.1072" width={17} height="2.31818" transform="rotate(-90 7.84082 17.1072)" fill="black" />
-                                                    </svg></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="banner-img-contact"> <img className="bdrd-16" src="/assets/lib/user/imgs/page/pages/banner-contact3.png" alt="Travilla" /></div>
+                                    <div className="banner-img-contact"> <img className="bdrd-16" src="https://firebasestorage.googleapis.com/v0/b/love-fe-71303.firebasestorage.app/o/helpCenter%2Fhelp2.png?alt=media&token=8f7a5cfe-9272-44e6-a013-cc6a204b9495" alt="Travilla" /></div>
+                                    <div className="banner-img-contact"> <img className="bdrd-16" src="https://firebasestorage.googleapis.com/v0/b/love-fe-71303.firebasestorage.app/o/helpCenter%2Fhelp4.png?alt=media&token=55097a59-6056-413e-b1cf-2f114d54aceb" alt="Travilla" /></div>
                                 </div>
                                 <div className="col-sm-6">
-                                    <div className="banner-img-contact"> <img className="bdrd-16" src="/assets/lib/user/imgs/page/pages/banner-contact2.png" alt="Travilla" /></div>
-                                    <div className="banner-img-contact"> <img className="bdrd-16" src="/assets/lib/user/imgs/page/pages/banner-contact4.png" alt="Travilla" /></div>
+                                    <div className="banner-img-contact"> <img className="bdrd-16" src="https://firebasestorage.googleapis.com/v0/b/love-fe-71303.firebasestorage.app/o/helpCenter%2Fhelp3.png?alt=media&token=6c7ff2c6-e0a7-4114-bd73-0e82333613ab" alt="Travilla" /></div>
+                                    <div className="banner-img-contact"> <img className="bdrd-16" src="https://thienanagency.com/photos/all/khac/workshop-painting.jpg" alt="Travilla" /></div>
                                 </div>
                             </div>
                         </div>

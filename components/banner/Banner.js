@@ -14,7 +14,7 @@ export default function Banner() {
                 interval={2000} pause="hover">
                 <Carousel.Item>
                     <Image
-                        src="/assets/banner/banner.png"
+                        src="/assets/banner/banner2.png"
                         alt="banner"
                         layout="responsive"
                         width={1920}
@@ -32,7 +32,7 @@ export default function Banner() {
                 </Carousel.Item>
                 <Carousel.Item>
                     <Image
-                        src="/assets/banner/banner.png"
+                        src="/assets/banner/banner2.png"
                         alt="banner"
                         layout="responsive"
                         width={1920}

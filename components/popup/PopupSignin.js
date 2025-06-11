@@ -1,6 +1,6 @@
 'use client'
 
-import { decodeToken, fetchLogin, fetchLoginGoogle, fetchLogout, fetchUserInfoVer2 } from "@/app/api/account";
+import { decodeToken, fetchLogin, fetchLoginGoogle, fetchLogout, fetchUserInfoVer2, fetchRefreshToken } from "@/app/api/account";
 import { getAuthToken, getAuthTokenDuration, getUserInfo, setUserInfoToStorage } from "@/app/util/auth";
 import { validateNonEmptyString, validatePassword } from "@/app/util/validation";
 import { useMutation } from "@tanstack/react-query";
@@ -36,31 +36,83 @@ export default function PopupSignin() {
         error: {},
     });
 
+    const ONE_WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
+
     const handleAutoLogout = () => {
         const token = getAuthToken();
-        if (!token || token === 'EXPIRED') {
+        const loginTime = localStorage.getItem('loginTime');
+        const currentTime = Date.now();
+
+        if (!token || token === 'EXPIRED' || (loginTime && currentTime - loginTime >= ONE_WEEK_IN_MS)) {
             fetchLogout();
             return;
         }
+
         const tokenDuration = getAuthTokenDuration();
 
-        const timer = setTimeout(() => {
-            fetchLogout();
+        const timer = setTimeout(async () => {
+            const userInfo = getUserInfo();
+            const refreshToken = userInfo?.refreshToken;
+            if (refreshToken) {
+                const response = await fetchRefreshToken(refreshToken);
+                if (response?.accessToken) {
+                    userInfo.accessToken = response.accessToken;
+                    userInfo.expiration = response.expiration;
+                    setUserInfoToStorage(userInfo);
+                    handleAutoLogout(); // Recalculate the timer with new expiration
+                } else {
+                    fetchLogout();
+                }
+            } else {
+                fetchLogout();
+            }
         }, tokenDuration);
         return () => clearTimeout(timer);
     };
 
     const handleAutoLogoutVerGoogle = (duration) => {
-        const userInfo = getUserInfo()
-        const token = userInfo?.accessToken
-        if (!token || token === 'EXPIRED') {
+        const userInfo = getUserInfo();
+        const token = userInfo?.accessToken;
+        const loginTime = localStorage.getItem('loginTime');
+        const currentTime = Date.now();
+
+        if (!token || token === 'EXPIRED' || (loginTime && currentTime - loginTime >= ONE_WEEK_IN_MS)) {
             fetchLogout();
             return;
         }
-        const timer = setTimeout(() => {
-            fetchLogout();
+
+        const timer = setTimeout(async () => {
+            const refreshToken = userInfo?.refreshToken;
+            if (refreshToken) {
+                const response = await fetchRefreshToken(refreshToken);
+                if (response?.accessToken) {
+                    userInfo.accessToken = response.accessToken;
+                    userInfo.expiration = response.expiration;
+                    setUserInfoToStorage(userInfo);
+                    handleAutoLogoutVerGoogle(response.expiration - Date.now()); // Recalculate the timer with new expiration
+                } else {
+                    fetchLogout();
+                }
+            } else {
+                fetchLogout();
+            }
         }, duration);
         return () => clearTimeout(timer);
+    };
+
+    const onSuccessLogin = (userInfo) => {
+        setUserInfoToStorage(userInfo);
+        localStorage.setItem('loginTime', Date.now());
+        handleAutoLogout();
+        setFormState({
+            email: "",
+            password: "",
+            error: {},
+        });
+        toast.success("Đăng nhập thành công");
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
     };
 
     const { mutate, isPending } = useMutation({
@@ -68,7 +120,7 @@ export default function PopupSignin() {
         mutationFn: (userInfo) => fetchLogin(userInfo.email, userInfo.password),
         onSuccess: async (response) => {
             const decodedToken = decodeToken(response?.result?.accessToken);
-            const userId = decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
+            const userId = decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
             const userInfo = {
                 email: formState.email,
@@ -78,17 +130,7 @@ export default function PopupSignin() {
                 refreshToken: response?.result.refreshToken,
                 id: userId,
             };
-            setUserInfoToStorage(userInfo);
-            handleAutoLogout()
-            setFormState({
-                email: "",
-                password: "",
-                error: {},
-            })
-            toast.success("Đăng nhập thành công");
-            setTimeout(() => {
-                location.reload()
-            }, 2000)
+            onSuccessLogin(userInfo);
         },
         onError: () => {
             toast.error("Email hoặc password không hợp lệ");
@@ -142,9 +184,9 @@ export default function PopupSignin() {
             .then((result) => result.user.getIdToken())
             .then(async (idToken) => {
                 const response = await fetchLoginGoogle(idToken);
-                const decodedToken = decodeToken(response?.result)
-                const userId = decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
-                const userInfoFetch = await fetchUserInfoVer2(userId)
+                const decodedToken = decodeToken(response?.result);
+                const userId = decodedToken.payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+                const userInfoFetch = await fetchUserInfoVer2(userId);
                 const userInfo = {
                     email: userInfoFetch?.result.email,
                     roles: decodedToken?.payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
@@ -152,15 +194,10 @@ export default function PopupSignin() {
                     id: userId,
                     expiration: decodedToken?.payload.exp * 1000,
                 };
-                setUserInfoToStorage(userInfo);
-                handleAutoLogoutVerGoogle(decodedToken?.payload.exp)
-                toast.success("Đăng nhập thành công");
-                setTimeout(() => {
-                    location.reload()
-                }, 2000)
+                onSuccessLogin(userInfo);
             })
             .catch(() => {
-                toast.error("Đăng nhập thất bại, vui lòng thử lại sau!")
+                toast.error("Đăng nhập thất bại, vui lòng thử lại sau!");
             });
     }
 

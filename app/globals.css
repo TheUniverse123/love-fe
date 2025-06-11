@@ -508,6 +508,14 @@ h6.text-lg-bold.item-collapse.white-color.collapsed-item {
     background-image: url('/assets/lib/user/imgs/template/icons/arrow-down-filter-dark.svg');
 }
 
+.arrow-down {
+    background-image: url('/assets/lib/user/imgs/template/icons/arrow-down-white.svg');
+}
+
+.arrow-right {
+    background-image: url('/assets/lib/user/imgs/template/icons/arrow-down-filter-dark.svg');
+}
+
 ul.dropdown-menu.dropdown-menu-light.show {
     top: 17px !important;
     left: -77px !important;

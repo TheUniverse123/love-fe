@@ -10,7 +10,7 @@ export default function ExploreBanner() {
                 interval={2000} pause="hover">
                 <Carousel.Item>
                     <Image
-                        src="/assets/banner/banner-explore.png"
+                        src="/assets/banner/banner-explore2.png"
                         alt="banner"
                         layout="responsive"
                         width={1260}
@@ -30,7 +30,7 @@ export default function ExploreBanner() {
                 </Carousel.Item>
                 <Carousel.Item>
                     <Image
-                        src="/assets/banner/banner-explore.png"
+                        src="/assets/banner/banner-explore2.png"
                         alt="banner"
                         layout="responsive"
                         width={1260}
