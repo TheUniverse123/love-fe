@@ -1,18 +1,18 @@
 'use client'
 import styles from "./ReportContent.module.css"
 
-import { fetchNewRegisterUsers } from "@/app/api/dashboard"
+import { fetchWorkshopRecentRegisterUser } from "@/app/api/dashboard"
 import { fetchWorkshopByUsers } from "@/app/api/manage-workshop"
 import { fetchWorkshopOfUsers } from "@/app/api/workshop"
-import { formatDate, formatDateRange, getTop5RecentBookings } from "@/app/util/convert"
+import { getUserInfo } from "@/app/util/auth"
+import { formatDateRange } from "@/app/util/convert"
 import { useQuery } from "@tanstack/react-query"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 import { Spinner } from "react-bootstrap"
 import CalendarSidebarCanvas from "../calendar/CalendarSidebarCanvas"
 import ChartComponent from './ChartComponent'
 import MyEvent from './MyEvent'
-import { getUserInfo } from "@/app/util/auth"
-import Link from "next/link"
 const userInfo = getUserInfo()
 
 export default function ReportContent() {
@@ -77,9 +77,9 @@ export default function ReportContent() {
     };
 
     async function handleFetchNewRegisterUsers() {
-        const response = await fetchNewRegisterUsers()
+        const response = await fetchWorkshopRecentRegisterUser()
         if (response.statusCode === 200) {
-            setRegisterUsers(getTop5RecentBookings(response.result))
+            setRegisterUsers(response.result)
         }
     }
 
@@ -198,18 +198,19 @@ export default function ReportContent() {
                             <div className={`panel-body ${styles.panelBody}`}>
                                 {registerUsers?.map(item => (
                                     <div className="card-style-3 row pb-20 pt-20 border-1px-bottom" key={item.userEmail}>
-                                        <div className="card-image col-lg-4 flex-center-align pr-0">
-                                            <div className="card-image-inner online mr-10 flex-center">
-                                                <img src="/assets/lib/dashboard/imgs/page/dashboard/avata1.png" alt="icon" />
+                                        <div className="col-lg-5 flex-center-align pr-0">
+                                            <div className="mr-10 flex-center">
+                                                <img className={styles.image} src={item.avatarUrl || "/assets/icon/user.svg"} alt="icon" />
                                             </div>
                                             <div className="card-title">
                                                 <p className="text-sm-bold white-color">
-                                                    {item.userFullName}
+                                                    {item.userName}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="card-phone col-3 flex-center pl-0">
-                                            <Link className="text-xs-medium phone white-color" href="#">{formatDate(item.bookingDate)}</Link>
+                                        <div className="col-3 flex-center pl-0">
+                                            <img src='/assets/icon/phone-dashboard.svg' className='mr-5' />
+                                            <Link className="text-xs-medium phone white-color" href="#">{item.userPhone || 'Unknonw'}</Link>
                                         </div>
                                         <div className="card-email col-4 pr-0 flex-start">
                                             <img src='/assets/icon/email-dashboard.svg' className='mr-5' />

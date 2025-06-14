@@ -61,7 +61,7 @@ export default function MyEvent({
                 <div className="card-flight card-hotel main-background border-1px">
                     <div className={`card-image ${styles.cardImage} ${smallImage ? styles.smallImage : styles.largeImage}`}>
                         <Link href={link ? link.toString() : ""}>
-                            <img src={imageSrc} alt="Travila" />
+                            <img src={imageSrc} alt="Travila" className="object-cover"/>
                         </Link>
                     </div>
                     <div className={`card-info main-background row border-none ${styles.cardInfoEvent}`}>

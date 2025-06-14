@@ -17,6 +17,10 @@
     max-width: 740px !important;
 }
 
+.cardImage .image {
+    object-fit: cover !important;
+}
+
 .discount {
     width: 60px !important;
     height: 60px !important;

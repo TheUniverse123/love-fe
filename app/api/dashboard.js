@@ -35,3 +35,15 @@ export const fetchNewRegisterUsers = async (userId) => {
         })
     return data
 }
+
+export const fetchWorkshopRecentRegisterUser = async () => {
+    const data = await axiosInstanceJson.get("/api/UserBookings/recent")
+        .then((response) => {
+            return response.data
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}

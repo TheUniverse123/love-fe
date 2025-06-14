@@ -8,6 +8,12 @@ import { fetchCreateTicket, fetchCreateWorkshop, fetchUpdateTicket, fetchUpdateW
 import { uploadImageToFirebase } from "@/app/util/uploadImage";
 import { toast } from "react-toastify";
 
+const convertToVietnamTime = (dateString) => {
+    if (!dateString) return dateString;
+    const date = new Date(dateString);
+    return new Date(date.getTime() + (7 * 60 * 60 * 1000)).toISOString();
+};
+
 export default function CreateEventPage({ mode = 'create', initialWorkshop = null, initialTicket = null }) {
     const [activeTab, setActiveTab] = useState(1);
     const eventFormRef = useRef();
@@ -59,8 +65,8 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 imagePath: backgroundUrl,
                 eventLogoPath: eventLogoUrl,
                 ticketImagePath: ticketImageUrl,
-                startDate: ticketData.eventStartDate,
-                endDate: ticketData.eventEndDate,
+                startDate: convertToVietnamTime(ticketData.eventStartDate),
+                endDate: convertToVietnamTime(ticketData.eventEndDate),
                 isFree: ticketData.isChecked === true,
                 price: Number(ticketData.ticketPrice),
                 totalTickets: Number(ticketData.totalTickets),
@@ -91,8 +97,8 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 ticketName: ticketData.ticketName,
                 minQuantityPerOrder: Number(ticketData.minTickets),
                 maxQuantityPerOrder: Number(ticketData.maxTickets),
-                saleStartDate: ticketData.ticketSaleStartDate,
-                saleEndDate: ticketData.ticketSaleEndDate,
+                saleStartDate: convertToVietnamTime(ticketData.ticketSaleStartDate),
+                saleEndDate: convertToVietnamTime(ticketData.ticketSaleEndDate),
             };
             await fetchCreateTicket(ticketInfo);
             toast.success("🎉 Tạo sự kiện và vé thành công!");
@@ -110,28 +116,68 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             const eventData = eventFormRef.current.getData();
             const ticketData = ticketFormRef.current.getData();
             const checkoutData = checkoutFormRef.current.getData();
+            const [
+                eventLogoUrl,
+                backgroundUrl,
+                organizerLogoUrl,
+                ticketImageUrl
+            ] = await Promise.all([
+                eventData.eventLogoPath !== initialWorkshop.eventLogoPath ? 
+                    uploadImageToFirebase(eventData.eventLogoPath, 'eventLogoPath') : 
+                    initialWorkshop.eventLogoPath,
+                eventData.imagePath !== initialWorkshop.imagePath ? 
+                    uploadImageToFirebase(eventData.imagePath, 'imagePath') : 
+                    initialWorkshop.imagePath,
+                eventData.organizationLogoPath !== initialWorkshop.organizationLogoPath ? 
+                    uploadImageToFirebase(eventData.organizationLogoPath, 'organizationLogoPath') : 
+                    initialWorkshop.organizationLogoPath,
+                ticketData.ticketPath !== initialWorkshop.ticketImagePath ? 
+                    uploadImageToFirebase(ticketData.ticketPath, 'ticketImagePath') : 
+                    initialWorkshop.ticketImagePath,
+            ]);
+
             const updatedWorkshop = {
-                ...eventData,
-                ...checkoutData,
-                startDate: ticketData.eventStartDate,
-                endDate: ticketData.eventEndDate,
-                isFree: ticketData.isChecked,
+                eventType: eventData.paymentMethod,
+                placeName: eventData.eventAddressName,
+                province: eventData.province,
+                district: eventData.district,
+                ward: eventData.ward,
+                street: eventData.houseNumber,
+                title: eventData.eventName,
+                description: eventData.eventDescription,
+                imagePath: backgroundUrl,
+                eventLogoPath: eventLogoUrl,
+                ticketImagePath: ticketImageUrl,
+                startDate: convertToVietnamTime(ticketData.eventStartDate),
+                endDate: convertToVietnamTime(ticketData.eventEndDate),
+                isFree: ticketData.isChecked === true,
                 price: Number(ticketData.ticketPrice),
                 totalTickets: Number(ticketData.totalTickets),
-                ticketImagePath: ticketData.ticketPath,
+                categoryId: Number(eventData.categoryId),
+                organizationName: eventData.organizerName,
+                organizationInfo: eventData.organizerInfo,
+                organizationLogoPath: organizerLogoUrl,
+                accountHolder: checkoutData.accountHolder,
+                accountNumber: checkoutData.accountNumber,
+                bankName: checkoutData.bankName,
+                branch: checkoutData.branch,
+                isBusiness: checkoutData.businessType === 'business',
+                invoiceName: checkoutData.fullName,
+                invoiceAddress: checkoutData.address,
+                taxCode: checkoutData.businessType === 'business' ? checkoutData.taxCode : 'none',
                 workshopId: initialWorkshop.workshopId
             };
-
             await fetchUpdateWorkshop(initialWorkshop.workshopId, updatedWorkshop);
+
             const updatedTicket = {
-                workshopTicketInfoId: initialTicket.workshopTicketInfoId,
                 workshopId: initialWorkshop.workshopId,
                 ticketName: ticketData.ticketName,
-                minQuantityPerOrder: ticketData.minTickets,
-                maxQuantityPerOrder: ticketData.maxTickets,
-                saleStartDate: ticketData.ticketSaleStartDate,
-                saleEndDate: ticketData.ticketSaleEndDate
+                minQuantityPerOrder: Number(ticketData.minTickets),
+                maxQuantityPerOrder: Number(ticketData.maxTickets),
+                saleStartDate: convertToVietnamTime(ticketData.ticketSaleStartDate),
+                saleEndDate: convertToVietnamTime(ticketData.ticketSaleEndDate)
             };
+
             await fetchUpdateTicket(initialTicket.workshopTicketInfoId, updatedTicket);
             toast.success("🎉 Cập nhật thành công!");
             localStorage.setItem("activeItem", "event")

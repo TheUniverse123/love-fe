@@ -87,7 +87,7 @@ export default function WorkshopBanner() {
 
             <div className="container">
                 <div className={`mb-40 mt-100 ${styles.titleWrapper}`}>
-                    <h2 className={`neutral100-color ${styles.title}`}>Bạn đang quan tâm chủ đề nào</h2>
+                    <h2 className={`neutral100-color ${styles.title}`}>Workshop nổi bật</h2>
                     <div className="box-button-slider box-button-slider-team text-end">
                         {/* Custom Prev and Next buttons */}
                         <div

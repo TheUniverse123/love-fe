@@ -15,8 +15,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
         taxCode: '',
         confirmationMessage: '',
     })
-    console.log(formData)
-
     useEffect(() => {
         if (formRef) {
             formRef.current = {
@@ -24,7 +22,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                     ...formData
                 }),
                 prefillData: (data) => {
-                    console.log(data)
                     setFormData({
                         accountHolder: data.accountHolder || '',
                         accountNumber: data.accountNumber || '',

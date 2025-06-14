@@ -21,14 +21,12 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
     const [errors, setErrors] = useState({});
     const [eventStartTime, setEventStartTime] = useState({ hour: 0, minute: 0 }); // giờ, phút
     const [ticketPath, setTicketImagePath] = useState(null)
+
     useEffect(() => {
         if (ticketPrice === 0) {
             setIsChecked(true)
         }
     }, [ticketPrice])
-
-    console.log(eventStartDate, eventEndDate)
-
     useEffect(() => {
         if (formRef) {
             formRef.current = {
@@ -43,6 +41,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     minTickets,
                     maxTickets,
                     ticketPrice,
+                    ticketName,
                     description: eventDescription,
                 }),
                 prefillData: (data) => {
@@ -59,10 +58,41 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     setEventDescription(data.description || '');
                     setTicketImagePath(data.ticketImagePath);
                     setTicketFile(data.ticketImagePath);
+
+                    // Set initial time values from the dates
+                    if (data.startDate) {
+                        const startDate = new Date(data.startDate);
+                        setEventStartTime({ 
+                            hour: startDate.getHours(), 
+                            minute: startDate.getMinutes() 
+                        });
+                    }
+                    if (data.endDate) {
+                        const endDate = new Date(data.endDate);
+                        setEventEndTime({ 
+                            hour: endDate.getHours(), 
+                            minute: endDate.getMinutes() 
+                        });
+                    }
+                    if (data.workshopTicketInfo.saleStartDate) {
+                        const saleStartDate = new Date(data.workshopTicketInfo.saleStartDate);
+                        setTicketSaleStartTime({ 
+                            hour: saleStartDate.getHours(), 
+                            minute: saleStartDate.getMinutes() 
+                        });
+                    }
+                    if (data.workshopTicketInfo.saleEndDate) {
+                        const saleEndDate = new Date(data.workshopTicketInfo.saleEndDate);
+                        setTicketSaleEndTime({ 
+                            hour: saleEndDate.getHours(), 
+                            minute: saleEndDate.getMinutes() 
+                        });
+                    }
                 }
             };
         }
     }, [isChecked, ticketPath, eventStartDate, eventEndDate, ticketSaleStartDate, ticketSaleEndDate, totalTickets, minTickets, maxTickets, ticketPrice, eventDescription]);
+
     const applyTimeToDate = (date, hour, minute) => {
         const newDate = new Date(date);
         newDate.setHours(hour);

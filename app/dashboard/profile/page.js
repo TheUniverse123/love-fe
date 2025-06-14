@@ -30,6 +30,7 @@ export default function ProfilePage() {
         queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
     })
     const [errors, setErrors] = useState({});
+
     const validateForm = () => {
         const newErrors = {};
         // Full Name
@@ -86,21 +87,20 @@ export default function ProfilePage() {
         },
     });
     const handleUpdateProfile = async (e) => {
+        console.log(data?.avatarUrl)
         e.preventDefault();
         if (!validateForm()) return;
         const avatarUrl = await handleUploadFileToFirebase();
-        console.log(data?.result.avatarUrl, avatarUrl)
         const dataSubmit = {
             id: getUserInfo().id,
             ...formData,
             dateOfBirth: convertToISOString(dateInputRef.current.value),
-            avatarUrl: avatarUrl ? avatarUrl : data?.avatarUrl,
+            avatarUrl: avatarUrl ? avatarUrl : data?.result.avatarUrl,
         };
+        console.log(dateInputRef.current.value)
         mutate(dataSubmit);
     };
     const handleUploadFileToFirebase = async () => {
-        console.log(fileUpload)
-
         if (!fileUpload) return null;
         try {
             const url = await uploadImageToFirebase(fileUpload, "avatar");
@@ -148,6 +148,13 @@ export default function ProfilePage() {
             });
         }
     }
+
+    useEffect(() => {
+        if (dateInputRef.current) {
+            dateInputRef.current.value = formatDate(data?.result.dateOfBirth)
+        }
+    }, [data])
+
     useEffect(() => {
         handleResetForm()
     }, [data]);
@@ -208,7 +215,6 @@ export default function ProfilePage() {
                                         type="text"
                                         placeholder="DD/MM/YYYY"
                                         ref={dateInputRef}
-                                        value={formatDate(formData.dateOfBirth)}
                                     />
                                     {errors.dateOfBirth && <p className="error-message-validate font-11">{errors.dateOfBirth}</p>}
                                 </div>
@@ -330,3 +336,4 @@ export default function ProfilePage() {
         </div>
     )
 }
+

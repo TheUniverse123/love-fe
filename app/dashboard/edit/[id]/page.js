@@ -11,9 +11,10 @@ export default function EditWorkshopPage() {
     useEffect(() => {
         const loadData = async () => {
             const workshop = await fetchWorkshopDetail({ workshopId: id });
-            const ticket = await fetchTicketDetail({ workshopId: id });
-
+            const ticket = await fetchTicketDetail
+                ({ workshopId: workshop?.workshopTicketInfo.workshopTicketInfoId });
             setWorkshopData(workshop);
+            console.log(ticket)
             setTicketData(ticket);
         };
 

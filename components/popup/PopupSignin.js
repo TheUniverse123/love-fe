@@ -1,22 +1,21 @@
 'use client'
 
-import { decodeToken, fetchLogin, fetchLoginGoogle, fetchLogout, fetchUserInfoVer2, fetchRefreshToken } from "@/app/api/account";
-import { getAuthToken, getAuthTokenDuration, getUserInfo, setUserInfoToStorage } from "@/app/util/auth";
+import { decodeToken, fetchLogin, fetchLoginGoogle, fetchLogout, fetchRefreshToken, fetchUserInfoVer2 } from "@/app/api/account";
+import { getUserInfo, setUserInfoToStorage } from "@/app/util/auth";
 import { validateNonEmptyString, validatePassword } from "@/app/util/validation";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./PopupSignin.module.css";
 
+import { auth, provider } from "@/app/util/firebase";
 import { usePopup } from "@/contexts/PopupContext";
+import { signInWithPopup } from "firebase/auth";
+import { Spinner } from "react-bootstrap";
 import CloseButton from "./CloseButton";
 import ForgotPasswordForm from "./ForgotPasswordForm";
-import ResetPasswordForm from "./ResetPasswordForm";
 import PopupRegister from "./PopupRegister";
-import { Spinner } from "react-bootstrap";
-import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "@/app/util/firebase";
-
+import ResetPasswordForm from "./ResetPasswordForm";
 export default function PopupSignin() {
     const [activeTab, setActiveTab] = useState("signin");
     const { isPopupVisible, closePopup, openPopup } = usePopup()
@@ -36,68 +35,59 @@ export default function PopupSignin() {
         error: {},
     });
 
-    const ONE_WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
+    const ONE_WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
 
     const handleAutoLogout = () => {
-        const token = getAuthToken();
         const loginTime = localStorage.getItem('loginTime');
         const currentTime = Date.now();
-
-        if (!token || token === 'EXPIRED' || (loginTime && currentTime - loginTime >= ONE_WEEK_IN_MS)) {
+        const tokenDuration = currentTime - loginTime;
+        
+        // Check if logged in for more than a week
+        if (loginTime && tokenDuration >= ONE_WEEK_IN_MS) {
             fetchLogout();
             return;
         }
 
-        const tokenDuration = getAuthTokenDuration();
-
-        const timer = setTimeout(async () => {
-            const userInfo = getUserInfo();
-            const refreshToken = userInfo?.refreshToken;
-            if (refreshToken) {
-                const response = await fetchRefreshToken(refreshToken);
-                if (response?.accessToken) {
-                    userInfo.accessToken = response.accessToken;
-                    userInfo.expiration = response.expiration;
-                    setUserInfoToStorage(userInfo);
-                    handleAutoLogout(); // Recalculate the timer with new expiration
-                } else {
-                    fetchLogout();
-                }
-            } else {
-                fetchLogout();
-            }
-        }, tokenDuration);
-        return () => clearTimeout(timer);
-    };
-
-    const handleAutoLogoutVerGoogle = (duration) => {
         const userInfo = getUserInfo();
-        const token = userInfo?.accessToken;
-        const loginTime = localStorage.getItem('loginTime');
-        const currentTime = Date.now();
-
-        if (!token || token === 'EXPIRED' || (loginTime && currentTime - loginTime >= ONE_WEEK_IN_MS)) {
-            fetchLogout();
+        if (!userInfo?.accessToken) {
             return;
         }
 
-        const timer = setTimeout(async () => {
-            const refreshToken = userInfo?.refreshToken;
+        const tokenExpiration = userInfo.expiration;
+        const timeUntilExpiration = tokenExpiration - currentTime;
+
+        // If token is expired or about to expire in less than 5 minutes
+        if (timeUntilExpiration < 5 * 60 * 1000) {
+            const refreshToken = userInfo.refreshToken;
             if (refreshToken) {
-                const response = await fetchRefreshToken(refreshToken);
-                if (response?.accessToken) {
-                    userInfo.accessToken = response.accessToken;
-                    userInfo.expiration = response.expiration;
-                    setUserInfoToStorage(userInfo);
-                    handleAutoLogoutVerGoogle(response.expiration - Date.now()); // Recalculate the timer with new expiration
-                } else {
-                    fetchLogout();
-                }
-            } else {
+                fetchRefreshToken(refreshToken)
+                    .then(response => {
+                        if (response?.result.accessToken) {
+                            userInfo.accessToken = response.result.accessToken;
+                            userInfo.expiration = response.result.expiration;
+                            setUserInfoToStorage(userInfo);
+                            handleAutoLogout(); // Check again after refresh
+                        } else {
+                            if (timeUntilExpiration <= 0) {
+                                fetchLogout();
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        // Only logout if current token is expired
+                        if (timeUntilExpiration <= 0) {
+                            fetchLogout();
+                        }
+                    });
+            } else if (timeUntilExpiration <= 0) {
+                // If no refresh token and current token is expired
                 fetchLogout();
             }
-        }, duration);
-        return () => clearTimeout(timer);
+        } else {
+            // Set timer to check again when token is about to expire
+            const timer = setTimeout(handleAutoLogout, timeUntilExpiration - 5 * 60 * 1000);
+            return () => clearTimeout(timer);
+        }
     };
 
     const onSuccessLogin = (userInfo) => {

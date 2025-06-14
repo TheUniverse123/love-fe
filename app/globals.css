@@ -264,6 +264,10 @@ input[type="radio"] {
     background-color: transparent !important;
 }
 
+.object-cover {
+    object-fit: cover !important;
+}
+
 #calendar-events th.prev,
 #calendar-events th.next,
 #calendar-events th.datepicker-switch {

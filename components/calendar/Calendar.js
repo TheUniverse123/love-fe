@@ -16,7 +16,7 @@ const Calendar = ({ onDateChange, onTimeChange, initialDate }) => {
         if (initialDate && !initialDateSet.current) {
             const parsedDate = new Date(initialDate);
             if (!isNaN(parsedDate.getTime())) {
-                setSelectedDate(parsedDate);
+                setSelectedDate(parsedDate)
                 const h = String(parsedDate.getHours()).padStart(2, "0");
                 const m = String(parsedDate.getMinutes()).padStart(2, "0");
                 setSelectedHour(h);
@@ -58,10 +58,15 @@ const Calendar = ({ onDateChange, onTimeChange, initialDate }) => {
         const dateToSave = selectedDate || new Date();
         const hourToSave = selectedHour || dateToSave.getHours();
         const minuteToSave = selectedMinute || dateToSave.getMinutes();
-
-        const dateString = `${dateToSave.toLocaleDateString('en-GB')} ${hourToSave}:${minuteToSave}`;
+        
+        // Tạo bản sao của date để không ảnh hưởng đến date gốc
+        const displayDate = new Date(dateToSave);
+        displayDate.setHours(parseInt(hourToSave));
+        
+        // Hiển thị giờ Việt Nam
+        const dateString = `${displayDate.toLocaleDateString('en-GB')} ${String(displayDate.getHours()).padStart(2, "0")}:${minuteToSave}`;
         setInputValue(dateString);
-        setIsCalendarOpen(false)
+        setIsCalendarOpen(false);
     };
 
     const days = generateCalendar(currentMonth);
