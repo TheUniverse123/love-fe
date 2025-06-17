@@ -25,15 +25,9 @@ export const fetchLogin = async (email, password) => {
 }
 
 export const fetchRefreshToken = async (refreshToken) => {
-    const data = await axiosInstanceJson.post('/api/Auth/refresh-token', {
-        refreshToken
-    }).then((response) => { 
-            return response.data
-        }
-        ).catch((error) => {
-            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
-            return errors
-        })
+    const data = await axiosInstanceJson.post('/api/Auth/refresh', refreshToken).then((response) => {
+        return response.data
+    })
     return data
 }
 

@@ -6,6 +6,8 @@ import { fetchLogout, fetchUserInfo } from '@/app/api/account';
 import { getUserInfo } from '@/app/util/auth';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { fetchPoint } from '@/app/api/point';
+import { Spinner } from 'react-bootstrap';
 const userInfo = getUserInfo()
 export default function DashboardSidebar() {
     const [activeItem, setActiveItem] = useState();
@@ -16,6 +18,11 @@ export default function DashboardSidebar() {
             setActiveItem(savedActiveItem);
         }
     }, []);
+
+    const { data: point, isLoading: isLoadingPoint } = useQuery({
+        queryKey: ['point'],
+        queryFn: () => fetchPoint(),
+    })
 
     const handleItemClick = (item) => {
         setActiveItem(item); // Cập nhật state
@@ -38,7 +45,7 @@ export default function DashboardSidebar() {
                     <div className="btn btn-default grey-button-background mt-15"
                         style={{ padding: "10px 20px!important", width: "70%!important" }}>
                         <Link href='/dashboard/point-accumulate' className='flex-space white-color'>
-                            <span>50.000</span>
+                            <span>{isLoadingPoint ? <Spinner /> : point?.totalPoints}</span>
                             <span className="flex-center ml-5">
                                 <img src='/assets/icon/star-dashboard.svg' alt='' />
                             </span>

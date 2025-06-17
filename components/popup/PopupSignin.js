@@ -34,14 +34,32 @@ export default function PopupSignin() {
         password: "",
         error: {},
     });
-
     const ONE_WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
+    const [logoutTimeout, setLogoutTimeout] = useState(null);
+
+    useEffect(() => {
+        const userInfo = getUserInfo();
+        if (userInfo) {
+            handleAutoLogout();
+        }
+        // Cleanup function to clear timeout when component unmounts
+        return () => {
+            if (logoutTimeout) {
+                clearTimeout(logoutTimeout);
+            }
+        };
+    }, []);
 
     const handleAutoLogout = () => {
+        // Clear any existing timeout
+        if (logoutTimeout) {
+            clearTimeout(logoutTimeout);
+        }
+
         const loginTime = localStorage.getItem('loginTime');
         const currentTime = Date.now();
         const tokenDuration = currentTime - loginTime;
-        
+
         // Check if logged in for more than a week
         if (loginTime && tokenDuration >= ONE_WEEK_IN_MS) {
             fetchLogout();
@@ -52,10 +70,8 @@ export default function PopupSignin() {
         if (!userInfo?.accessToken) {
             return;
         }
-
         const tokenExpiration = userInfo.expiration;
         const timeUntilExpiration = tokenExpiration - currentTime;
-
         // If token is expired or about to expire in less than 5 minutes
         if (timeUntilExpiration < 5 * 60 * 1000) {
             const refreshToken = userInfo.refreshToken;
@@ -68,32 +84,32 @@ export default function PopupSignin() {
                             setUserInfoToStorage(userInfo);
                             handleAutoLogout(); // Check again after refresh
                         } else {
-                            if (timeUntilExpiration <= 0) {
+                            // Only logout if current token is expired AND we've been logged in for more than a week
+                            if (timeUntilExpiration <= 0 && tokenDuration >= ONE_WEEK_IN_MS) {
                                 fetchLogout();
                             }
                         }
                     })
                     .catch(() => {
-                        // Only logout if current token is expired
-                        if (timeUntilExpiration <= 0) {
+                        // Only logout if current token is expired AND we've been logged in for more than a week
+                        if (timeUntilExpiration <= 0 && tokenDuration >= ONE_WEEK_IN_MS) {
                             fetchLogout();
                         }
                     });
-            } else if (timeUntilExpiration <= 0) {
-                // If no refresh token and current token is expired
+            } else if (timeUntilExpiration <= 0 && tokenDuration >= ONE_WEEK_IN_MS) {
+                // If no refresh token and current token is expired AND we've been logged in for more than a week
                 fetchLogout();
             }
         } else {
             // Set timer to check again when token is about to expire
             const timer = setTimeout(handleAutoLogout, timeUntilExpiration - 5 * 60 * 1000);
-            return () => clearTimeout(timer);
+            setLogoutTimeout(timer);
         }
     };
 
     const onSuccessLogin = (userInfo) => {
         setUserInfoToStorage(userInfo);
         localStorage.setItem('loginTime', Date.now());
-        handleAutoLogout();
         setFormState({
             email: "",
             password: "",
@@ -181,6 +197,7 @@ export default function PopupSignin() {
                     email: userInfoFetch?.result.email,
                     roles: decodedToken?.payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
                     accessToken: response?.result,
+                    refreshToken: response?.result,
                     id: userId,
                     expiration: decodedToken?.payload.exp * 1000,
                 };

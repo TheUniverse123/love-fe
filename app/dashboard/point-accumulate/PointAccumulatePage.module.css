@@ -2,7 +2,8 @@
     margin-right: 532px !important;
     padding-left: 35px !important;
     padding-top: 20px !important;
-    height: 200vh !important;
+    min-height: 100vh !important;
+    padding-bottom: 100px !important;
 }
 
 .positive {

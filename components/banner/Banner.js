@@ -11,7 +11,7 @@ export default function Banner() {
     return (
         <div className='main-background'>
             <Carousel controls={false} indicators={false}
-                interval={2000} pause="hover">
+                interval={5000} pause="hover">
                 <Carousel.Item>
                     <Image
                         src="/assets/banner/banner2.png"

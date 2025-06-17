@@ -1,7 +1,22 @@
-import styles from "./PointAccumulatePage.module.css"
-import { historyAccumulatePoint } from '@/data'
+'use client'
+
+import { fetchPoint, fetchPointHistory } from '@/app/api/point';
+import { useQuery } from '@tanstack/react-query';
+import styles from "./PointAccumulatePage.module.css";
+import { Spinner } from 'react-bootstrap';
+import { formatDate } from '@/app/util/convert';
 
 export default function PointAccumulatePage() {
+    const { data: point, isLoading: isLoadingPoint } = useQuery({
+        queryKey: ['point'],
+        queryFn: () => fetchPoint(),
+    })
+
+    const { data: pointHistory, isLoading: isLoadingPointHistory } = useQuery({
+        queryKey: ['pointHistory'],
+        queryFn: () => fetchPointHistory(1, 1000),
+    })
+
     return (
         <div className={styles.pointAccumulate}>
             <div className="flex-space pb-20 border-1px-bottom">
@@ -11,10 +26,10 @@ export default function PointAccumulatePage() {
                 <div className='text-center'>
                     <img src='/assets/icon/ticket-point.svg' />
                     <h4 className='white-color flex-center mt-30'>
-                        <span className='mr-10'>50.000</span>
+                        <span className='mr-10'>{isLoadingPoint ? <Spinner /> : point?.totalPoints}</span>
                         <img src='/assets/icon/star-dashboard.svg' width={51} height={51} />
                     </h4>
-                    <p className='white-color text-xl-bold mt-20'>Chúc mừng bạn đã đặt hạng Vàng!</p>
+                    <p className='white-color text-xl-bold mt-20'>Chúc mừng bạn đã đặt level {point?.level}!</p>
                 </div>
             </div>
 
@@ -29,18 +44,18 @@ export default function PointAccumulatePage() {
                     <div className="collapse show mt-30" id="collapseQuestion">
                         <div className="card card-body main-background">
                             <div className="list-questions">
-                                {historyAccumulatePoint.map((item) => (
-                                    <div className="item-question main-background border-color">
+                                {pointHistory?.items.map((item) => (
+                                    <div className="item-question main-background border-color" key={item.id}>
                                         <div className="flex-space">
                                             <div>
-                                                <p className="text-xl-bold neutral-400 mb-0">{item.date}</p>
+                                                <p className="text-xl-bold neutral-400 mb-0">{formatDate(item.createdDate)}</p>
                                             </div>
                                             <div className="px-3 py-1">
-                                                <p className={`mb-0 ${item.isPositive ? styles.positive : styles.negative}`}>{item.isPositive ? "+" : "-"} {item.points}</p>
+                                                <p className={`mb-0 ${item.points > 0 ? styles.positive : styles.negative}`}>{item.points > 0 ? "+" : ""}{item.points} điểm</p>
                                             </div>
                                         </div>
                                         <div className="mt-10">
-                                            <p className="white-color">{item.eventName}</p>
+                                            <p className="white-color">{item.description}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -58,8 +73,10 @@ export default function PointAccumulatePage() {
                     </button>
                     <div className="collapse show mt-30" id="collapseOverview">
                         <div className="card card-body main-background">
-                            <p className="white-color">Elevate your Las Vegas experience to new heights with a journey aboard The High Roller at The LINQ. As the tallest observation wheel in the world, standing at an impressive 550 feet tall, The High Roller offers a bird's-eye perspective of the iconic Las Vegas Strip and its surrounding desert landscape. From the moment you step into one of the spacious cabins, you'll be transported on a mesmerizing adventure, where every turn offers a new and breathtaking vista of the vibrant city below.
-                            </p>
+                            <a rel='noopener noreferrer' target='_blank' href="https://firebasestorage.googleapis.com/v0/b/love-fe-71303.firebasestorage.app/o/policy%2FCh%C3%ADnh%20s%C3%A1ch%20th%C3%A0nh%20vi%C3%AAn.pdf?alt=media&token=f4491a3c-d142-4e91-8c2e-400c09253fa4" download className="d-flex align-items-center text-decoration-none">
+                                <img src="/assets/icon/pdf-icon.svg" alt="PDF" className="me-2" width={24} height={24} />
+                                <span className="white-color">Chính sách thành viên.pdf</span>
+                            </a>
                         </div>
                     </div>
                 </div>
