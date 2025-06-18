@@ -11,7 +11,7 @@ const PopularPostsSidebar = ({ title, posts }) => {
                             <div className="card-post">
                                 <div className="card-image">
                                     <Link href={post?.link.toString() || "#"}>
-                                        <img src={post?.imageSrc} alt="Travila" />
+                                        <img className="object-fit-cover" src={post?.imageSrc} alt="Travila" height={40} />
                                     </Link>
                                 </div>
                                 <div className="card-info">

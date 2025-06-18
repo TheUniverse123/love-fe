@@ -13,3 +13,7 @@
 .negative {
     color: var(--bg-danger-color) !important;
 }
+
+.rotate180 {
+    transform: rotate(180deg);
+}

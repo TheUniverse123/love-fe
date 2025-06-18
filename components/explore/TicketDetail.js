@@ -3,10 +3,14 @@
 import { useMutation } from "@tanstack/react-query";
 import styles from "./TicketDetail.module.css";
 import { fetchApproveWorkshop, fetchDeclineWorkshop } from "@/app/api/manage-workshop";
-import { useState } from "react";
+import { fetchCheckWorkshop, fetchRemoveFavouriteWorkshops, fetchSaveFavouriteWorkshops } from "@/app/api/saved-workshops";
+import { getUserInfo } from "@/app/util/auth";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { queryClient } from "@/app/util/providers";
 import Link from "next/link";
+
+const userId = getUserInfo()?.id
 
 export default function TicketDetail({
     discount,
@@ -26,6 +30,44 @@ export default function TicketDetail({
 }) {
     const [showModal, setShowModal] = useState(false)
     const [showModalApprove, setShowModalApprove] = useState(false)
+    const [isSaved, setIsSaved] = useState(false)
+
+    useEffect(() => {
+        handleFetchCheckWorkshop()
+    }, [userId, workshopId])
+
+    async function handleFetchCheckWorkshop() {
+        if (userId && workshopId) {
+            const response = await fetchCheckWorkshop(userId, workshopId)
+            if (response.statusCode === 200) {
+                setIsSaved(response.result.isSaved)
+            }
+        }
+    }
+
+    async function handleToggleSaved() {
+        if (userId && workshopId) {
+            if (!isSaved) {
+                const response = await fetchSaveFavouriteWorkshops(userId, workshopId)
+                if (response.statusCode === 200) {
+                    setIsSaved(true)
+                    toast.success("Lưu sự kiện thành công")
+                } else {
+                    toast.error("Có lỗi xảy ra, vui lòng thử lại sau")
+                }
+            } else {
+                const response = await fetchRemoveFavouriteWorkshops(userId, workshopId)
+                if (response.statusCode === 200) {
+                    setIsSaved(false)
+                    toast.success("Đã hủy lưu sự kiện")
+                } else {
+                    toast.error("Có lỗi xảy ra, vui lòng thử lại sau")
+                }
+            }
+        } else {
+            toast.error("Vui lòng đăng nhập để lưu sự kiện")
+        }
+    }
 
     const { mutate } = useMutation({
         mutationKey: ['decline-workshop'],
@@ -87,12 +129,12 @@ export default function TicketDetail({
                         </div>
                         <div className="card-flight card-hotel main-background">
                             <div className={`card-image ${styles.cardImage}`}>
-                                <Link className={`wish flex-center main-background ${styles.discount}`} href="#">
-                                    <svg style={{ stroke: "white" }} width={40} height={40} viewBox="0 0 20 18"
+                                <button className={`wish flex-center main-background ${styles.discount}`} onClick={handleToggleSaved}>
+                                    <svg style={{ stroke: "white" }} width={20} height={20} className={`${isSaved ? "saved-events" : ""}`} viewBox="0 0 20 18"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M17.071 10.1422L11.4141 15.7991C10.6331 16.5801 9.36672 16.5801 8.58568 15.7991L2.92882 10.1422C0.9762 8.1896 0.9762 5.02378 2.92882 3.07116C4.88144 1.11853 8.04727 1.11853 9.99989 3.07116C11.9525 1.11853 15.1183 1.11853 17.071 3.07116C19.0236 5.02378 19.0236 8.1896 17.071 10.1422Z" stroke strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                </Link>
+                                </button>
                                 <Link href={link.toString()} >
                                     <img src={imageSrc} alt="ticket-image" className={styles.image} />
                                 </Link>

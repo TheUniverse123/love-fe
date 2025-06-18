@@ -42,7 +42,6 @@ export default function PopupSignin() {
         if (userInfo) {
             handleAutoLogout();
         }
-        // Cleanup function to clear timeout when component unmounts
         return () => {
             if (logoutTimeout) {
                 clearTimeout(logoutTimeout);
@@ -51,7 +50,6 @@ export default function PopupSignin() {
     }, []);
 
     const handleAutoLogout = () => {
-        // Clear any existing timeout
         if (logoutTimeout) {
             clearTimeout(logoutTimeout);
         }
@@ -60,8 +58,7 @@ export default function PopupSignin() {
         const currentTime = Date.now();
         const tokenDuration = currentTime - loginTime;
 
-        // Check if logged in for more than a week
-        if (loginTime && tokenDuration >= ONE_WEEK_IN_MS) {
+        if (tokenDuration >= ONE_WEEK_IN_MS) {
             fetchLogout();
             return;
         }
@@ -72,7 +69,6 @@ export default function PopupSignin() {
         }
         const tokenExpiration = userInfo.expiration;
         const timeUntilExpiration = tokenExpiration - currentTime;
-        // If token is expired or about to expire in less than 5 minutes
         if (timeUntilExpiration < 5 * 60 * 1000) {
             const refreshToken = userInfo.refreshToken;
             if (refreshToken) {
@@ -82,26 +78,22 @@ export default function PopupSignin() {
                             userInfo.accessToken = response.result.accessToken;
                             userInfo.expiration = response.result.expiration;
                             setUserInfoToStorage(userInfo);
-                            handleAutoLogout(); // Check again after refresh
+                            handleAutoLogout();
                         } else {
-                            // Only logout if current token is expired AND we've been logged in for more than a week
-                            if (timeUntilExpiration <= 0 && tokenDuration >= ONE_WEEK_IN_MS) {
+                            if (tokenDuration >= ONE_WEEK_IN_MS) {
                                 fetchLogout();
                             }
                         }
                     })
                     .catch(() => {
-                        // Only logout if current token is expired AND we've been logged in for more than a week
-                        if (timeUntilExpiration <= 0 && tokenDuration >= ONE_WEEK_IN_MS) {
+                        if (tokenDuration >= ONE_WEEK_IN_MS) {
                             fetchLogout();
                         }
                     });
-            } else if (timeUntilExpiration <= 0 && tokenDuration >= ONE_WEEK_IN_MS) {
-                // If no refresh token and current token is expired AND we've been logged in for more than a week
+            } else if (tokenDuration >= ONE_WEEK_IN_MS) {
                 fetchLogout();
             }
         } else {
-            // Set timer to check again when token is about to expire
             const timer = setTimeout(handleAutoLogout, timeUntilExpiration - 5 * 60 * 1000);
             setLogoutTimeout(timer);
         }

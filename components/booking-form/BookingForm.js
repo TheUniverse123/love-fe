@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import AdditionalService from "./AdditionalService";
 import TicketTypeLine from "./TicketTypeLine";
 import TimePicker from "./TimePicker";
+import LoyaltyPoints from "./LoyaltyPoints";
 import { formatDate, getTimeFromISO } from "@/app/util/convert";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { getUserInfo } from "@/app/util/auth";
 import Link from "next/link";
+import { useQuery } from '@tanstack/react-query';
+import { fetchPoint } from '@/app/api/point';
+
 const services = [
     { title: "Bữa ăn nhẹ (Snack)", price: "50.000 đ" },
     { title: "Nước uống (Nước suối, cà phê)", price: "15.000 đ" },
@@ -16,25 +20,37 @@ const services = [
     { title: "Tư vấn riêng 1:1 sau workshop", price: "200.000 đ" },
     { title: "Quà tặng lưu niệm (sổ tay, bút)", price: "100.000 đ" },
 ];
+
 function formatPriceVN(price) {
     return price === 0 ? "Miễn phí" : price.toLocaleString("vi-VN") + " đ";
 }
+
 export default function BookingForm({ workshopDetail, mode, ref }) {
     const [adultQty, setAdultQty] = useState(1);
     const [workshopStartDate, setWorkshopStartDate] = useState("")
     const [selectedServices, setSelectedServices] = useState([]);
+    const [pointsUsed, setPointsUsed] = useState(0);
     const router = useRouter();
+    
     const adultPriceNum = workshopDetail?.isFree
         ? 0
         : workshopDetail?.price > 0
             ? workshopDetail.price
             : 100000;
+
+    // Fetch user points
+    const { data: point, isLoading: isLoadingPoint } = useQuery({
+        queryKey: ['point'],
+        queryFn: () => fetchPoint(),
+    });
+            
     useEffect(() => {
         if (workshopDetail && workshopDetail.startDate) {
             console.log(workshopDetail?.startDate)
             setWorkshopStartDate(formatDate(workshopDetail.startDate))
         }
     }, [workshopDetail])
+    
     const toggleService = (title, priceStr) => {
         const priceNum = parseInt(priceStr.replace(/[^\d]/g, ""));
         setSelectedServices((prev) => {
@@ -48,7 +64,10 @@ export default function BookingForm({ workshopDetail, mode, ref }) {
     };
 
     const totalServicePrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
-    const totalPrice = adultQty * adultPriceNum + totalServicePrice;
+    const subtotal = adultQty * adultPriceNum + totalServicePrice;
+    const discountAmount = pointsUsed * 1000; // 1 điểm = 1.000 VND
+    const totalPrice = Math.max(0, subtotal - discountAmount); // Đảm bảo không âm
+    
     const handleBooking = (e) => {
         e.preventDefault();
         if (!getUserInfo()) {
@@ -70,6 +89,9 @@ export default function BookingForm({ workshopDetail, mode, ref }) {
             quantity: adultQty,
             price: workshopDetail.price,
             totalPrice: totalPrice,
+            subtotal: subtotal,
+            pointsUsed: pointsUsed,
+            discountAmount: discountAmount,
             addtionalService: totalServicePrice,
             description: serviceDescription,
             name: workshopDetail.title,
@@ -145,6 +167,16 @@ export default function BookingForm({ workshopDetail, mode, ref }) {
                                 onToggle={toggleService}
                             />
                         ))}
+                    </div>
+                </div>
+                <div className="item-line-booking border-color">
+                    <div className="box-tickets">
+                        <strong className="text-lg-bold white-color">Điểm tích lũy</strong>
+                        <LoyaltyPoints
+                            totalPrice={subtotal}
+                            onPointsChange={setPointsUsed}
+                            userPoints={point?.totalPoints || 0}
+                        />
                     </div>
                 </div>
                 {mode !== "review" && <>

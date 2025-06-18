@@ -18,7 +18,7 @@ export default function CancelPage() {
     return (
         <main className={`main main-background ${styles.main}`}>
             {showModal && (
-                <div className="modal fade show flex-center" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal fade show flex-center border-background opacity-08" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content p-30 main-secondary-background">
                             <div className="modal-body flex-center flex-column">

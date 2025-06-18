@@ -37,7 +37,8 @@ export default function TicketCheckoutInformation() {
             quantity: workshopBookingInfo.quantity,
             includeAdditionalService: workshopBookingInfo.addtionalService > 0 ? true : false,
             additionalServicePrice: workshopBookingInfo.addtionalService,
-            additionalServiceDescription: workshopBookingInfo.description
+            additionalServiceDescription: workshopBookingInfo.description,
+            usePoints: workshopBookingInfo.pointsUsed || 0
         }
         mutate(bookingInfo)
     }
@@ -63,8 +64,14 @@ export default function TicketCheckoutInformation() {
                 <div className="row mt-25 pb-20 border-1px-white-2-bottom">
                     <div className="flex-space mb-5">
                         <p className="white-color font-16">Tạm tính</p>
-                        <p className="white-color font-16">{formatPrice(workshopBookingInfo.quantity * workshopBookingInfo.price)}</p>
+                        <p className="white-color font-16">{formatPrice(workshopBookingInfo.subtotal || (workshopBookingInfo.quantity * workshopBookingInfo.price + workshopBookingInfo.addtionalService))}</p>
                     </div>
+                    {workshopBookingInfo.pointsUsed > 0 && (
+                        <div className="flex-space mb-5">
+                            <p className="white-color font-16">Điểm tích lũy sử dụng</p>
+                            <p className="white-color font-16">-{formatPrice(workshopBookingInfo.discountAmount || (workshopBookingInfo.pointsUsed * 1000))}</p>
+                        </div>
+                    )}
                     <div className="flex-space mb-5">
                         <p className="white-color font-16">Giảm giá</p>
                         <p className="white-color font-16">0 đ</p>

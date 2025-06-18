@@ -45,6 +45,7 @@ export default function WorkshopDetailPage({ params }) {
                 link="#"
                 buttonText="Đặt ngay"
                 onClick={scrollToBookingForm}
+                workshopId={params?.slug}
             />
             <section className="box-section box-content-tour-detail main-background" style={{ paddingBottom: "290px" }}>
                 <div className="container">

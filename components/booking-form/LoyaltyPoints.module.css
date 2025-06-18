@@ -1,23 +1,8 @@
-.lineBookingTickets {
+.pointsSelectContainer {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: space-between;
-}
-
-.itemTicket {
-    display: flex;
-    justify-content: space-between;
-    /* width: 256px; */
-    align-items: center;
-}
-
-.dropdownQuantity {
-    position: relative;
-}
-
-.whiteColor {
-    color: white;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
 }
 
 .customSelectWrapper {
@@ -26,9 +11,8 @@
 }
 
 .customSelectInput {
-    padding: 4px 8px;
     border-radius: 4px;
-    font-size: 1rem;
+    font-size: 12px;
     text-align: center;
     background-color: #171717;
     color: var(--bg-white-color);
@@ -36,7 +20,12 @@
     width: auto;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    min-width: 150px;
+}
+
+.customSelectInput:hover {
+    background-color: #444;
 }
 
 .customSelectList {
@@ -44,10 +33,12 @@
     top: 100%;
     left: 0;
     z-index: 10;
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
     background-color: #171717;
     width: 100%;
+    border-radius: 4px;
+    margin-top: 2px;
     /* Custom scrollbar styling */
     scrollbar-width: thin;
     scrollbar-color: #444 #171717;
@@ -78,6 +69,7 @@
     cursor: pointer;
     color: var(--bg-white-color);
     text-align: center;
+    font-size: 12px;
 }
 
 .customSelectItem:hover,
@@ -85,47 +77,8 @@
     background-color: #444;
 }
 
-.inputWrapper {
-    margin-top: 8px;
-}
-
-.inputQuantity {
-    width: 50px;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: center;
-    background-color: #171717;
-    color: var(--bg-white-color);
-    border: 1px solid #444;
-    outline: none;
-    transition: all 0.3s ease;
-    font-weight: 500;
-}
-
-.inputQuantity:focus {
-    outline: none;
-    border-color: #666;
-    background-color: #1a1a1a;
-    box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.2);
-}
-
-.inputQuantity:hover {
-    border-color: #666;
-    background-color: #1a1a1a;
-}
-
-.inputQuantity::placeholder {
-    color: #888;
-    font-weight: 400;
-}
-
-.customSelectItem:hover {
-    background-color: #444;
-}
-
-.customSelectInput:hover {
-    background-color: #444;
+.whiteColor {
+    color: white;
 }
 
 .arrow {
@@ -136,4 +89,18 @@
     transform: rotate(45deg);
     transition: transform 0.3s ease;
     margin-bottom: 3px;
+    margin-left: 8px;
 }
+
+.pointsInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.pointsInfo span {
+    color: var(--bs-success);
+    font-weight: 500;
+    font-size: 10px;
+} 

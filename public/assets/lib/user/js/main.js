@@ -1078,6 +1078,7 @@
     
     });
 })(jQuery);
+
 // Check billed
 function switchBilled() {
     var checkBox = $("#cb_billed_type");
