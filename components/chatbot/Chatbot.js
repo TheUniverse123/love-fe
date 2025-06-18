@@ -1,9 +1,8 @@
 'use client'
 import { useEffect, useRef, useState } from "react"
 import styles from "./Chatbox.module.css"
-import { GoogleGenAI } from "@google/genai"
+import { quickChat } from "@/app/api/cozeai"
 
-const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 function getCurrentTime() {
     return new Date().toLocaleTimeString('vi-VN', {
         hour: '2-digit',
@@ -16,14 +15,14 @@ export default function Chatbot() {
     const inputRef = useRef(null)
     const chatContainerRef = useRef(null)
     const [suggestions, setSuggestions] = useState([{
-        text: "🤔 What is WappGPT?",
-        action: () => handleSuggestionClick("🤔 What is WappGPT?")
+        text: "Chính sách",
+        action: () => handleSuggestionClick("Chính sách")
     }, {
-        text: "💰 Pricing",
-        action: () => handleSuggestionClick("💰 Pricing")
+        text: "Giá cả",
+        action: () => handleSuggestionClick("Giá cả")
     }, {
         text: "🙋‍♂️ FAQs",
-        action: () => handleSuggestionClick("🙋‍♂️ FAQs")
+        action: () => handleSuggestionClick("FAQs")
     }])
     const [chatValue, setChatValue] = useState([{
         type: 'ai',
@@ -44,46 +43,30 @@ export default function Chatbot() {
     }
 
     async function generateBotResponse(userMessage) {
-        const ai = new GoogleGenAI({ apiKey: API_KEY });
         try {
-            const response = await ai.models.generateContent({
-                model: "gemini-2.0-flash",
-                contents: userMessage + ". Hãy trình bày định dạng cho đẹp, xuống dòng tách đoạn cho đẹp",
-                config: {
-                    maxOutputTokens: 500,
-                    temperature: 0.1,
-                },
-            });
-            setChatValue(prevValue => [...prevValue, { type: 'ai', message: response.text, time: getCurrentTime() }])
-            generateSuggestions(response.text);
+            const response = await quickChat(userMessage);
+            
+            if (response && response.answer) {
+                setChatValue(prevValue => [...prevValue, { type: 'ai', message: response.answer, time: getCurrentTime() }])
+                
+                // Generate suggestions from the response
+                if (response.suggestions && response.suggestions.length > 0) {
+                    const formattedSuggestions = response.suggestions.map(suggestion => ({
+                        text: suggestion,
+                        action: () => handleSuggestionClick(suggestion)
+                    }));
+                    setSuggestions(formattedSuggestions);
+                } else {
+                    setSuggestions([]);
+                }
+            } else {
+                setChatValue(prevValue => [...prevValue, { type: 'error', message: "Có lỗi xảy ra, vui lòng thử lại sau ⚠", time: getCurrentTime() }])
+            }
         } catch (error) {
             console.log(error)
             setChatValue(prevValue => [...prevValue, { type: 'error', message: "Có lỗi xảy ra, vui lòng thử lại sau ⚠", time: getCurrentTime() }])
         } finally {
-            setChatValue(prevValue => prevValue.filter(item => item.type !== 'delay').slice(-3))
-        }
-    }
-
-    async function generateSuggestions(aiResponse) {
-        const ai = new GoogleGenAI({ apiKey: API_KEY });
-        try {
-            const response = await ai.models.generateContent({
-                model: "gemini-2.0-flash",
-                contents: `Hãy tạo ra 3 gợi ý (1 gợi ý bắt buộc là 2 từ, có biểu tượng cảm xúc đứng trước mỗi gợi ý, không ghi bất cứ thứ gì thêm) dựa vào response sau: "${aiResponse}"`,
-                config: {
-                    maxOutputTokens: 100,
-                    temperature: 0.2,
-                },
-            });
-            const suggestions = response.text.split('\n').map(text => ({
-                text: text.trim().replace("* ", ""),
-                action: () => handleSuggestionClick(text.trim())
-            }));
-            const finalSuggestions = suggestions.filter(suggestion => suggestion.text !== '').slice(-3);
-            setSuggestions(finalSuggestions);
-        } catch (error) {
-            console.error('Error generating suggestions:', error);
-            setSuggestions([]);  // Fallback: No suggestions in case of error
+            setChatValue(prevValue => prevValue.filter(item => item.type !== 'delay'))
         }
     }
 

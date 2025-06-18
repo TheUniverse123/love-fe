@@ -7,9 +7,7 @@ import WorkshopTrendList from "@/components/card/WorkshopTrendList";
 import { useQuery } from "@tanstack/react-query";
 import { fetchComingSoonWorkshops, fetchMostBookedWorkshops, fetchWorkshops } from "./api/workshop";
 import { convertTrendWorkshop } from "./util/convert";
-
 export default function Home() {
-
   const { data: AIChooseWorkshops } = useQuery({
     queryKey: ['AI-workshops'],
     queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 15 }),
