@@ -14,7 +14,7 @@ export default function WorkshopBanner() {
         queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 10 }),
     });
 
-    const result = shuffleArray(randomWorkshop || [])
+    const result = shuffleArray(randomWorkshop || [])?.filter(item => item.status === 1)
     const sliderRef = useRef(null);  // Create a reference for the slider
 
     // Slick slider settings

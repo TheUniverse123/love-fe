@@ -62,30 +62,30 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                     // Set initial time values from the dates
                     if (data.startDate) {
                         const startDate = new Date(data.startDate);
-                        setEventStartTime({ 
-                            hour: startDate.getHours(), 
-                            minute: startDate.getMinutes() 
+                        setEventStartTime({
+                            hour: startDate.getHours(),
+                            minute: startDate.getMinutes()
                         });
                     }
                     if (data.endDate) {
                         const endDate = new Date(data.endDate);
-                        setEventEndTime({ 
-                            hour: endDate.getHours(), 
-                            minute: endDate.getMinutes() 
+                        setEventEndTime({
+                            hour: endDate.getHours(),
+                            minute: endDate.getMinutes()
                         });
                     }
                     if (data.workshopTicketInfo.saleStartDate) {
                         const saleStartDate = new Date(data.workshopTicketInfo.saleStartDate);
-                        setTicketSaleStartTime({ 
-                            hour: saleStartDate.getHours(), 
-                            minute: saleStartDate.getMinutes() 
+                        setTicketSaleStartTime({
+                            hour: saleStartDate.getHours(),
+                            minute: saleStartDate.getMinutes()
                         });
                     }
                     if (data.workshopTicketInfo.saleEndDate) {
                         const saleEndDate = new Date(data.workshopTicketInfo.saleEndDate);
-                        setTicketSaleEndTime({ 
-                            hour: saleEndDate.getHours(), 
-                            minute: saleEndDate.getMinutes() 
+                        setTicketSaleEndTime({
+                            hour: saleEndDate.getHours(),
+                            minute: saleEndDate.getMinutes()
                         });
                     }
                 }
@@ -251,7 +251,16 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
     const validate = () => {
         const newErrors = {};
 
-        if (!ticketName.trim()) newErrors.ticketName = "Vui lòng nhập tên vé";
+        console.log(eventStartDate, eventEndDate)
+        if (eventStartDate && eventEndDate && eventStartDate >= eventEndDate) {
+            newErrors.eventEndDate = "Thời gian kết thúc sự kiện phải sau thời gian bắt đầu sự kiện";
+        }
+
+        if (ticketSaleStartDate && ticketSaleEndDate && ticketSaleStartDate >= ticketSaleEndDate) {
+            newErrors.ticketSaleEndDate = "Thời gian kết thúc bán vé phải sau thời gian bắt đầu bán vé";
+        }
+
+        if (!ticketName.trim()) newErrors.ticketName = "Vui lòng nhập loại loại vé";
         if (isNaN(totalTickets) || Number(totalTickets) < 1 || Number(totalTickets) > 999) newErrors.totalTickets = "Vui lòng nhập tổng số lượng vé hợp lệ (1-999)";
         if (isNaN(minTickets) || Number(minTickets) < 1 || Number(minTickets) > 999) newErrors.minTickets = "Vui lòng nhập số vé tối thiểu hợp lệ (1-999)";
         if (isNaN(maxTickets) || Number(maxTickets) < 1 || Number(maxTickets) > 999) newErrors.maxTickets = "Vui lòng nhập số vé tối đa hợp lệ (1-999)";

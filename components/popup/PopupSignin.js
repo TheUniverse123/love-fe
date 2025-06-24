@@ -16,6 +16,8 @@ import CloseButton from "./CloseButton";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import PopupRegister from "./PopupRegister";
 import ResetPasswordForm from "./ResetPasswordForm";
+import Cookies from 'js-cookie';
+
 export default function PopupSignin() {
     const [activeTab, setActiveTab] = useState("signin");
     const { isPopupVisible, closePopup, openPopup } = usePopup()
@@ -54,7 +56,7 @@ export default function PopupSignin() {
             clearTimeout(logoutTimeout);
         }
 
-        const loginTime = localStorage.getItem('loginTime');
+        const loginTime = Cookies.get('loginTime');
         const currentTime = Date.now();
         const tokenDuration = currentTime - loginTime;
 
@@ -101,7 +103,7 @@ export default function PopupSignin() {
 
     const onSuccessLogin = (userInfo) => {
         setUserInfoToStorage(userInfo);
-        localStorage.setItem('loginTime', Date.now());
+        Cookies.set('loginTime', Date.now(), { expires: 7, secure: true, sameSite: 'Strict' });
         setFormState({
             email: "",
             password: "",

@@ -1,7 +1,7 @@
 'use client'
 
 import { fetchWorkshopsExploreAll, fetchSearchWorkshops } from "@/app/api/workshop";
-import { convertWorkshopApi } from "@/app/util/convert";
+import { convertWorkshopApiForExplore } from "@/app/util/convert";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import ExploreBoxViewResult from "./ExploreBoxViewResult";
@@ -96,6 +96,8 @@ export default function ExploreWorkshops({ filtersSelected }) {
             });
             combinedItems = Array.from(map.values());
 
+            combinedItems = combinedItems.filter((item) => item.status === 1);
+
             // Lọc theo rating (client filter)
             if (ratingFilter.length > 0) {
                 combinedItems = combinedItems.filter((item) =>
@@ -134,7 +136,7 @@ export default function ExploreWorkshops({ filtersSelected }) {
 
     useEffect(() => {
         if (data) {
-            setWorkshops(convertWorkshopApi(data?.items));
+            setWorkshops(convertWorkshopApiForExplore(data?.items));
             setTotalPages(data?.totalPages);
             if (data?.currentPage && data.currentPage !== page) {
                 setPage(data.currentPage);

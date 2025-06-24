@@ -39,6 +39,23 @@ export function shuffleArray(array = []) {
 
 export function convertWorkshopApi(workshops = []) {
     if (workshops === undefined) return []
+    return workshops?.filter(item => item.status === 1)?.map(item => {
+        return {
+            label: "",
+            imgSrc: item.imagePath,
+            rating: item.averageRating,
+            title: item.title,
+            date: formatDate(item.startDate),
+            price: formatPrice(item.price),
+            link: `/user/explore/${item.workshopId}`,
+            approvedReviewCount: item.approvedReviewCount,
+            workshopId: item.workshopId
+        }
+    })
+}
+
+export function convertWorkshopApiForExplore(workshops = []) {
+    if (workshops === undefined) return []
     return workshops?.map(item => {
         return {
             label: "",
@@ -54,9 +71,10 @@ export function convertWorkshopApi(workshops = []) {
     })
 }
 
+
 export function convertTrendWorkshop(workshops = []) {
     if (workshops === undefined) return []
-    return workshops?.map(item => {
+    return workshops?.filter(item => item.status === 1)?.map(item => {
         return {
             id: item.workshopId,
             img: item.imagePath,
@@ -71,7 +89,7 @@ export function convertTrendWorkshop(workshops = []) {
 
 export function convertRemarkedWorkshop(workshops = []) {
     if (!workshops) return []
-    return workshops?.map(item => {
+    return workshops?.filter(item => item.status === 1)?.map(item => {
         return {
             link: item.workshopId,
             imageSrc: item.imagePath,

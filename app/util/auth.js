@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const COOKIE_EXPIRATION_DAYS = 1 / 24;
+const COOKIE_EXPIRATION_DAYS = 7;
 
 export const getAuthToken = () => {
     const userInfo = getUserInfo();

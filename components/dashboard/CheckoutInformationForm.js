@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import InputLabel from './InputLabel'
+import { Spinner } from 'react-bootstrap'
 
 export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
     const [formData, setFormData] = useState({
@@ -38,6 +39,7 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
         }
     }, [formData]);
     const [errors, setErrors] = useState({})
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData(prev => ({
@@ -89,9 +91,14 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
         return Object.keys(newErrors).length === 0
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (validate()) {
-            onCreate()
+            setIsSubmitting(true)
+            try {
+                await onCreate()
+            } finally {
+                setIsSubmitting(false)
+            }
         } else {
             window.scrollTo({ top: 0, behavior: "smooth" })
         }
@@ -315,7 +322,20 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                     <button
                         className="btn btn-default primary-background white-color w-100 mb-50"
                         onClick={handleSubmit}
-                    >Lưu</button>
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                                className="me-2"
+                            />
+                        ) : null}
+                        {isSubmitting ? 'Đang lưu...' : 'Lưu'}
+                    </button>
                 </div>
             </div>
         </div>

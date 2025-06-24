@@ -13,12 +13,12 @@ import Link from "next/link";
 const PAGE_SIZE = 2;
 const userInfo = getUserInfo();
 export default function MyEvents() {
-  const [selectedTab, setSelectedTab] = useState('upcoming');
+  const [selectedTab, setSelectedTab] = useState('approved');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [pagination, setPagination] = useState({
-    upcoming: 1,
-    past: 1,
-    waiting: 1,
+    pending: 1,
+    approved: 1,
+    completed: 1,
   });
 
   const getTabClass = (tab) => {
@@ -32,12 +32,12 @@ export default function MyEvents() {
   });
 
   const filteredEvents = useMemo(() => {
-    if (!data?.workshops) return { upcoming: [], past: [], waiting: [] };
+    if (!data?.workshops) return { pending: [], approved: [], completed: [] };
     const now = Date.now();
-    const upcoming = data.workshops.filter(item => new Date(item.startDate).getTime() > now);
-    const past = data.workshops.filter(item => new Date(item.startDate).getTime() < now);
-    const waiting = data.workshops.filter(item => item.status === 0);
-    return { upcoming, past, waiting };
+    const pending = data.workshops.filter(item => item.status === 0);
+    const approved = data.workshops.filter(item => item.status === 1 && new Date(item.startDate).getTime() > now);
+    const completed = data.workshops.filter(item => item.status === 1 && new Date(item.startDate).getTime() <= now);
+    return { pending, approved, completed };
   }, [data]);
 
   const currentEvents = useMemo(() => {
@@ -172,15 +172,13 @@ export default function MyEvents() {
 
       {/* Tabs */}
       <div className="flex-space mt-20">
-        {['upcoming', 'past', 'waiting'].map(tab => (
-          <div key={tab} className="col-lg-4 col-md-4 col-sm-6">
+        {[{ key: 'pending', label: 'Đang duyệt' }, { key: 'approved', label: 'Đã duyệt' }, { key: 'completed', label: 'Đã hoàn thành' }].map(tab => (
+          <div key={tab.key} className="col-lg-4 col-md-4 col-sm-6">
             <div
-              className={`${getTabClass(tab)} ${styles.tabItem}`}
-              onClick={() => setSelectedTab(tab)}
+              className={`${getTabClass(tab.key)} ${styles.tabItem}`}
+              onClick={() => setSelectedTab(tab.key)}
             >
-              <p className="white-color text-lg-bold text-center">
-                {tab === 'upcoming' ? 'Sắp tới' : tab === 'past' ? 'Đã qua' : 'Chờ duyệt'}
-              </p>
+              <p className="white-color text-lg-bold text-center">{tab.label}</p>
             </div>
           </div>
         ))}
@@ -203,6 +201,7 @@ export default function MyEvents() {
                 ? 'waiting'
                 : (new Date(event.startDate).getTime() < Date.now() ? 'success' : undefined)
             }
+            hideEditButton={selectedTab !== 'pending'}
           />
         ))}
 

@@ -7,6 +7,7 @@ import styles from "./CreateEventPage.module.css"
 import { fetchCreateTicket, fetchCreateWorkshop, fetchUpdateTicket, fetchUpdateWorkshop } from "@/app/api/manage-workshop";
 import { uploadImageToFirebase } from "@/app/util/uploadImage";
 import { toast } from "react-toastify";
+import EventPendingPopup from "@/components/popup/EventPendingPopup";
 
 const convertToVietnamTime = (dateString) => {
     if (!dateString) return dateString;
@@ -19,6 +20,7 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
     const eventFormRef = useRef();
     const ticketFormRef = useRef();
     const checkoutFormRef = useRef();
+    const [showPendingPopup, setShowPendingPopup] = useState(false);
     const handleContinue = () => {
         setActiveTab(prevTab => prevTab + 1)
     }
@@ -100,12 +102,14 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 saleStartDate: convertToVietnamTime(ticketData.ticketSaleStartDate),
                 saleEndDate: convertToVietnamTime(ticketData.ticketSaleEndDate),
             };
-            await fetchCreateTicket(ticketInfo);
+            const ticketResponse = await fetchCreateTicket(ticketInfo);
+            if (ticketResponse.statusCode !== 201) {
+                toast.error(ticketResponse[0])
+                return
+            }
             toast.success("🎉 Tạo sự kiện và vé thành công!");
             localStorage.setItem("activeItem", "event")
-            setTimeout(() => {
-                window.location.href = "/dashboard/my-event"
-            }, 2000)
+            setShowPendingPopup(true);
         } catch (err) {
             toast.error("Đã có lỗi xảy ra, vui lòng thử lại.");
         }
@@ -122,17 +126,17 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 organizerLogoUrl,
                 ticketImageUrl
             ] = await Promise.all([
-                eventData.eventLogoPath !== initialWorkshop.eventLogoPath ? 
-                    uploadImageToFirebase(eventData.eventLogoPath, 'eventLogoPath') : 
+                eventData.eventLogoPath !== initialWorkshop.eventLogoPath ?
+                    uploadImageToFirebase(eventData.eventLogoPath, 'eventLogoPath') :
                     initialWorkshop.eventLogoPath,
-                eventData.imagePath !== initialWorkshop.imagePath ? 
-                    uploadImageToFirebase(eventData.imagePath, 'imagePath') : 
+                eventData.imagePath !== initialWorkshop.imagePath ?
+                    uploadImageToFirebase(eventData.imagePath, 'imagePath') :
                     initialWorkshop.imagePath,
-                eventData.organizationLogoPath !== initialWorkshop.organizationLogoPath ? 
-                    uploadImageToFirebase(eventData.organizationLogoPath, 'organizationLogoPath') : 
+                eventData.organizationLogoPath !== initialWorkshop.organizationLogoPath ?
+                    uploadImageToFirebase(eventData.organizationLogoPath, 'organizationLogoPath') :
                     initialWorkshop.organizationLogoPath,
-                ticketData.ticketPath !== initialWorkshop.ticketImagePath ? 
-                    uploadImageToFirebase(ticketData.ticketPath, 'ticketImagePath') : 
+                ticketData.ticketPath !== initialWorkshop.ticketImagePath ?
+                    uploadImageToFirebase(ticketData.ticketPath, 'ticketImagePath') :
                     initialWorkshop.ticketImagePath,
             ]);
 
@@ -178,7 +182,11 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 saleEndDate: convertToVietnamTime(ticketData.ticketSaleEndDate)
             };
 
-            await fetchUpdateTicket(initialTicket.workshopTicketInfoId, updatedTicket);
+            const ticketResponse = await fetchUpdateTicket(initialTicket.workshopTicketInfoId, updatedTicket);
+            if (ticketResponse.statusCode !== 200) {
+                toast.error(ticketResponse[0])
+                return
+            }
             toast.success("🎉 Cập nhật thành công!");
             localStorage.setItem("activeItem", "event")
             setTimeout(() => {
@@ -234,6 +242,7 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                     <CheckoutInformationForm formRef={checkoutFormRef} onBack={handleBack} onCreate={mode === "create" ? handleCreateWorkshopAndTicket : handleUpdateWorkshopAndTicket} />
                 </div>
             </div>
+            <EventPendingPopup open={showPendingPopup} onClose={() => setShowPendingPopup(false)} />
         </div>
     );
 }

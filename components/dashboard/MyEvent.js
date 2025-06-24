@@ -18,7 +18,8 @@ export default function MyEvent({
     isButtonVisible = true,
     mode = "manage",
     tab = "",
-    workshopId = 0
+    workshopId = 0,
+    hideEditButton = false
 }) {
     const [tabText, setTabText] = useState('Quản lý')
     const [showModal, setShowModal] = useState(false)
@@ -90,7 +91,7 @@ export default function MyEvent({
                                 <Link href={(mode === "review" && tab === "upcoming") ? `/user/review/${workshopId}` : ""}
                                     className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>
                                     {tabText}</Link>
-                                {(tab !== "past" && tab !== "waiting") &&
+                                {(!hideEditButton && tab !== "past" && tab !== "waiting") &&
                                     <Link
                                         href={mode !== "review" ? `/dashboard/edit/${workshopId}` : "#"}
                                         onClick={() => mode === "review" ? setShowModal(true) : {}}
