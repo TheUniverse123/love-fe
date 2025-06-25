@@ -34,6 +34,10 @@ body {
     overflow-x: hidden !important;
 }
 
+.btn {
+    color: #fff !important;
+}
+
 a {
     cursor: pointer !important;
 }

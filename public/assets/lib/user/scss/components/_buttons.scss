@@ -32,7 +32,7 @@
 	}
 	&.btn-black {
 		padding: 8px 18px !important;
-		color: var(--bs-neutral-0) !important;
+		color: #fff !important;
 		font-size: 14px !important;
 		line-height: 22px !important;
 		font-family: $font-manrope;
@@ -60,17 +60,17 @@
 			margin-left: 13px;
 		}
 		&:hover {
-			color: var(--bs-neutral-0) !important;
+			color: #fff !important;
 			background-color: var(--bs-neutral-1000);
 			border: 0;
 			svg {
-				stroke: var(--bs-neutral-0);
+				stroke: #fff;
 			}
 		}
 	}
 	&.btn-black-lg {
 		padding: 12px 22px !important;
-		color: var(--bs-neutral-0) !important;
+		color: #fff !important;
 		font-size: 16px !important;
 		line-height: 26px !important;
 		font-family: $font-manrope;
@@ -81,7 +81,7 @@
 		align-items: center;
 		width: fit-content;
 		svg {
-			stroke: var(--bs-neutral-0);
+			stroke: #fff;
 			margin-left: 13px;
 		}
 		svg.first {
@@ -98,7 +98,7 @@
 	}
 	&.btn-black-lg-square {
 		padding: 12px 22px !important;
-		color: var(--bs-neutral-0) !important;
+		color: #fff !important;
 		font-size: 16px !important;
 		line-height: 26px !important;
 		font-family: $font-manrope;
@@ -109,7 +109,7 @@
 		align-items: center;
 		width: fit-content;
 		svg {
-			stroke: var(--bs-neutral-0);
+			stroke: #fff;
 			margin-left: 13px;
 		}
 		svg.first {
@@ -145,10 +145,10 @@
 			margin-right: 8px;
 		}
 		&:hover {
-			color: var(--bs-neutral-0) !important;
+			color: #fff !important;
 			background-color: var(--bs-neutral-1000);
 			svg {
-				stroke: var(--bs-neutral-0);
+				stroke: #fff;
 			}
 		}
 	}
@@ -226,7 +226,7 @@
 		padding: 11px 18px;
 		border-radius: 50px;
 		background-color: var(--bs-neutral-1000);
-		color: var(--bs-neutral-0);
+		color: #fff;
 		font-size: 14px;
 		line-height: 22px;
 		font-weight: 700;
@@ -374,7 +374,7 @@
 		color: var(--bs-neutral-1000);
 		&:hover {
 			background-color: var(--bs-neutral-1000) !important;
-			color: var(--bs-neutral-0);
+			color: #fff;
 		}
 	}
 	&.btn-label-tag-lg {
@@ -388,7 +388,7 @@
 		color: var(--bs-neutral-1000);
 		&:hover {
 			background-color: var(--bs-neutral-1000) !important;
-			color: var(--bs-neutral-0);
+			color: #fff;
 		}
 	}
 	&.btn-link {
@@ -424,7 +424,7 @@
 		}
 		&:hover {
 			background-color: var(--bs-neutral-900);
-			color: var(--bs-neutral-0);
+			color: #fff;
 			border-color: var(--bs-neutral-900);
 		}
 	}
