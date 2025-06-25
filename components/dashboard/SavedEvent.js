@@ -19,7 +19,7 @@ export default function SavedEvent({
                 <div className="card-flight card-hotel main-background">
                     <div className={`card-image ${styleMain.cardImage}`}>
                         <Link href={link}>
-                            <img src={imageSrc} alt="image" />
+                            <img src={imageSrc} alt="image" className="object-cover" />
                         </Link>
                     </div>
                     <div className={`card-info main-background border-color row ${styleMain.cardInfo}`}>
