@@ -70,8 +70,12 @@ export default function PopupSignin() {
             return;
         }
         const tokenExpiration = userInfo.expiration;
-        const timeUntilExpiration = tokenExpiration - currentTime;
-        if (timeUntilExpiration < 15 * 60 * 1000) {
+        let tokenExpirationMs = typeof tokenExpiration === "string"
+            ? Date.parse(tokenExpiration)
+            : Number(tokenExpiration);
+        const timeUntilExpiration = tokenExpirationMs - Number(currentTime);
+        const REFRESH_BEFORE_EXPIRATION = 5 * 60 * 1000; // 5 phút
+        if (timeUntilExpiration < REFRESH_BEFORE_EXPIRATION) {
             const refreshToken = userInfo.refreshToken || userInfo.accessToken;
             if (refreshToken) {
                 fetchRefreshToken(refreshToken)
@@ -95,8 +99,9 @@ export default function PopupSignin() {
             } else if (tokenDuration >= ONE_WEEK_IN_MS) {
                 fetchLogout();
             }
-        } else {
-            const timer = setTimeout(handleAutoLogout, timeUntilExpiration - 5 * 60 * 1000);
+        }
+        else {
+            const timer = setTimeout(handleAutoLogout, timeUntilExpiration - REFRESH_BEFORE_EXPIRATION);
             setLogoutTimeout(timer);
         }
     };
