@@ -361,7 +361,8 @@ input[type="radio"] {
 }
 
 .white-color {
-    color: var(--bg-white-color) !important;
+    color: #fff !important; /* fallback */
+    color: var(--bg-white-color, #fff) !important;
 }
 
 .white-color-2 {
