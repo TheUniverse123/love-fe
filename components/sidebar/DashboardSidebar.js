@@ -1,16 +1,20 @@
 'use client';
-import { useState, useEffect } from 'react';
-import styles from './DashboardSidebar.module.css';
-import TicketIcon from '@/public/assets/icon/TicketIcon';
 import { fetchLogout, fetchUserInfo } from '@/app/api/account';
 import { getUserInfo } from '@/app/util/auth';
+import TicketIcon from '@/public/assets/icon/TicketIcon';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { fetchPoint } from '@/app/api/point';
-import { Spinner } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import styles from './DashboardSidebar.module.css';
+import UserAvatar from './UserAvatar';
 const userInfo = getUserInfo()
 export default function DashboardSidebar() {
     const [activeItem, setActiveItem] = useState();
+
+    const { data } = useQuery({
+        queryKey: ['user-info'],
+        queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
+    })
 
     useEffect(() => {
         const savedActiveItem = localStorage.getItem("activeItem");
@@ -19,40 +23,14 @@ export default function DashboardSidebar() {
         }
     }, []);
 
-    const { data: point, isLoading: isLoadingPoint } = useQuery({
-        queryKey: ['point'],
-        queryFn: () => fetchPoint(),
-    })
-
     const handleItemClick = (item) => {
         setActiveItem(item); // Cập nhật state
         localStorage.setItem("activeItem", item); // Lưu trạng thái vào localStorage
     };
 
-    const { data } = useQuery({
-        queryKey: ['user-info'],
-        queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
-    })
-
     return (
         <div className={styles.sidebar}>
-            <div className={styles.profile}>
-                <div className='flex-space'>
-                    <img className={styles.avatar} src={data?.result.avatarUrl} alt="User Avatar" />
-                    <span className={styles.userName}>{data ? data?.result.userName : 'Tên người dùng'}</span>
-                </div>
-                <div className='pb-15 w-100 flex-center border-1px-bottom'>
-                    <div className="btn btn-default grey-button-background mt-15"
-                        style={{ padding: "10px 20px!important", width: "70%!important" }}>
-                        <Link href='/dashboard/point-accumulate' className='flex-space white-color'>
-                            <span>{isLoadingPoint ? <Spinner /> : point?.totalPoints}</span>
-                            <span className="flex-center ml-5">
-                                <img src='/assets/icon/star-dashboard.svg' alt='' />
-                            </span>
-                        </Link>
-                    </div>
-                </div>
-            </div>
+            <UserAvatar />
 
             <div className={`${styles.menu} pb-5 border-1px-bottom`}>
                 <Link href="/dashboard" className={`${styles.menuItemContainer} flex-start ${activeItem === 'ticket' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('ticket')}>

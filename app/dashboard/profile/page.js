@@ -29,6 +29,8 @@ export default function ProfilePage() {
         queryKey: ['user-info'],
         queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
     })
+
+    console.log(data)
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
@@ -71,7 +73,7 @@ export default function ProfilePage() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-    const { mutate, isPending } = useMutation({
+    const { mutate, isLoading } = useMutation({
         mutationKey: ['update-user'],
         mutationFn: (userInfo) => updateUserInfo(userInfo),
         onSuccess: (response) => {
@@ -87,7 +89,6 @@ export default function ProfilePage() {
         },
     });
     const handleUpdateProfile = async (e) => {
-        console.log(data?.avatarUrl)
         e.preventDefault();
         if (!validateForm()) return;
         const avatarUrl = await handleUploadFileToFirebase();
@@ -97,7 +98,6 @@ export default function ProfilePage() {
             dateOfBirth: convertToISOString(dateInputRef.current.value),
             avatarUrl: avatarUrl ? avatarUrl : data?.result.avatarUrl,
         };
-        console.log(dateInputRef.current.value)
         mutate(dataSubmit);
     };
     const handleUploadFileToFirebase = async () => {
@@ -323,11 +323,28 @@ export default function ProfilePage() {
                             </button>
                         </div>
                         <div className="d-flex justify-content-center justify-content-md-end ml-15">
-                            <button disabled={isPending} type="submit" className="btn btn-black-lg primary-background">
-                                {isPending ? <Spinner /> : 'Lưu'}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="13" viewBox="0 0 17 13" fill="none">
-                                    <path d="M16.1632 2.28815L6.16325 12.2882C6.07615 12.3756 5.97266 12.4449 5.8587 12.4922C5.74475 12.5395 5.62257 12.5639 5.49918 12.5639C5.3758 12.5639 5.25362 12.5395 5.13967 12.4922C5.02571 12.4449 4.92222 12.3756 4.83512 12.2882L0.460122 7.91315C0.372916 7.82594 0.303741 7.72242 0.256545 7.60848C0.20935 7.49454 0.185059 7.37242 0.185059 7.24909C0.185059 7.12576 0.20935 7.00364 0.256545 6.8897C0.303741 6.77576 0.372916 6.67223 0.460122 6.58503C0.547328 6.49782 0.650857 6.42864 0.764797 6.38145C0.878737 6.33425 1.00086 6.30996 1.12418 6.30996C1.24751 6.30996 1.36963 6.33425 1.48357 6.38145C1.59751 6.42864 1.70104 6.49782 1.78825 6.58503L5.49997 10.2967L14.8367 0.961587C15.0128 0.785467 15.2517 0.686523 15.5007 0.686523C15.7498 0.686523 15.9887 0.785467 16.1648 0.961587C16.3409 1.13771 16.4399 1.37658 16.4399 1.62565C16.4399 1.87472 16.3409 2.11359 16.1648 2.28971L16.1632 2.28815Z" fill="white" />
-                                </svg>
+                            <button disabled={isLoading} type="submit" className="btn btn-black-lg primary-background">
+                                {isLoading ? (
+                                    <>
+                                        <Spinner 
+                                            as="span" 
+                                            animation="border" 
+                                            size="sm" 
+                                            role="status" 
+                                            aria-hidden="true"
+                                            style={{ marginRight: '8px' }}
+                                            className={styles.spinner}
+                                        />
+                                        Đang xử lý...
+                                    </>
+                                ) : (
+                                    <>
+                                        Lưu
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="13" viewBox="0 0 17 13" fill="none">
+                                            <path d="M16.1632 2.28815L6.16325 12.2882C6.07615 12.3756 5.97266 12.4449 5.8587 12.4922C5.74475 12.5395 5.62257 12.5639 5.49918 12.5639C5.3758 12.5639 5.25362 12.5395 5.13967 12.4922C5.02571 12.4449 4.92222 12.3756 4.83512 12.2882L0.460122 7.91315C0.372916 7.82594 0.303741 7.72242 0.256545 7.60848C0.20935 7.49454 0.185059 7.37242 0.185059 7.24909C0.185059 7.12576 0.20935 7.00364 0.256545 6.8897C0.303741 6.77576 0.372916 6.67223 0.460122 6.58503C0.547328 6.49782 0.650857 6.42864 0.764797 6.38145C0.878737 6.33425 1.00086 6.30996 1.12418 6.30996C1.24751 6.30996 1.36963 6.33425 1.48357 6.38145C1.59751 6.42864 1.70104 6.49782 1.78825 6.58503L5.49997 10.2967L14.8367 0.961587C15.0128 0.785467 15.2517 0.686523 15.5007 0.686523C15.7498 0.686523 15.9887 0.785467 16.1648 0.961587C16.3409 1.13771 16.4399 1.37658 16.4399 1.62565C16.4399 1.87472 16.3409 2.11359 16.1648 2.28971L16.1632 2.28815Z" fill="white" />
+                                        </svg>
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>

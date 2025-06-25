@@ -15,10 +15,31 @@
 }
 
 .avatar {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #DF9D63, #A64E00);
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatarImg {
     width: 48px;
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.avatarCrown {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: -10px;
+    left: 0px;
+    z-index: 1;
 }
 
 .userName {

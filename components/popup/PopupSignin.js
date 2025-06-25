@@ -71,8 +71,8 @@ export default function PopupSignin() {
         }
         const tokenExpiration = userInfo.expiration;
         const timeUntilExpiration = tokenExpiration - currentTime;
-        if (timeUntilExpiration < 5 * 60 * 1000) {
-            const refreshToken = userInfo.refreshToken;
+        if (timeUntilExpiration < 15 * 60 * 1000) {
+            const refreshToken = userInfo.refreshToken || userInfo.accessToken;
             if (refreshToken) {
                 fetchRefreshToken(refreshToken)
                     .then(response => {

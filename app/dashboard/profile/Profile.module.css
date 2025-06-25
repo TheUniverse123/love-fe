@@ -40,6 +40,15 @@
     padding: 16px 25px;
 }
 
+/* Spinner styling for loading state */
+.spinner {
+    color: white !important;
+}
+
+.spinner span {
+    color: white !important;
+}
+
 @media (min-width: 1400px) and (max-width: 1500px) {
     .container {
         margin-right: 300px;
