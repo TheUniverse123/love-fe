@@ -86,17 +86,17 @@ export default function PopupSignin() {
                             setUserInfoToStorage(userInfo);
                             handleAutoLogout();
                         } else {
-                            if (tokenDuration >= ONE_WEEK_IN_MS) {
+                            if (tokenDuration >= ONE_WEEK_IN_MS || !getUserInfo()) {
                                 fetchLogout();
                             }
                         }
                     })
                     .catch(() => {
-                        if (tokenDuration >= ONE_WEEK_IN_MS) {
+                        if (tokenDuration >= ONE_WEEK_IN_MS || !getUserInfo()) {
                             fetchLogout();
                         }
                     });
-            } else if (tokenDuration >= ONE_WEEK_IN_MS) {
+            } else if (tokenDuration >= ONE_WEEK_IN_MS || !getUserInfo()) {
                 fetchLogout();
             }
         }
