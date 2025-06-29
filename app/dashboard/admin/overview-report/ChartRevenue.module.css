@@ -1,0 +1,109 @@
+:root {
+  --background-card-bg: #191919;
+  --bg-zinc-800: #313131;
+  --border-border-1: #313131;
+  --bg-violet-800: #4700D5;
+  --neutral-500: #737373;
+  --bg-indigo-400: #7682FF;
+  --neutral-600: #8E8E8E;
+  --neutral-1000: #F2F2F2;
+  --legend-ticket: #00C48C;
+  --legend-revenue: #FF647C;
+}
+
+.sectionStyle {
+    padding: 18px 30px !important;
+}
+
+.panelBody {
+    padding: 20px 25px !important;
+}
+
+.chartCard {
+  background: var(--background-card-bg);
+  border-radius: 16px;
+  color: #fff;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.legend {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 0.92rem;
+  color: var(--neutral-600);
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dotTicket {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-indigo-400);
+}
+
+.dotRevenue {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-violet-800);
+}
+
+@media (max-width: 900px) {
+  .chartCard {
+    padding: 20px 10px 10px 10px;
+    border-radius: 10px;
+  }
+  .title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .legend {
+    gap: 14px;
+    font-size: 0.85rem;
+  }
+  .legendItem {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 600px) {
+  .chartCard {
+    padding: 10px 2vw 8px 2vw;
+    border-radius: 7px;
+  }
+  .title {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+  .legend {
+    gap: 8px;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+  }
+  .legendItem {
+    gap: 3px;
+  }
+  .panelBody {
+    min-width: 0;
+    padding: 0;
+  }
+} 
