@@ -12,7 +12,7 @@ export default function StatisticsItem({ number, text, isUp }) {
                 <div className="card-info w-60">
                     <div className="card-title">
                         <h3 className={`text-xl-bold neutral-1000 flex-space align-items-end ${styles.titleResponsive}`}>
-                            <span className="count white-color font-16">{number}</span>
+                            <span className="count white-color font-15">{number}</span>
                             {(isUp >= 0) && <span className="up-color font-11">{isUp}%
                                 <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11 1H19M19 1V9M19 1L11 9L7 5L1 11" stroke="#34D674" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

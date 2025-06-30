@@ -13,10 +13,10 @@ export default function BoxStatisticalOverviewAdmin() {
     return (
         <div className="section-box box-statistical mt-35 mb-35">
             {isPending ? <Spinner /> : <div className="row">
-                <StatisticsItem number={data?.totalTicketsSold} text="Tổng số vé đã bán" isUp={data?.ticketsSoldChangePercent} />
-                <StatisticsItem number={formatPrice(data?.totalRevenue)} text="Doanh thu" isUp={data?.revenueChangePercent} />
-                <StatisticsItem number={data?.totalOrganizers} text="Nhà tổ chức workshop" isUp={data?.organizersChangePercent} />
-                <StatisticsItem number={data?.ongoingWorkshops} text="Workshop đang diễn ra" isUp={data?.ongoingWorkshopsChangePercent} />
+                <StatisticsItem number={data?.totalTicketsSold} text="Tổng số vé đã bán" isUp={Math.round(data?.ticketsSoldChangePercent)} />
+                <StatisticsItem number={formatPrice(data?.totalRevenue)} text="Doanh thu" isUp={Math.round(data?.revenueChangePercent)} />
+                <StatisticsItem number={data?.totalOrganizers} text="Nhà tổ chức workshop" isUp={Math.round(data?.organizersChangePercent)} />
+                <StatisticsItem number={data?.ongoingWorkshops} text="Workshop đang diễn ra" isUp={Math.round(data?.ongoingWorkshopsChangePercent)} />
             </div>}
         </div>
     )

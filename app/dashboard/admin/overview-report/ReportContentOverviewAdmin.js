@@ -41,13 +41,6 @@ export default function ReportContentOverviewAdmin() {
         staleTime: 1000 * 60 * 5,
         refetchInterval: 1000 * 60 * 5,
     })
-
-    const { data, isPending } = useQuery({
-        queryKey: ['workshop-user', currentPage],
-        queryFn: ({ signal }) => fetchWorkshopByUsers(
-            { signal, pageNumber: currentPage, pageSize: 3, userId: userInfo?.id }),
-    });
-
     const totalPages = recentCreatedWorkshops?.totalPages || 1; // Tổng số trang
 
     const generatePagination = () => {
