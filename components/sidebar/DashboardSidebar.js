@@ -63,6 +63,11 @@ export default function DashboardSidebar() {
                     <div className={`ml-10 ${styles.menuItem}`}>Tổng quan báo cáo</div>
                 </Link>}
 
+                {data?.result.roles.includes("Admin") && <Link href="/dashboard/admin/detail-report" className={`${styles.menuItemContainer} flex-start ${activeItem === 'detailReport' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('detailReport')}>
+                    <TicketIcon icon="report" />
+                    <div className={`ml-10 ${styles.menuItem}`}>Chi tiết báo cáo</div>
+                </Link>}
+
                 {data?.result.roles.includes("Admin") && <Link href="/dashboard/ticket/checkin" className={`${styles.menuItemContainer} flex-start ${activeItem === 'checkin' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('checkin')}>
                     <TicketIcon icon="checkin" />
                     <div className={`ml-10 ${styles.menuItem}`}>Check-in vé</div>
