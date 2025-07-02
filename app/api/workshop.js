@@ -72,8 +72,9 @@ export const fetchWorkshopsCount = async () => {
 }
 
 export const fetchSearchWorkshops = async ({ signal, pageNumber, pageSize, search }) => {
+    const keywordParam = search.keyword ? `&Keyword=${encodeURIComponent(search.keyword)}` : '';
     const data = await axiosInstanceJson
-        .get(`/api/Workshops/search?pageNumber=${pageNumber}&pageSize=${pageSize}&District=${search.district}&CategoryId=${search.categoryId}&MinPrice=0&MaxPrice=${search.maxPrice}`)
+        .get(`/api/Workshops/search?pageNumber=${pageNumber}&pageSize=${pageSize}&District=${search.district}&CategoryId=${search.categoryId}&MinPrice=0&MaxPrice=${search.maxPrice}${keywordParam}`)
         .then((response) => {
             return response.data.result
         }
@@ -98,6 +99,18 @@ export const fetchWorkshopOfUsers = async ({ signal, userId }) => {
 
 export const fetchWorkshopDetail = async ({ signal, workshopId }) => {
     const data = await axiosInstanceJson.get(`/api/Workshops/get-by-id/${workshopId}`)
+        .then((response) => {
+            return response.data.result
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}
+
+export const fetchRegisteredWorkshopsByUser = async ({ signal, pageNumber, pageSize, userId }) => {
+    const data = await axiosInstanceJson.get(`/api/Workshops/user/${userId}/workshops?pageNumber=${pageNumber}&pageSize=${pageSize}`)
         .then((response) => {
             return response.data.result
         }

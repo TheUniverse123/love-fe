@@ -7,6 +7,7 @@ import { fetchWorkshopTopRevenue } from "@/app/api/admin-dashboard";
 import { useEffect, useState } from "react";
 import { fetchListParticipants, fetchListUsers, fetchListWorkshops } from "@/app/api/admin-dashboard-detail";
 import { formatDate } from "@/app/util/convert";
+import { fetchRegisteredWorkshopsByUser } from "@/app/api/workshop";
 
 export default function DetailReport() {
     const [isMediumScreen, setIsMediumScreen] = useState(false)
@@ -31,6 +32,11 @@ export default function DetailReport() {
     const participantPageSize = 10;
     const [participantDate, setParticipantDate] = useState(""); // '' hoặc ngày (YYYY-MM-DD)
     const [participantSearch, setParticipantSearch] = useState("");
+
+    // State cho expand/collapse participant workshop
+    const [expandedParticipant, setExpandedParticipant] = useState(null); // userId
+    const [registeredWorkshops, setRegisteredWorkshops] = useState({}); // { [userId]: [workshop, ...] }
+    const [loadingWorkshops, setLoadingWorkshops] = useState({}); // { [userId]: boolean }
 
     useEffect(() => {
         const checkScreenSize = () => {
@@ -125,7 +131,7 @@ export default function DetailReport() {
 
     // Lấy danh sách giá trị duy nhất cho filter
     const workshopTypes = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.eventType).filter(Boolean) : []));
-    const workshopDates = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.startDate?.slice(0,10)).filter(Boolean) : []));
+    const workshopDates = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.startDate?.slice(0, 10)).filter(Boolean) : []));
     const workshopLocations = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.location).filter(Boolean) : []));
     const workshopOrganizers = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.organizationName).filter(Boolean) : []));
 
@@ -139,7 +145,7 @@ export default function DetailReport() {
     }
     // Filter theo ngày
     if (workshopDate) {
-        workshops = workshops.filter(item => (item.startDate || "").slice(0,10) === workshopDate);
+        workshops = workshops.filter(item => (item.startDate || "").slice(0, 10) === workshopDate);
     }
     // Filter theo địa điểm
     if (workshopLocation) {
@@ -167,10 +173,10 @@ export default function DetailReport() {
         ? listParticipants.items
         : [];
     // Lấy danh sách ngày đăng ký duy nhất
-    const participantDates = Array.from(new Set(participants.map(p => p.createdDate?.slice(0,10)).filter(Boolean)));
+    const participantDates = Array.from(new Set(participants.map(p => p.createdDate?.slice(0, 10)).filter(Boolean)));
     // Filter theo ngày đăng ký
     if (participantDate) {
-        participants = participants.filter(item => (item.createdDate || '').slice(0,10) === participantDate);
+        participants = participants.filter(item => (item.createdDate || '').slice(0, 10) === participantDate);
     }
     // Search theo tên, email, SĐT, ID
     if (participantSearch.trim()) {
@@ -199,6 +205,21 @@ export default function DetailReport() {
         if (total > 1) pages.push(total);
         return pages;
     }
+
+    // Hàm handle expand
+    const handleExpandParticipant = async (userId) => {
+        if (expandedParticipant === userId) {
+            setExpandedParticipant(null);
+            return;
+        }
+        setExpandedParticipant(userId);
+        if (!registeredWorkshops[userId]) {
+            setLoadingWorkshops(prev => ({ ...prev, [userId]: true }));
+            const data = await fetchRegisteredWorkshopsByUser({ userId, pageNumber: 1, pageSize: 100 });
+            setRegisteredWorkshops(prev => ({ ...prev, [userId]: data?.items || [] }));
+            setLoadingWorkshops(prev => ({ ...prev, [userId]: false }));
+        }
+    };
 
     return (
         <div style={{ paddingLeft: "35px", paddingTop: "20px", paddingRight: "36px" }}>
@@ -325,244 +346,297 @@ export default function DetailReport() {
                                     )}
                                 </div>
                                 <div className={`panel-body ${styles.panelBody}`}>
-                                    <table className={`${tableClass} ${styles['detail-table']}`}>
-                                        <thead>
-                                            <tr>
+                                    <div className="table-background border-1px p-15 border-radius-10">
+                                        <table className={`${tableClass} ${styles['detail-table']} table-background border-1px`}>
+                                            <thead>
+                                                <tr>
+                                                    {activeTab === 'organizer' && (
+                                                        <>
+                                                            <th className={`${styles.rank} ${styles['detail-tableHeader']} ${styles['detail-colIndex']}`}>#</th>
+                                                            <th className={`${styles.organizer} ${styles['detail-tableHeader']}`}>Nhà tổ chức</th>
+                                                            <th className={styles['detail-tableHeader']}>Thông tin liên hệ</th>
+                                                            <th className={styles['detail-tableHeader']}>Ngày tạo tài khoản</th>
+                                                            <th className={styles['detail-tableHeader']}>Gói dịch vụ</th>
+                                                        </>
+                                                    )}
+                                                    {activeTab === 'workshop' && (
+                                                        <>
+                                                            <th className={`${styles['detail-tableHeader']} ${styles['detail-colIndex']}`}>#</th>
+                                                            <th className={styles['detail-tableHeader']}>Tên Workshop</th>
+                                                            <th className={styles['detail-tableHeader']}>Thể loại</th>
+                                                            <th className={styles['detail-tableHeader']}>Địa điểm</th>
+                                                            <th className={styles['detail-tableHeader']}>Nhà tổ chức</th>
+                                                            <th className={styles['detail-tableHeader']}>Ngày bắt đầu</th>
+                                                            <th className={styles['detail-tableHeader']}>Ngày kết thúc</th>
+                                                        </>
+                                                    )}
+                                                    {activeTab === 'participant' && (
+                                                        <>
+                                                            <th className={`${styles['detail-tableHeader']} ${styles['detail-colId']}`}>ID</th>
+                                                            <th className={styles['detail-tableHeader']}>Họ và tên</th>
+                                                            <th className={styles['detail-tableHeader']}>Email</th>
+                                                            <th className={styles['detail-tableHeader']}>Số điện thoại</th>
+                                                            <th className={styles['detail-tableHeader']}>Ngày đăng ký</th>
+                                                            <th className={styles['detail-tableHeader']}>Số workshop</th>
+                                                            <th className={styles['detail-tableHeader']}>Trạng thái</th>
+                                                        </>
+                                                    )}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 {activeTab === 'organizer' && (
-                                                    <>
-                                                        <th className={`${styles.rank} ${styles['detail-tableHeader']} ${styles['detail-colIndex']}`}>#</th>
-                                                        <th className={`${styles.organizer} ${styles['detail-tableHeader']}`}>Nhà tổ chức</th>
-                                                        <th className={styles['detail-tableHeader']}>Thông tin liên hệ</th>
-                                                        <th className={styles['detail-tableHeader']}>Ngày tạo tài khoản</th>
-                                                        <th className={styles['detail-tableHeader']}>Gói dịch vụ</th>
-                                                    </>
+                                                    isPendingListUsers ? (
+                                                        <tr><td colSpan={5} style={{ textAlign: 'center' }}>Đang tải dữ liệu...</td></tr>
+                                                    ) : (
+                                                        pagedOrganizers.map((item, idx) => (
+                                                            <tr key={item.id}>
+                                                                <td className={`${styles.rank} ${styles['detail-tableCell']} ${styles['detail-colIndex']}`}>{(organizerPage - 1) * organizerPageSize + idx + 1}</td>
+                                                                <td className={`${styles.organizer} ${styles['detail-tableCell']} ${styles['detail-cellName']}`}>
+                                                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                                                        <img
+                                                                            className={styles.image}
+                                                                            src={item.avatarUrl || "/assets/icon/user.svg"}
+                                                                            alt="icon"
+                                                                        />
+                                                                        <div>
+                                                                            <div className={styles.organizerName} style={{ fontWeight: 600, color: '#fff' }}>{item.fullName}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellEmail']}`}>
+                                                                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                                                        <span>
+                                                                            <svg className={styles['detail-contactIcon']} width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Z" stroke="#6674FF" strokeWidth="1.5" /><path d="M2.5 4.5 8 9l5.5-4.5" stroke="#6674FF" strokeWidth="1.5" /></svg>
+                                                                            {item.email}
+                                                                        </span>
+                                                                        <span>
+                                                                            <svg className={styles['detail-contactIcon']} width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="12" height="8" rx="2" stroke="#6674FF" strokeWidth="1.5" /><path d="M4 8h8" stroke="#6674FF" strokeWidth="1.5" /></svg>
+                                                                            {item.phoneNumber || "N/A"}
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{formatDate(item.createdDate)}</td>
+                                                                <td className={styles['detail-tableCell']}>
+                                                                    {(() => {
+                                                                        const pkg = getPackageInfo(item.address);
+                                                                        return (
+                                                                            <button className={styles['detail-serviceButton']} style={{ background: pkg.color, color: '#fff' }}>{pkg.name}</button>
+                                                                        );
+                                                                    })()}
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    )
                                                 )}
                                                 {activeTab === 'workshop' && (
-                                                    <>
-                                                        <th className={`${styles['detail-tableHeader']} ${styles['detail-colIndex']}`}>#</th>
-                                                        <th className={styles['detail-tableHeader']}>Tên Workshop</th>
-                                                        <th className={styles['detail-tableHeader']}>Thể loại</th>
-                                                        <th className={styles['detail-tableHeader']}>Địa điểm</th>
-                                                        <th className={styles['detail-tableHeader']}>Nhà tổ chức</th>
-                                                        <th className={styles['detail-tableHeader']}>Ngày bắt đầu</th>
-                                                        <th className={styles['detail-tableHeader']}>Ngày kết thúc</th>
-                                                    </>
+                                                    isPendingListWorkshops ? (
+                                                        <tr><td colSpan={7} style={{ textAlign: 'center' }}>Đang tải dữ liệu...</td></tr>
+                                                    ) : (
+                                                        pagedWorkshops.map((item, idx) => (
+                                                            <tr key={item.workshopId}>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-colIndex']}`}>{(workshopPage - 1) * workshopPageSize + idx + 1}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellWorkshop']}`}>{item.title}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellType']}`}>{item.eventType}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{item.location}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.organizationName}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.startDate?.slice(0, 10)}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.endDate?.slice(0, 10)}</td>
+                                                            </tr>
+                                                        ))
+                                                    )
                                                 )}
                                                 {activeTab === 'participant' && (
-                                                    <>
-                                                        <th className={`${styles['detail-tableHeader']} ${styles['detail-colId']}`}>ID</th>
-                                                        <th className={styles['detail-tableHeader']}>Họ và tên</th>
-                                                        <th className={styles['detail-tableHeader']}>Email</th>
-                                                        <th className={styles['detail-tableHeader']}>Số điện thoại</th>
-                                                        <th className={styles['detail-tableHeader']}>Ngày đăng ký</th>
-                                                        <th className={styles['detail-tableHeader']}>Số workshop</th>
-                                                    </>
+                                                    isPendingListParticipants ? (
+                                                        <tr><td colSpan={8} style={{ textAlign: 'center' }}>Đang tải dữ liệu...</td></tr>
+                                                    ) : (
+                                                        pagedParticipants.flatMap((item, idx) => [
+                                                            <tr key={item.userId}>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-colId']}`}>{item.userId}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.fullName}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellEmail']}`}>{item.email}</td>
+                                                                <td className={styles['detail-tableCell']}>{item.phoneNumber || "N/A"}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.createdDate?.slice(0,10)}</td>
+                                                                <td className={styles['detail-tableCell']}
+                                                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                                                                    onClick={() => handleExpandParticipant(item.userId)}
+                                                                >
+                                                                    {item.workshopCount?.toString().padStart(2, '0')}
+                                                                    <svg
+                                                                        width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                                        style={{ transform: expandedParticipant === item.userId ? 'rotate(180deg)' : 'rotate(0deg)', transition: '0.2s' }}
+                                                                    >
+                                                                        <path d="M6 9L11 14L16 9" stroke="#A1A1A1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                    </svg>
+                                                                </td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellStatus']}`}>{item.isActive ? "Đang hoạt động" : "Ngưng hoạt động"}</td>
+                                                            </tr>,
+                                                            expandedParticipant === item.userId && (
+                                                                <tr key={item.userId + '-expand'}>
+                                                                    <td colSpan={8} style={{ background: '#232323', padding: 0 }}>
+                                                                        {loadingWorkshops[item.userId] ? (
+                                                                            <div style={{ padding: 16, textAlign: 'center' }}>Đang tải workshop...</div>
+                                                                        ) : (
+                                                                            (registeredWorkshops[item.userId]?.length > 0 ? (
+                                                                                <table style={{ width: '100%', background: 'transparent', color: '#fff', margin: 0 }}>
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Tên workshop</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Thể loại</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Địa điểm</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Nhà tổ chức</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Ngày bắt đầu</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Ngày kết thúc</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        {registeredWorkshops[item.userId].map((w, widx) => (
+                                                                                            <tr key={w.workshopId || widx} style={{ background: 'transparent' }}>
+                                                                                                <td style={{ padding: 8 }}>{w.title}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.categoryName}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.location}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.organizationName}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.startDate?.slice(0,10)}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.endDate?.slice(0,10)}</td>
+                                                                                            </tr>
+                                                                                        ))}
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            ) : (
+                                                                                <div style={{ padding: 16, textAlign: 'center', color: '#aaa' }}>Không có workshop nào</div>
+                                                                            ))
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                        ])
+                                                    )
                                                 )}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {activeTab === 'organizer' && (
-                                                isPendingListUsers ? (
-                                                    <tr><td colSpan={5} style={{ textAlign: 'center' }}>Đang tải dữ liệu...</td></tr>
-                                                ) : (
-                                                    pagedOrganizers.map((item, idx) => (
-                                                        <tr key={item.id}>
-                                                            <td className={`${styles.rank} ${styles['detail-tableCell']} ${styles['detail-colIndex']}`}>{(organizerPage - 1) * organizerPageSize + idx + 1}</td>
-                                                            <td className={`${styles.organizer} ${styles['detail-tableCell']} ${styles['detail-cellName']}`}>
-                                                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                                                    <img
-                                                                        className={styles.image}
-                                                                        src={item.avatarUrl || "/assets/icon/user.svg"}
-                                                                        alt="icon"
-                                                                    />
-                                                                    <div>
-                                                                        <div className={styles.organizerName} style={{ fontWeight: 600, color: '#fff' }}>{item.fullName}</div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellEmail']}`}>
-                                                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                                                                    <span>
-                                                                        <svg className={styles['detail-contactIcon']} width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Z" stroke="#6674FF" strokeWidth="1.5" /><path d="M2.5 4.5 8 9l5.5-4.5" stroke="#6674FF" strokeWidth="1.5" /></svg>
-                                                                        {item.email}
-                                                                    </span>
-                                                                    <span>
-                                                                        <svg className={styles['detail-contactIcon']} width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="12" height="8" rx="2" stroke="#6674FF" strokeWidth="1.5" /><path d="M4 8h8" stroke="#6674FF" strokeWidth="1.5" /></svg>
-                                                                        {item.phoneNumber || "N/A"}
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{formatDate(item.createdDate)}</td>
-                                                            <td className={styles['detail-tableCell']}>
-                                                                {(() => {
-                                                                    const pkg = getPackageInfo(item.address);
-                                                                    return (
-                                                                        <button className={styles['detail-serviceButton']} style={{ background: pkg.color, color: '#fff' }}>{pkg.name}</button>
-                                                                    );
-                                                                })()}
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                )
-                                            )}
-                                            {activeTab === 'workshop' && (
-                                                isPendingListWorkshops ? (
-                                                    <tr><td colSpan={7} style={{ textAlign: 'center' }}>Đang tải dữ liệu...</td></tr>
-                                                ) : (
-                                                    pagedWorkshops.map((item, idx) => (
-                                                        <tr key={item.workshopId}>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-colIndex']}`}>{(workshopPage - 1) * workshopPageSize + idx + 1}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellWorkshop']}`}>{item.title}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellType']}`}>{item.eventType}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{item.location}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.organizationName}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.startDate?.slice(0,10)}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.endDate?.slice(0,10)}</td>
-                                                        </tr>
-                                                    ))
-                                                )
-                                            )}
-                                            {activeTab === 'participant' && (
-                                                isPendingListParticipants ? (
-                                                    <tr><td colSpan={7} style={{ textAlign: 'center' }}>Đang tải dữ liệu...</td></tr>
-                                                ) : (
-                                                    pagedParticipants.map((item, idx) => (
-                                                        <tr key={item.userId}>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-colId']}`}>{item.userId}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.fullName}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellEmail']}`}>{item.email}</td>
-                                                            <td className={styles['detail-tableCell']}>{item.phoneNumber || "N/A"}</td>
-                                                            <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.createdDate?.slice(0,10)}</td>
-                                                            <td className={styles['detail-tableCell']}>{item.workshopCount}</td>
-                                                        </tr>
-                                                    ))
-                                                )
-                                            )}
-                                        </tbody>
-                                    </table>
-                                    {activeTab === 'organizer' && totalOrganizerPages > 1 && (
-                                        <nav aria-label="Page navigation example" style={{ marginTop: 24 }}>
-                                            <ul className="pagination">
-                                                <li className={`page-item ${organizerPage === 1 ? "disabled" : ""}`}>
-                                                    <a
-                                                        className="page-link main-third-background white-color-4"
-                                                        href="#"
-                                                        onClick={e => { e.preventDefault(); if (organizerPage > 1) setOrganizerPage(organizerPage - 1); }}
-                                                        aria-label="Previous"
-                                                    >
-                                                        <span aria-hidden="true">&lt;</span>
-                                                    </a>
-                                                </li>
-                                                {getVisiblePages(organizerPage, totalOrganizerPages).map((num, idx) => (
-                                                    <li key={idx} className="page-item">
-                                                        {num === "..." ? (
-                                                            <span className="page-link main-third-background white-color-4">...</span>
-                                                        ) : (
-                                                            <a
-                                                                href="#"
-                                                                className={`page-link ${organizerPage === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
-                                                                onClick={e => { e.preventDefault(); setOrganizerPage(num); }}
-                                                            >
-                                                                {num}
-                                                            </a>
-                                                        )}
+                                            </tbody>
+                                        </table>
+                                        {activeTab === 'organizer' && totalOrganizerPages > 1 && (
+                                            <nav aria-label="Page navigation example" style={{ marginTop: 24 }}>
+                                                <ul className="pagination">
+                                                    <li className={`page-item ${organizerPage === 1 ? "disabled" : ""}`}>
+                                                        <a
+                                                            className="page-link main-third-background white-color-4"
+                                                            href="#"
+                                                            onClick={e => { e.preventDefault(); if (organizerPage > 1) setOrganizerPage(organizerPage - 1); }}
+                                                            aria-label="Previous"
+                                                        >
+                                                            <span aria-hidden="true">&lt;</span>
+                                                        </a>
                                                     </li>
-                                                ))}
-                                                <li className={`page-item ${organizerPage === totalOrganizerPages ? "disabled" : ""}`}>
-                                                    <a
-                                                        className="page-link main-third-background white-color-4"
-                                                        href="#"
-                                                        onClick={e => { e.preventDefault(); if (organizerPage < totalOrganizerPages) setOrganizerPage(organizerPage + 1); }}
-                                                        aria-label="Next"
-                                                    >
-                                                        <span aria-hidden="true">&gt;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    )}
-                                    {activeTab === 'workshop' && totalWorkshopPages > 1 && (
-                                        <nav aria-label="Page navigation example" style={{ marginTop: 24 }}>
-                                            <ul className="pagination">
-                                                <li className={`page-item ${workshopPage === 1 ? "disabled" : ""}`}>
-                                                    <a
-                                                        className="page-link main-third-background white-color-4"
-                                                        href="#"
-                                                        onClick={e => { e.preventDefault(); if (workshopPage > 1) setWorkshopPage(workshopPage - 1); }}
-                                                        aria-label="Previous"
-                                                    >
-                                                        <span aria-hidden="true">&lt;</span>
-                                                    </a>
-                                                </li>
-                                                {getVisiblePages(workshopPage, totalWorkshopPages).map((num, idx) => (
-                                                    <li key={idx} className="page-item">
-                                                        {num === "..." ? (
-                                                            <span className="page-link main-third-background white-color-4">...</span>
-                                                        ) : (
-                                                            <a
-                                                                href="#"
-                                                                className={`page-link ${workshopPage === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
-                                                                onClick={e => { e.preventDefault(); setWorkshopPage(num); }}
-                                                            >
-                                                                {num}
-                                                            </a>
-                                                        )}
+                                                    {getVisiblePages(organizerPage, totalOrganizerPages).map((num, idx) => (
+                                                        <li key={idx} className="page-item">
+                                                            {num === "..." ? (
+                                                                <span className="page-link main-third-background white-color-4">...</span>
+                                                            ) : (
+                                                                <a
+                                                                    href="#"
+                                                                    className={`page-link ${organizerPage === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
+                                                                    onClick={e => { e.preventDefault(); setOrganizerPage(num); }}
+                                                                >
+                                                                    {num}
+                                                                </a>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                    <li className={`page-item ${organizerPage === totalOrganizerPages ? "disabled" : ""}`}>
+                                                        <a
+                                                            className="page-link main-third-background white-color-4"
+                                                            href="#"
+                                                            onClick={e => { e.preventDefault(); if (organizerPage < totalOrganizerPages) setOrganizerPage(organizerPage + 1); }}
+                                                            aria-label="Next"
+                                                        >
+                                                            <span aria-hidden="true">&gt;</span>
+                                                        </a>
                                                     </li>
-                                                ))}
-                                                <li className={`page-item ${workshopPage === totalWorkshopPages ? "disabled" : ""}`}>
-                                                    <a
-                                                        className="page-link main-third-background white-color-4"
-                                                        href="#"
-                                                        onClick={e => { e.preventDefault(); if (workshopPage < totalWorkshopPages) setWorkshopPage(workshopPage + 1); }}
-                                                        aria-label="Next"
-                                                    >
-                                                        <span aria-hidden="true">&gt;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    )}
-                                    {activeTab === 'participant' && totalParticipantPages > 1 && (
-                                        <nav aria-label="Page navigation example" style={{ marginTop: 24 }}>
-                                            <ul className="pagination">
-                                                <li className={`page-item ${participantPage === 1 ? "disabled" : ""}`}>
-                                                    <a
-                                                        className="page-link main-third-background white-color-4"
-                                                        href="#"
-                                                        onClick={e => { e.preventDefault(); if (participantPage > 1) setParticipantPage(participantPage - 1); }}
-                                                        aria-label="Previous"
-                                                    >
-                                                        <span aria-hidden="true">&lt;</span>
-                                                    </a>
-                                                </li>
-                                                {getVisiblePages(participantPage, totalParticipantPages).map((num, idx) => (
-                                                    <li key={idx} className="page-item">
-                                                        {num === "..." ? (
-                                                            <span className="page-link main-third-background white-color-4">...</span>
-                                                        ) : (
-                                                            <a
-                                                                href="#"
-                                                                className={`page-link ${participantPage === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
-                                                                onClick={e => { e.preventDefault(); setParticipantPage(num); }}
-                                                            >
-                                                                {num}
-                                                            </a>
-                                                        )}
+                                                </ul>
+                                            </nav>
+                                        )}
+                                        {activeTab === 'workshop' && totalWorkshopPages > 1 && (
+                                            <nav aria-label="Page navigation example" style={{ marginTop: 24 }}>
+                                                <ul className="pagination">
+                                                    <li className={`page-item ${workshopPage === 1 ? "disabled" : ""}`}>
+                                                        <a
+                                                            className="page-link main-third-background white-color-4"
+                                                            href="#"
+                                                            onClick={e => { e.preventDefault(); if (workshopPage > 1) setWorkshopPage(workshopPage - 1); }}
+                                                            aria-label="Previous"
+                                                        >
+                                                            <span aria-hidden="true">&lt;</span>
+                                                        </a>
                                                     </li>
-                                                ))}
-                                                <li className={`page-item ${participantPage === totalParticipantPages ? "disabled" : ""}`}>
-                                                    <a
-                                                        className="page-link main-third-background white-color-4"
-                                                        href="#"
-                                                        onClick={e => { e.preventDefault(); if (participantPage < totalParticipantPages) setParticipantPage(participantPage + 1); }}
-                                                        aria-label="Next"
-                                                    >
-                                                        <span aria-hidden="true">&gt;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    )}
+                                                    {getVisiblePages(workshopPage, totalWorkshopPages).map((num, idx) => (
+                                                        <li key={idx} className="page-item">
+                                                            {num === "..." ? (
+                                                                <span className="page-link main-third-background white-color-4">...</span>
+                                                            ) : (
+                                                                <a
+                                                                    href="#"
+                                                                    className={`page-link ${workshopPage === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
+                                                                    onClick={e => { e.preventDefault(); setWorkshopPage(num); }}
+                                                                >
+                                                                    {num}
+                                                                </a>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                    <li className={`page-item ${workshopPage === totalWorkshopPages ? "disabled" : ""}`}>
+                                                        <a
+                                                            className="page-link main-third-background white-color-4"
+                                                            href="#"
+                                                            onClick={e => { e.preventDefault(); if (workshopPage < totalWorkshopPages) setWorkshopPage(workshopPage + 1); }}
+                                                            aria-label="Next"
+                                                        >
+                                                            <span aria-hidden="true">&gt;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        )}
+                                        {activeTab === 'participant' && totalParticipantPages > 1 && (
+                                            <nav aria-label="Page navigation example" style={{ marginTop: 24 }}>
+                                                <ul className="pagination">
+                                                    <li className={`page-item ${participantPage === 1 ? "disabled" : ""}`}>
+                                                        <a
+                                                            className="page-link main-third-background white-color-4"
+                                                            href="#"
+                                                            onClick={e => { e.preventDefault(); if (participantPage > 1) setParticipantPage(participantPage - 1); }}
+                                                            aria-label="Previous"
+                                                        >
+                                                            <span aria-hidden="true">&lt;</span>
+                                                        </a>
+                                                    </li>
+                                                    {getVisiblePages(participantPage, totalParticipantPages).map((num, idx) => (
+                                                        <li key={idx} className="page-item">
+                                                            {num === "..." ? (
+                                                                <span className="page-link main-third-background white-color-4">...</span>
+                                                            ) : (
+                                                                <a
+                                                                    href="#"
+                                                                    className={`page-link ${participantPage === num ? "secondary-background white-color active" : "main-third-background white-color-4"}`}
+                                                                    onClick={e => { e.preventDefault(); setParticipantPage(num); }}
+                                                                >
+                                                                    {num}
+                                                                </a>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                    <li className={`page-item ${participantPage === totalParticipantPages ? "disabled" : ""}`}>
+                                                        <a
+                                                            className="page-link main-third-background white-color-4"
+                                                            href="#"
+                                                            onClick={e => { e.preventDefault(); if (participantPage < totalParticipantPages) setParticipantPage(participantPage + 1); }}
+                                                            aria-label="Next"
+                                                        >
+                                                            <span aria-hidden="true">&gt;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

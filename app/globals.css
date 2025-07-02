@@ -28,6 +28,7 @@
     --bg-sidebar-background: #1E1E1E;
     --bg-button-grey-color: #4D4D4D;
     --bg-neutral-700: #D6D7D8;
+    --bg-table-background: #242424;
 }
 
 body {
@@ -475,6 +476,10 @@ input[type="radio"] {
 
 .border-background {
     background-color: var(--bg-border-color) !important;
+}
+
+.table-background {
+    background-color: var(--bg-table-background) !important;
 }
 
 .arrow-button-background {
