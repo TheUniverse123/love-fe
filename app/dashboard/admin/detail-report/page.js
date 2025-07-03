@@ -82,10 +82,6 @@ export default function DetailReport() {
         }),
     })
 
-    console.log(listParticipants)
-    console.log(listUsers)
-    console.log(listWorkshops)
-
     // Thêm hàm chuyển đổi tên và màu gói dịch vụ
     const getPackageInfo = (address) => {
         if (!address) return { name: 'Đồng', color: '#D76A0B' };
@@ -129,19 +125,21 @@ export default function DetailReport() {
     const totalOrganizerPages = Math.ceil(organizers.length / organizerPageSize);
     const pagedOrganizers = organizers.slice((organizerPage - 1) * organizerPageSize, organizerPage * organizerPageSize);
 
-    // Lấy danh sách giá trị duy nhất cho filter
-    const workshopTypes = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.eventType).filter(Boolean) : []));
-    const workshopDates = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.startDate?.slice(0, 10)).filter(Boolean) : []));
-    const workshopLocations = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.location).filter(Boolean) : []));
-    const workshopOrganizers = Array.from(new Set(Array.isArray(listWorkshops?.items) ? listWorkshops.items.map(w => w.organizationName).filter(Boolean) : []));
+    // Mapping categoryId sang tên thể loại
+    const categoryMap = {
+        1: "Nghệ thuật & thủ công",
+        2: "Ẩm thực & pha chế",
+        3: "Sức khỏe",
+        4: "Phát triển kỹ năng"
+    };
+    // Lấy danh sách categoryId duy nhất (chỉ 1-4)
+    const workshopCategories = [1, 2, 3, 4];
 
     // Xử lý workshop
-    let workshops = Array.isArray(listWorkshops?.items)
-        ? listWorkshops.items
-        : [];
-    // Filter theo thể loại
+    let workshops = Array.from(listWorkshops?.items || []);
+    // Filter theo categoryId
     if (workshopCategory) {
-        workshops = workshops.filter(item => (item.eventType || "").toLowerCase() === workshopCategory.toLowerCase());
+        workshops = workshops.filter(item => String(item.categoryId) === String(workshopCategory));
     }
     // Filter theo ngày
     if (workshopDate) {
@@ -167,6 +165,13 @@ export default function DetailReport() {
     // Phân trang
     const totalWorkshopPages = Math.ceil(workshops.length / workshopPageSize);
     const pagedWorkshops = workshops.slice((workshopPage - 1) * workshopPageSize, workshopPage * workshopPageSize);
+
+    // Thêm lại biến workshopDates sau khi đã filter workshops
+    const workshopDates = Array.from(new Set(workshops.map(w => w.startDate?.slice(0, 10)).filter(Boolean)));
+    // Thêm lại biến workshopLocations sau khi đã filter workshops
+    const workshopLocations = Array.from(new Set(workshops.map(w => w.location).filter(Boolean)));
+    // Thêm lại biến workshopOrganizers sau khi đã filter workshops
+    const workshopOrganizers = Array.from(new Set(workshops.map(w => w.organizationName).filter(Boolean)));
 
     // Xử lý participant
     let participants = Array.isArray(listParticipants?.items)
@@ -284,8 +289,8 @@ export default function DetailReport() {
                                         <>
                                             <select className={styles.filterSelect} value={workshopCategory} onChange={e => { setWorkshopCategory(e.target.value); setWorkshopPage(1); }}>
                                                 <option value="">Chọn thể loại</option>
-                                                {workshopTypes.map(type => (
-                                                    <option key={type} value={type}>{type}</option>
+                                                {workshopCategories.map(id => (
+                                                    <option key={id} value={id}>{categoryMap[id]}</option>
                                                 ))}
                                             </select>
                                             <select className={styles.filterSelect} value={workshopDate} onChange={e => { setWorkshopDate(e.target.value); setWorkshopPage(1); }}>
@@ -436,7 +441,7 @@ export default function DetailReport() {
                                                             <tr key={item.workshopId}>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-colIndex']}`}>{(workshopPage - 1) * workshopPageSize + idx + 1}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellWorkshop']}`}>{item.title}</td>
-                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellType']}`}>{item.eventType}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellType']}`}>{categoryMap[item.categoryId] || ''}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{item.location}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.organizationName}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.startDate?.slice(0, 10)}</td>

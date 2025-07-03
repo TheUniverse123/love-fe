@@ -1,7 +1,7 @@
 import { axiosInstanceJson } from "./axiosInstance";
 
 export const fetchAdminDashboardOverview = async () => {
-    const data = await axiosInstanceJson.get(`/api/admin-dashboard/overview`)
+    const data = await axiosInstanceJson.get(`/api/admin-dashboard/all-statistics`)
         .then((response) => {
             return response.data.result
         }
