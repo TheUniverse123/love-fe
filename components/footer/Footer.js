@@ -7,16 +7,16 @@ import Link from "next/link"
 const contactInfo = [
     {
         text: "Hotline",
-        description: "1-800-222-8888"
+        description: "0837220804"
     },
     {
         text: "Email",
-        description: "teamloveofficial6@gmail.com"
+        description: "lovebookingws@gmail.com"
     },
     {
-        text: "Địa chỉ",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
+        text: "Fanpage",
+        description: "https://www.facebook.com/profile.php?id=61576189272965"
+    }
 ]
 
 export default function Footer() {
