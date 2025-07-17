@@ -39,6 +39,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
         "Sức khỏe",
         "Phát triển kỹ năng"
     ];
+    const [onlineMettingUrl, setOnlineMettingUrl] = useState('');
     useEffect(() => {
         if (formRef) {
             formRef.current = {
@@ -56,12 +57,19 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     eventDescription,
                     organizationLogoPath,
                     organizerName,
-                    organizerInfo
+                    organizerInfo,
+                    onlineMettingUrl
                 }),
                 prefillData: (data) => {
                     console.log(data)
                     setEventName(data.title || '');
-                    setPaymentMethod(data.eventType || '');
+                    if (data.eventType === 'online') {
+                        setPaymentMethod('credit-card-payment');
+                    } else if (data.eventType === 'offline') {
+                        setPaymentMethod('event-payment');
+                    } else {
+                        setPaymentMethod(data.eventType || '');
+                    }
                     setEventAddressName(data.placeName || '');
                     setProvince(data.province || '');
                     setDistrict(data.district || '');
@@ -78,13 +86,14 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     setLogoFile(data.eventLogoPath);
                     setBackgroundImage(data.imagePath);
                     setOrganizerLogo(data.organizationLogoPath);
+                    setOnlineMettingUrl(data.onlineMettingUrl || '');
                 }
             };
         }
     }, [
         logoFile, backgroundImage, eventName, paymentMethod, eventAddressName,
         selectedProvince, selectedDistrict, selectedWard, houseNumber,
-        selectedCategory, eventDescription, organizerLogo, organizerName, organizerInfo
+        selectedCategory, eventDescription, organizerLogo, organizerName, organizerInfo, onlineMettingUrl
     ]);
     useEffect(() => {
         async function prefillLocations() {
@@ -115,7 +124,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
             }
         }
         prefillLocations();
-    }, [province, district, ward]);
+    }, [province, district, ward, onlineMettingUrl]);
 
     const clearError = (field) => {
         if (errors[field]) {
@@ -215,6 +224,10 @@ export default function EventInformationForm({ onContinue, formRef }) {
         setOrganizerInfo(e.target.value);
         clearError('organizerInfo');
     };
+    const handleOnlineMettingUrlChange = (e) => {
+        setOnlineMettingUrl(e.target.value);
+        clearError('onlineMettingUrl');
+    };
     const validate = () => {
         const newErrors = {};
 
@@ -222,16 +235,20 @@ export default function EventInformationForm({ onContinue, formRef }) {
         if (!backgroundImage) newErrors.backgroundImage = "Vui lòng tải ảnh nền sự kiện";
         if (!eventName.trim()) newErrors.eventName = "Vui lòng nhập tên sự kiện";
         if (!paymentMethod) newErrors.paymentMethod = "Vui lòng chọn hình thức sự kiện";
-        if (!eventAddressName.trim()) newErrors.eventAddressName = "Vui lòng nhập tên địa điểm";
-        if (!selectedProvince) newErrors.selectedProvince = "Vui lòng chọn Tỉnh/Thành phố";
-        if (!selectedDistrict) newErrors.selectedDistrict = "Vui lòng chọn Quận/Huyện";
-        if (!selectedWard) newErrors.selectedWard = "Vui lòng chọn Phường/Xã";
-        if (!houseNumber.trim()) newErrors.houseNumber = "Vui lòng nhập số nhà, đường";
+        if (paymentMethod === 'event-payment') {
+            if (!eventAddressName.trim()) newErrors.eventAddressName = "Vui lòng nhập tên địa điểm";
+            if (!selectedProvince) newErrors.selectedProvince = "Vui lòng chọn Tỉnh/Thành phố";
+            if (!selectedDistrict) newErrors.selectedDistrict = "Vui lòng chọn Quận/Huyện";
+            if (!selectedWard) newErrors.selectedWard = "Vui lòng chọn Phường/Xã";
+            if (!houseNumber.trim()) newErrors.houseNumber = "Vui lòng nhập số nhà, đường";
+        } else if (paymentMethod === 'credit-card-payment') {
+            if (!onlineMettingUrl.trim()) newErrors.onlineMettingUrl = "Vui lòng nhập link sự kiện online";
+        }
+        if (organizerName.trim() === '') {
+            newErrors.organizerName = "Vui lòng nhập tên Ban Tổ chức";
+        }
         if (!selectedCategory) newErrors.selectedCategory = "Vui lòng chọn thể loại sự kiện";
-        if (!eventDescription.trim()) newErrors.eventDescription = "Vui lòng nhập mô tả sự kiện";
         if (!organizerLogo) newErrors.organizerLogo = "Vui lòng tải logo Ban Tổ chức";
-        if (!organizerName.trim()) newErrors.organizerName = "Vui lòng nhập tên Ban Tổ chức";
-        if (!organizerInfo.trim()) newErrors.organizerInfo = "Vui lòng nhập thông tin Ban Tổ chức";
 
         setErrors(newErrors);
 
@@ -322,7 +339,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                 <div className="row mt-10">
                     <div className="col-md-12 mb-20">
                         <div className="form-group ml-25">
-                            <InputLabel label="Địa chỉ sự kiện" />
+                            <InputLabel label="Loại sự kiện" />
                             <div className="row" style={{ width: "70%", alignItems: "center" }}>
                                 <div className="col-md-4" style={{ display: 'flex', alignItems: 'center' }}>
                                     <div className="item-payment-method" style={{ display: 'flex', alignItems: 'center' }}>
@@ -383,93 +400,108 @@ export default function EventInformationForm({ onContinue, formRef }) {
                         </div>
                     </div>
 
-                    <div className="col-md-12 mb-20">
-                        <div className="form-group">
-                            <InputLabel label="Tên địa điểm" isMarginLeft />
-                            <input
-                                className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
-                                type="text"
-                                placeholder="Tên địa điểm"
-                                value={eventAddressName}
-                                onChange={handleEventAddressNameChange}
-                            />
-                            {errors.eventAddressName && <p className="error-message-validate font-12">{errors.eventAddressName}</p>}
+                    {/* Địa chỉ offline hoặc link online */}
+                    {paymentMethod === 'event-payment' && (
+                        <>
+                            <div className="col-md-12 mb-20">
+                                <div className="form-group">
+                                    <InputLabel label="Tên địa điểm" isMarginLeft isRequired={true}/>
+                                    <input
+                                        className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
+                                        type="text"
+                                        placeholder="Tên địa điểm"
+                                        value={eventAddressName}
+                                        onChange={handleEventAddressNameChange}
+                                    />
+                                    {errors.eventAddressName && <p className="error-message-validate font-12">{errors.eventAddressName}</p>}
+                                </div>
+                            </div>
+                            <div className="col-md-6 mb-20">
+                                <div className="form-group">
+                                    <InputLabel label="Tỉnh/Thành phố" isMarginLeft isRequired={true}/>
+                                    <select
+                                        className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
+                                        value={selectedProvince}
+                                        onChange={handleProvinceChange}
+                                    >
+                                        <option value="" disabled>Chọn Tỉnh/Thành phố</option>
+                                        {provinces.map(province => (
+                                            <option data-key={province.name} key={province.name} value={province.code}>
+                                                {province.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.selectedProvince && <p className="error-message-validate font-12">{errors.selectedProvince}</p>}
+                                </div>
+                            </div>
+                            <div className="col-md-6 mb-20">
+                                <div className="form-group">
+                                    <InputLabel label="Quận/Huyện" isMarginLeft isRequired={true}/>
+                                    <select
+                                        className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
+                                        value={selectedDistrict}
+                                        onChange={handleDistrictChange}
+                                        disabled={!selectedProvince}
+                                    >
+                                        <option value="">Chọn Quận/Huyện</option>
+                                        {districts.map(district => (
+                                            <option data-key={district.name} key={district.name} value={district.code}>
+                                                {district.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.selectedDistrict && <p className="error-message-validate font-12">{errors.selectedDistrict}</p>}
+                                </div>
+                            </div>
+                            <div className="col-md-6 mb-20">
+                                <div className="form-group">
+                                    <InputLabel label="Phường/Xã" isMarginLeft isRequired={true}/>
+                                    <select
+                                        className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
+                                        value={selectedWard}
+                                        onChange={handleWardChange}
+                                        disabled={!selectedDistrict}
+                                    >
+                                        <option value="">Chọn Phường/Xã</option>
+                                        {wards.map(ward => (
+                                            <option data-key={ward.name} key={ward.name} value={ward.code}>
+                                                {ward.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.selectedWard && <p className="error-message-validate font-12">{errors.selectedWard}</p>}
+                                </div>
+                            </div>
+                            <div className="col-md-6 mb-20">
+                                <div className="form-group">
+                                    <InputLabel label="Số nhà, đường" isMarginLeft isRequired={true}/>
+                                    <input
+                                        className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
+                                        type="text"
+                                        placeholder="Số nhà, đường"
+                                        value={houseNumber}
+                                        onChange={handleHouseNumberChange}
+                                    />
+                                    {errors.houseNumber && <p className="error-message-validate font-12">{errors.houseNumber}</p>}
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    {paymentMethod === 'credit-card-payment' && (
+                        <div className="col-md-12 mb-20">
+                            <div className="form-group">
+                                <InputLabel label="Link sự kiện online" isMarginLeft isRequired={true}/>
+                                <input
+                                    className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
+                                    type="text"
+                                    placeholder="Nhập link sự kiện online"
+                                    value={onlineMettingUrl}
+                                    onChange={handleOnlineMettingUrlChange}
+                                />
+                                {errors.onlineMettingUrl && <p className="error-message-validate font-12">{errors.onlineMettingUrl}</p>}
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="col-md-6 mb-20">
-                        <div className="form-group">
-                            <InputLabel label="Tỉnh/Thành phố" isMarginLeft />
-                            <select
-                                className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
-                                value={selectedProvince}
-                                onChange={handleProvinceChange}
-                            >
-                                <option value="" disabled>Chọn Tỉnh/Thành phố</option>
-                                {provinces.map(province => (
-                                    <option data-key={province.name} key={province.name} value={province.code}>
-                                        {province.name}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.selectedProvince && <p className="error-message-validate font-12">{errors.selectedProvince}</p>}
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 mb-20">
-                        <div className="form-group">
-                            <InputLabel label="Quận/Huyện" isMarginLeft />
-                            <select
-
-                                className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
-                                value={selectedDistrict}
-                                onChange={handleDistrictChange}
-                                disabled={!selectedProvince}
-                            >
-                                <option value="">Chọn Quận/Huyện</option>
-                                {districts.map(district => (
-                                    <option data-key={district.name} key={district.name} value={district.code}>
-                                        {district.name}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.selectedDistrict && <p className="error-message-validate font-12">{errors.selectedDistrict}</p>}
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 mb-20">
-                        <div className="form-group">
-                            <InputLabel label="Phường/Xã" isMarginLeft />
-                            <select
-                                className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
-                                value={selectedWard}
-                                onChange={handleWardChange}
-                                disabled={!selectedDistrict}
-                            >
-                                <option value="">Chọn Phường/Xã</option>
-                                {wards.map(ward => (
-                                    <option data-key={ward.name} key={ward.name} value={ward.code}>
-                                        {ward.name}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.selectedWard && <p className="error-message-validate font-12">{errors.selectedWard}</p>}
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 mb-20">
-                        <div className="form-group">
-                            <InputLabel label="Số nhà, đường" isMarginLeft />
-                            <input
-                                className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
-                                type="text"
-                                placeholder="Số nhà, đường"
-                                value={houseNumber}
-                                onChange={handleHouseNumberChange}
-                            />
-                            {errors.houseNumber && <p className="error-message-validate font-12">{errors.houseNumber}</p>}
-                        </div>
-                    </div>
+                    )}
                 </div>
             </div>
 
@@ -506,7 +538,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                 <div className="row mt-10 d-flex">
                     <div className="col-md-12 mb-20">
                         <div className="form-group">
-                            <InputLabel label="Mô tả sự kiện" isMarginLeft />
+                            <InputLabel label="Mô tả sự kiện" isMarginLeft isRequired={false}/>
                             <textarea
                                 style={{ padding: "16px 25px", height: "333px" }}
                                 className="form-control form-input-background border-none border-radius-31"
@@ -564,7 +596,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                         </div>
 
                         <div className="form-group">
-                            <InputLabel label="Thông tin Ban Tổ chức" isMarginLeft />
+                            <InputLabel label="Thông tin Ban Tổ chức" isMarginLeft isRequired={false}/>
                             <textarea
                                 style={{ padding: "16px 25px", height: "142px" }}
                                 className="form-control form-input-background border-none border-radius-31 ml-20"

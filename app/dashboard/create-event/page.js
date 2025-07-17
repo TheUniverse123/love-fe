@@ -55,13 +55,21 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 uploadImageToFirebase(ticketData.ticketPath, 'ticketImagePath'),
             ]);
 
+            // Xác định location phù hợp
+            const isOnline = eventData.paymentMethod === 'credit-card-payment';
+            const location = isOnline
+                ? 'Sự kiện online'
+                : [eventData.houseNumber, eventData.eventAddressName, eventData.ward, eventData.district, eventData.province].filter(Boolean).join(', ');
+
+            const eventTypeValue = isOnline ? 'online' : 'offline';
             const workshopInfo = {
-                eventType: eventData.paymentMethod,
-                placeName: eventData.eventAddressName,
-                province: eventData.province,
-                district: eventData.district,
-                ward: eventData.ward,
-                street: eventData.houseNumber,
+                eventType: eventTypeValue,
+                placeName: location,
+                province: isOnline ? '' : eventData.province,
+                district: isOnline ? '' : eventData.district,
+                ward: isOnline ? '' : eventData.ward,
+                street: isOnline ? '' : eventData.houseNumber,
+                eventAddressName: isOnline ? '' : eventData.eventAddressName,
                 title: eventData.eventName,
                 description: eventData.eventDescription,
                 imagePath: backgroundUrl,
@@ -83,7 +91,8 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 isBusiness: checkoutData.businessType === 'business',
                 invoiceName: checkoutData.fullName,
                 invoiceAddress: checkoutData.address,
-                taxCode: checkoutData.businessType === 'business' ? checkoutData.taxCode : 'none'
+                taxCode: checkoutData.businessType === 'business' ? checkoutData.taxCode : 'none',
+                onlineMettingUrl: eventData.onlineMettingUrl
             };
 
             const workshopResponse = await fetchCreateWorkshop(workshopInfo);
@@ -139,14 +148,23 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                     uploadImageToFirebase(ticketData.ticketPath, 'ticketImagePath') :
                     initialWorkshop.ticketImagePath,
             ]);
+            console.log(eventData.onlineMettingUrl)
 
+            // Xác định location phù hợp
+            const isOnline = eventData.paymentMethod === 'credit-card-payment';
+            const location = isOnline
+                ? 'Sự kiện online'
+                : [eventData.houseNumber, eventData.eventAddressName, eventData.ward, eventData.district, eventData.province].filter(Boolean).join(', ');
+
+            const eventTypeValue = isOnline ? 'online' : 'offline';
             const updatedWorkshop = {
-                eventType: eventData.paymentMethod,
-                placeName: eventData.eventAddressName,
-                province: eventData.province,
-                district: eventData.district,
-                ward: eventData.ward,
-                street: eventData.houseNumber,
+                eventType: eventTypeValue,
+                placeName: location,
+                province: isOnline ? '' : eventData.province,
+                district: isOnline ? '' : eventData.district,
+                ward: isOnline ? '' : eventData.ward,
+                street: isOnline ? '' : eventData.houseNumber,
+                eventAddressName: isOnline ? '' : eventData.eventAddressName,
                 title: eventData.eventName,
                 description: eventData.eventDescription,
                 imagePath: backgroundUrl,
@@ -169,7 +187,8 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 invoiceName: checkoutData.fullName,
                 invoiceAddress: checkoutData.address,
                 taxCode: checkoutData.businessType === 'business' ? checkoutData.taxCode : 'none',
-                workshopId: initialWorkshop.workshopId
+                workshopId: initialWorkshop.workshopId,
+                onlineMettingUrl: eventData.onlineMettingUrl
             };
             await fetchUpdateWorkshop(initialWorkshop.workshopId, updatedWorkshop);
 
@@ -189,9 +208,9 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             }
             toast.success("🎉 Cập nhật thành công!");
             localStorage.setItem("activeItem", "event")
-            setTimeout(() => {
-                window.location.href = "/dashboard/my-event"
-            }, 2000)
+            // setTimeout(() => {
+            //     window.location.href = "/dashboard/my-event"
+            // }, 2000)
         } catch (err) {
             toast.error("❌ Có lỗi xảy ra khi cập nhật.");
         }

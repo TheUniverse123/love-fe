@@ -250,8 +250,6 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
     };
     const validate = () => {
         const newErrors = {};
-
-        console.log(eventStartDate, eventEndDate)
         if (eventStartDate && eventEndDate && eventStartDate >= eventEndDate) {
             newErrors.eventEndDate = "Thời gian kết thúc sự kiện phải sau thời gian bắt đầu sự kiện";
         }
@@ -300,7 +298,6 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
         if (!ticketSaleStartDate) newErrors.ticketSaleStartDate = "Vui lòng chọn thời gian bắt đầu bán vé";
         if (!ticketSaleEndDate) newErrors.ticketSaleEndDate = "Vui lòng chọn thời gian kết thúc bán vé";
 
-        if (!eventDescription.trim()) newErrors.eventDescription = "Vui lòng nhập mô tả sự kiện";
         if (!ticketFile) newErrors.ticketFile = "Vui lòng tải hình ảnh vé";
 
         setErrors(newErrors);
@@ -493,7 +490,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                 <div className="row mt-20">
                     <div className="col-md-8 mb-20">
                         <div className="form-group">
-                            <InputLabel label="Mô tả vé" isMarginLeft />
+                            <InputLabel label="Mô tả vé" isMarginLeft isRequired={false}/>
                             <textarea
                                 style={{ padding: "16px 25px", height: "193px" }}
                                 className="form-control form-input-background border-none border-radius-31"

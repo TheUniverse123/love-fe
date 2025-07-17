@@ -85,7 +85,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
             if (!formData.taxCode.trim()) newErrors.taxCode = "Vui lòng nhập mã số thuế cho doanh nghiệp";
             else if (!/^\d{10,14}$/.test(formData.taxCode.trim())) newErrors.taxCode = "Mã số thuế phải gồm 10-14 chữ số";
         }
-        if (!formData.confirmationMessage.trim()) newErrors.confirmationMessage = "Vui lòng nhập tin nhắn xác nhận";
 
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
@@ -289,26 +288,6 @@ export default function CheckoutInformationForm({ onBack, formRef, onCreate }) {
                             />
                         </div>
                         {errors.taxCode && <p className="error-message-validate font-12">{errors.taxCode}</p>}
-                    </div>
-                </div>
-            </div>
-
-            {/* Tin nhắn xác nhận */}
-            <div className="secondary-background border-radius-25 mb-35" style={{ padding: "20px 40px" }}>
-                <div className="row mt-10 d-flex">
-                    <div className="col-md-12 mb-20">
-                        <div className="form-group">
-                            <InputLabel label="Tin nhắn xác nhận dành cho người tham gia" isMarginLeft />
-                            <p className='ml-25 mb-15 white-color'>Tin nhắn xác nhận này sẽ được gửi đến cho người tham gia sau khi đặt vé thành công</p>
-                            <textarea
-                                name="confirmationMessage"
-                                style={{ padding: "16px 25px", height: "333px" }}
-                                className="form-control form-input-background border-none border-radius-31"
-                                value={formData.confirmationMessage}
-                                onChange={handleChange}
-                            />
-                            {errors.confirmationMessage && <p className="error-message-validate font-12">{errors.confirmationMessage}</p>}
-                        </div>
                     </div>
                 </div>
             </div>

@@ -12,8 +12,8 @@ export default function EventPendingPopup({ open, onClose }) {
       }}>
         <h2 style={{ fontWeight: 700, fontSize: 36, marginBottom: 20 }}>Sự Kiện Đang Chờ Duyệt</h2>
         <div style={{ fontSize: 16, marginBottom: 20 }}>
-          Đối tác vui lòng liên hệ LOVE qua hotline: <a href="tel:18002228888" style={{ color: "#5271ff" }}>1-800-222-8888</a> hoặc email:
-          <a href="mailto:teamloveofficial6@gmail.com" style={{ color: "#5271ff" }}> teamloveofficial6@gmail.com</a>
+          Đối tác vui lòng liên hệ LOVE qua hotline: <a href="tel:18002228888" style={{ color: "#5271ff" }}>0837220804</a> hoặc email:
+          <a href="mailto:lovebookingws@gmail.com" style={{ color: "#5271ff" }}> lovebookingws@gmail.com</a>
           để được hỗ trợ mở bán sự kiện. Trân trọng cảm ơn!
         </div>
         <button
