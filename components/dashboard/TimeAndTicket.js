@@ -91,7 +91,13 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
                 }
             };
         }
-    }, [isChecked, ticketPath, eventStartDate, eventEndDate, ticketSaleStartDate, ticketSaleEndDate, totalTickets, minTickets, maxTickets, ticketPrice, eventDescription]);
+    }, [isChecked, ticketPath, eventStartDate, 
+        eventEndDate, ticketSaleStartDate, ticketSaleEndDate, 
+        totalTickets, minTickets, maxTickets, ticketPrice, 
+        eventDescription, ticketName, ticketPrice, ticketPath,
+        eventStartDate, eventEndDate, ticketSaleStartDate, ticketSaleEndDate,
+        totalTickets, minTickets, maxTickets, ticketPrice, eventDescription
+    ]);
 
     const applyTimeToDate = (date, hour, minute) => {
         const newDate = new Date(date);

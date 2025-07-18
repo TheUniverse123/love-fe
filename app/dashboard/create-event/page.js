@@ -64,7 +64,8 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             const eventTypeValue = isOnline ? 'online' : 'offline';
             const workshopInfo = {
                 eventType: eventTypeValue,
-                placeName: location,
+                placeName: eventData.placeName,
+                location: location,
                 province: isOnline ? '' : eventData.province,
                 district: isOnline ? '' : eventData.district,
                 ward: isOnline ? '' : eventData.ward,
@@ -101,7 +102,6 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 toast.error(workshopResponse[0])
                 return
             }
-
             // Gọi API tạo ticket
             const ticketInfo = {
                 workshopId: workshopResponse?.result.workshopId,
@@ -159,7 +159,8 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             const eventTypeValue = isOnline ? 'online' : 'offline';
             const updatedWorkshop = {
                 eventType: eventTypeValue,
-                placeName: location,
+                placeName: eventData.placeName,
+                location: location,
                 province: isOnline ? '' : eventData.province,
                 district: isOnline ? '' : eventData.district,
                 ward: isOnline ? '' : eventData.ward,
@@ -192,6 +193,7 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
             };
             await fetchUpdateWorkshop(initialWorkshop.workshopId, updatedWorkshop);
 
+            console.log(ticketData)
             const updatedTicket = {
                 workshopId: initialWorkshop.workshopId,
                 ticketName: ticketData.ticketName,

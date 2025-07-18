@@ -18,7 +18,8 @@ export default function EventInformationForm({ onContinue, formRef }) {
     const { wards } = useWards(selectedDistrict);
     const [selectedWard, setSelectedWard] = useState('');
     const [eventName, setEventName] = useState('');
-    const [eventAddressName, setEventAddressName] = useState('');
+    const [placeName, setPlaceName] = useState('');
+    const [location, setLocation] = useState('');
     const [houseNumber, setHouseNumber] = useState('');
     const [eventDescription, setEventDescription] = useState('');
     const [organizerName, setOrganizerName] = useState('');
@@ -48,7 +49,8 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     imagePath,
                     eventName,
                     paymentMethod,
-                    eventAddressName,
+                    placeName,
+                    location,
                     province,
                     district,
                     ward,
@@ -70,7 +72,8 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     } else {
                         setPaymentMethod(data.eventType || '');
                     }
-                    setEventAddressName(data.placeName || '');
+                    setPlaceName(data.placeName || '');
+                    setLocation(data.location || '');
                     setProvince(data.province || '');
                     setDistrict(data.district || '');
                     setWard(data.ward || '');
@@ -91,9 +94,11 @@ export default function EventInformationForm({ onContinue, formRef }) {
             };
         }
     }, [
-        logoFile, backgroundImage, eventName, paymentMethod, eventAddressName,
+        logoFile, backgroundImage, eventName, paymentMethod, placeName,
         selectedProvince, selectedDistrict, selectedWard, houseNumber,
-        selectedCategory, eventDescription, organizerLogo, organizerName, organizerInfo, onlineMettingUrl
+        selectedCategory, eventDescription, organizerLogo, organizerName,
+        organizerInfo, onlineMettingUrl, location, eventLogoPath, imagePath,
+        organizationLogoPath
     ]);
     useEffect(() => {
         async function prefillLocations() {
@@ -204,9 +209,9 @@ export default function EventInformationForm({ onContinue, formRef }) {
         setEventName(e.target.value);
         clearError('eventName');
     };
-    const handleEventAddressNameChange = (e) => {
-        setEventAddressName(e.target.value);
-        clearError('eventAddressName');
+    const handlePlaceNameChange = (e) => {
+        setPlaceName(e.target.value);
+        clearError('placeName');
     };
     const handleHouseNumberChange = (e) => {
         setHouseNumber(e.target.value);
@@ -236,7 +241,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
         if (!eventName.trim()) newErrors.eventName = "Vui lòng nhập tên sự kiện";
         if (!paymentMethod) newErrors.paymentMethod = "Vui lòng chọn hình thức sự kiện";
         if (paymentMethod === 'event-payment') {
-            if (!eventAddressName.trim()) newErrors.eventAddressName = "Vui lòng nhập tên địa điểm";
+            if (!placeName.trim()) newErrors.placeName = "Vui lòng nhập tên địa điểm";
             if (!selectedProvince) newErrors.selectedProvince = "Vui lòng chọn Tỉnh/Thành phố";
             if (!selectedDistrict) newErrors.selectedDistrict = "Vui lòng chọn Quận/Huyện";
             if (!selectedWard) newErrors.selectedWard = "Vui lòng chọn Phường/Xã";
@@ -405,20 +410,20 @@ export default function EventInformationForm({ onContinue, formRef }) {
                         <>
                             <div className="col-md-12 mb-20">
                                 <div className="form-group">
-                                    <InputLabel label="Tên địa điểm" isMarginLeft isRequired={true}/>
+                                    <InputLabel label="Tên địa điểm" isMarginLeft isRequired={true} />
                                     <input
                                         className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
                                         type="text"
                                         placeholder="Tên địa điểm"
-                                        value={eventAddressName}
-                                        onChange={handleEventAddressNameChange}
+                                        value={placeName}
+                                        onChange={handlePlaceNameChange}
                                     />
-                                    {errors.eventAddressName && <p className="error-message-validate font-12">{errors.eventAddressName}</p>}
+                                    {errors.placeName && <p className="error-message-validate font-12">{errors.placeName}</p>}
                                 </div>
                             </div>
                             <div className="col-md-6 mb-20">
                                 <div className="form-group">
-                                    <InputLabel label="Tỉnh/Thành phố" isMarginLeft isRequired={true}/>
+                                    <InputLabel label="Tỉnh/Thành phố" isMarginLeft isRequired={true} />
                                     <select
                                         className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                         value={selectedProvince}
@@ -436,7 +441,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                             </div>
                             <div className="col-md-6 mb-20">
                                 <div className="form-group">
-                                    <InputLabel label="Quận/Huyện" isMarginLeft isRequired={true}/>
+                                    <InputLabel label="Quận/Huyện" isMarginLeft isRequired={true} />
                                     <select
                                         className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                         value={selectedDistrict}
@@ -455,7 +460,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                             </div>
                             <div className="col-md-6 mb-20">
                                 <div className="form-group">
-                                    <InputLabel label="Phường/Xã" isMarginLeft isRequired={true}/>
+                                    <InputLabel label="Phường/Xã" isMarginLeft isRequired={true} />
                                     <select
                                         className={`form-control form-input-background border-none border-radius-31 ${styles.selectBox}`}
                                         value={selectedWard}
@@ -474,7 +479,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                             </div>
                             <div className="col-md-6 mb-20">
                                 <div className="form-group">
-                                    <InputLabel label="Số nhà, đường" isMarginLeft isRequired={true}/>
+                                    <InputLabel label="Số nhà, đường" isMarginLeft isRequired={true} />
                                     <input
                                         className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
                                         type="text"
@@ -490,7 +495,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     {paymentMethod === 'credit-card-payment' && (
                         <div className="col-md-12 mb-20">
                             <div className="form-group">
-                                <InputLabel label="Link sự kiện online" isMarginLeft isRequired={true}/>
+                                <InputLabel label="Link sự kiện online" isMarginLeft isRequired={true} />
                                 <input
                                     className={`form-control form-input-background border-none border-radius-31 ${styles.inputPadding}`}
                                     type="text"
@@ -538,7 +543,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                 <div className="row mt-10 d-flex">
                     <div className="col-md-12 mb-20">
                         <div className="form-group">
-                            <InputLabel label="Mô tả sự kiện" isMarginLeft isRequired={false}/>
+                            <InputLabel label="Mô tả sự kiện" isMarginLeft isRequired={false} />
                             <textarea
                                 style={{ padding: "16px 25px", height: "333px" }}
                                 className="form-control form-input-background border-none border-radius-31"
@@ -596,7 +601,7 @@ export default function EventInformationForm({ onContinue, formRef }) {
                         </div>
 
                         <div className="form-group">
-                            <InputLabel label="Thông tin Ban Tổ chức" isMarginLeft isRequired={false}/>
+                            <InputLabel label="Thông tin Ban Tổ chức" isMarginLeft isRequired={false} />
                             <textarea
                                 style={{ padding: "16px 25px", height: "142px" }}
                                 className="form-control form-input-background border-none border-radius-31 ml-20"
