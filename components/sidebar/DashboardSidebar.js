@@ -33,29 +33,25 @@ export default function DashboardSidebar() {
             <UserAvatar />
 
             <div className={`${styles.menu} pb-5 border-1px-bottom`}>
-                {!data?.result.roles.includes("Admin") &&
-                    <Link href="/dashboard" className={`${styles.menuItemContainer} flex-start ${activeItem === 'ticket' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('ticket')}>
-                        <TicketIcon />
-                        <div className={`ml-10 ${styles.menuItem}`}>Vé đã đặt</div>
-                    </Link>}
+                <Link href="/dashboard" className={`${styles.menuItemContainer} flex-start ${activeItem === 'ticket' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('ticket')}>
+                    <TicketIcon />
+                    <div className={`ml-10 ${styles.menuItem}`}>Vé đã đặt</div>
+                </Link>
 
-                {!data?.result.roles.includes("Admin") &&
                 <Link href="/dashboard/my-event" className={`${styles.menuItemContainer} flex-start ${activeItem === 'event' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('event')}>
                     <TicketIcon icon="event" />
                     <div className={`ml-10 ${styles.menuItem}`}>Sự kiện của tôi</div>
-                </Link>}
+                </Link>
 
-                {!data?.result.roles.includes("Admin") &&
                 <Link href="/dashboard/saved-event" className={`${styles.menuItemContainer} flex-start ${activeItem === 'savedEvent' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('savedEvent')}>
                     <TicketIcon icon="savedEvent" />
                     <div className={`ml-10 ${styles.menuItem}`}>Sự kiện đã lưu</div>
-                </Link>}
+                </Link>
 
-                {!data?.result.roles.includes("Admin") &&
                 <Link href="/dashboard/report" className={`${styles.menuItemContainer} flex-start ${activeItem === 'report' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('report')}>
                     <TicketIcon icon="report" />
                     <div className={`ml-10 ${styles.menuItem}`}>Quản lý báo cáo</div>
-                </Link>}
+                </Link>
 
                 {data?.result.roles.includes("Admin") && <Link href="/dashboard/review" className={`${styles.menuItemContainer} flex-start ${activeItem === 'review' ? styles.active : ''}`} style={{ padding: "12px 0" }} onClick={() => handleItemClick('review')}>
                     <TicketIcon icon="report" />
