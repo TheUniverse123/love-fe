@@ -122,7 +122,7 @@ export default function MyEvents() {
     if (left > 2) {
       pages.push(
         <li key="left-ellipsis" className="page-item">
-          <Link href="#" className="page-link main-third-background white-color">...</Link>
+          <Link href="#" className="page-link main-third-background white-color-4">...</Link>
         </li>
       );
     }
@@ -144,7 +144,7 @@ export default function MyEvents() {
     if (right < total - 1) {
       pages.push(
         <li key="right-ellipsis" className="page-item">
-          <Link href="#" className="page-link main-third-background white-color">...</Link>
+          <Link href="#" className="page-link main-third-background white-color-4">...</Link>
         </li>
       );
     }

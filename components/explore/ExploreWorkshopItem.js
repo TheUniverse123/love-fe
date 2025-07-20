@@ -70,7 +70,7 @@ const ExploreWorkshopItem = ({ label, imgSrc, rating, title, date, price, link, 
                         </div>
                     </div>
                     <div className="card-title">
-                        <Link className="text-lg-bold white-color-2" href={link}>{title}</Link>
+                        <Link className={`text-lg-bold white-color-2 ${styles.title}`} href={link}>{title}</Link>
                     </div>
                     <div className="card-program">
                         <div className="card-duration-tour">

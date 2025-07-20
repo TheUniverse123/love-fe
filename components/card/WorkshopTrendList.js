@@ -5,7 +5,8 @@ import WorkshopCardItem from "./WorkshopCardItem";
 import Slider from "react-slick";  // Import Slider from react-slick
 import styles from "./WorkshopTrendList.module.css";
 
-export default function WorkshopTrendList({ sectionType = "default", items, title, background = "black", ...props }) {
+export default function WorkshopTrendList({ sectionType = "default", 
+    items, title, background = "black", isLoop = true, ...props }) {
     const sliderRef = useRef(null);  // Create a reference for the slider
 
     let sectionStyle = '';
@@ -18,29 +19,30 @@ export default function WorkshopTrendList({ sectionType = "default", items, titl
     }
 
     const settings = {
-        infinite: true,
+        infinite: isLoop,
         speed: 500,
-        slidesToShow: 4,
+        slidesToShow: Math.min(4, items?.length || 1),
         slidesToScroll: 1,
         arrows: false, // Disable default arrows because we will use custom ones
+        dots: false,
         responsive: [
             {
                 breakpoint: 768, // For small screens (adjust the number as needed)
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: Math.min(1, items?.length || 1),
                     slidesToScroll: 1,
                 }
             },
             {
                 breakpoint: 1024, // For medium screens
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: Math.min(2, items?.length || 1),
                     slidesToScroll: 1,
                 }
             }, {
                 breakpoint: 1200,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: Math.min(3, items?.length || 1),
                     slidesToScroll: 1,
                 }
             }

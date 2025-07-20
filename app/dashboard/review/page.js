@@ -14,7 +14,7 @@ export default function MyEvents() {
   const [currentPages, setCurrentPages] = useState({
     upcoming: 1,
     past: 1,
-    waiting: 1,
+    completed: 1,
   });
   const [searchKeyword, setSearchKeyword] = useState('');
 
@@ -32,7 +32,13 @@ export default function MyEvents() {
   const events = {
     upcoming: data ? data.filter(event => event.status === 0) : [],
     past: data ? data.filter(event => event.status === 1) : [],
-    waiting: data ? data.filter(event => event.status === 2) : [],
+    completed: data ? data.filter(event => {
+      // Check if event is approved and has ended (endDate is in the past)
+      if (event.status !== 1) return false;
+      const endDate = new Date(event.endDate);
+      const currentDate = new Date();
+      return endDate < currentDate;
+    }) : [],
   };
 
   const handlePageChange = (pageNumber) => {
@@ -88,7 +94,7 @@ export default function MyEvents() {
     setCurrentPages({
       upcoming: 1,
       past: 1,
-      waiting: 1,
+      completed: 1,
     })
   }, [searchKeyword, selectedTab]);
   return (
@@ -125,13 +131,13 @@ export default function MyEvents() {
 
         <div className="col-lg-4 col-md-4 col-sm-6">
           <div
-            className={`${getTabClass('waiting')} ${styles.tabItem}`}
+            className={`${getTabClass('completed')} ${styles.tabItem}`}
             onClick={() => {
-              setSelectedTab('waiting');
-              setCurrentPages((prevState) => ({ ...prevState, waiting: 1 }));
+              setSelectedTab('completed');
+              setCurrentPages((prevState) => ({ ...prevState, completed: 1 }));
             }}
           >
-            <p className="white-color text-lg-bold text-center">Từ chối</p>
+            <p className="white-color text-lg-bold text-center">Đã hoàn thành</p>
           </div>
         </div>
       </div>
@@ -146,7 +152,7 @@ export default function MyEvents() {
             price={event.isFree ? 'Miễn phí' : `${event.price} VND`}
             imageSrc={event.imagePath}
             buttonText={event.isFree ? "Đặt ngay" : "Mua vé"}
-            isSuccess={event.status === 1 ? "success" : event.status === 2 ? "waiting" : "pending"}
+            isSuccess={selectedTab === 'completed' ? "completed" : event.status === 1 ? "success" : "pending"}
             mode="review"
             tab={selectedTab}
             workshopId={event.workshopId}

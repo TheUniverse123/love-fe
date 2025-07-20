@@ -30,8 +30,8 @@ export default function MyEvent({
                 setTabText("Xem chi tiết")
             } else if (tab === "past") {
                 setTabText("Đã duyệt")
-            } else if (tab === "waiting") {
-                setTabText("Từ chối")
+            } else if (tab === "completed") {
+                setTabText("Đã duyệt")
             }
         }
     }, [mode, tab])
@@ -91,7 +91,7 @@ export default function MyEvent({
                                 <Link href={(mode === "review" && tab === "upcoming") ? `/user/review/${workshopId}` : ""}
                                     className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>
                                     {tabText}</Link>
-                                {(!hideEditButton && tab !== "past" && tab !== "waiting") &&
+                                {(!hideEditButton && tab !== "past" && tab !== "completed") &&
                                     <Link
                                         href={mode !== "review" ? `/dashboard/edit/${workshopId}` : "#"}
                                         onClick={() => mode === "review" ? setShowModal(true) : {}}

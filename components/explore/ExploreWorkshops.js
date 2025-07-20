@@ -278,11 +278,9 @@ export default function ExploreWorkshops({ filtersSelected }) {
                     {getVisiblePages(page, totalPages).map((num, idx) => (
                         <li key={idx} className="page-item">
                             {num === "..." ? (
-                                <li className="page-item">
-                                    <Link className="page-link main-third-background white-color-4" href="#">
-                                        ...
-                                    </Link>
-                                </li>
+                                <Link className="page-link main-third-background white-color-4" href="#">
+                                    ...
+                                </Link>
                             ) : (
                                 <Link
                                     href="#"

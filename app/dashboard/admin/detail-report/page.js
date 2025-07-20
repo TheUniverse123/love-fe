@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { fetchListParticipants, fetchListUsers, fetchListWorkshops } from "@/app/api/admin-dashboard-detail";
 import { formatDate } from "@/app/util/convert";
 import { fetchRegisteredWorkshopsByUser } from "@/app/api/workshop";
+import Link from "next/link";
 
 export default function DetailReport() {
     const [isMediumScreen, setIsMediumScreen] = useState(false)
@@ -534,7 +535,7 @@ export default function DetailReport() {
                                                     {getVisiblePages(organizerPage, totalOrganizerPages).map((num, idx) => (
                                                         <li key={idx} className="page-item">
                                                             {num === "..." ? (
-                                                                <span className="page-link main-third-background white-color-4">...</span>
+                                                                <Link href="#" className="page-link main-third-background white-color-4">...</Link>
                                                             ) : (
                                                                 <a
                                                                     href="#"
@@ -575,7 +576,7 @@ export default function DetailReport() {
                                                     {getVisiblePages(workshopPage, totalWorkshopPages).map((num, idx) => (
                                                         <li key={idx} className="page-item">
                                                             {num === "..." ? (
-                                                                <span className="page-link main-third-background white-color-4">...</span>
+                                                                <Link href="#" className="page-link main-third-background white-color-4">...</Link>
                                                             ) : (
                                                                 <a
                                                                     href="#"
@@ -616,7 +617,7 @@ export default function DetailReport() {
                                                     {getVisiblePages(participantPage, totalParticipantPages).map((num, idx) => (
                                                         <li key={idx} className="page-item">
                                                             {num === "..." ? (
-                                                                <span className="page-link main-third-background white-color-4">...</span>
+                                                                <Link href="#" className="page-link main-third-background white-color-4">...</Link>
                                                             ) : (
                                                                 <a
                                                                     href="#"
