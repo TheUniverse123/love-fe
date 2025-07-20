@@ -34,7 +34,9 @@ export default function MyEvent({
         queryFn: ({ signal }) => fetchWorkshopDetail({ signal, workshopId })
     })
     useEffect(() => {
-        setCurrentAccountNumber(workshopData?.accountNumber)
+        if (workshopData) {
+            setCurrentAccountNumber(workshopData?.accountNumber)
+        }
     }, [workshopData])
 
     useEffect(() => {
