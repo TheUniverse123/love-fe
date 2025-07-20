@@ -1,6 +1,5 @@
 'use client'
-
-import { fetchWorkshops } from "@/app/api/workshop";
+import { fetchWorkshopDetail, fetchWorkshops } from "@/app/api/workshop";
 import { formatDateRange } from "@/app/util/convert";
 import MyEvent from '@/components/dashboard/MyEvent';
 import InputSearch from '@/components/search/InputSearch';
@@ -28,6 +27,8 @@ export default function MyEvents() {
     queryKey: ['workshops-review'],
     queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 1000 }),
   });
+
+  console.log(data)
 
   const events = {
     upcoming: data ? data.filter(event => event.status === 0) : [],
@@ -87,7 +88,6 @@ export default function MyEvents() {
     }
     return pages;
   };
-
   const totalPages = Math.ceil(filteredEvents.length / pageSize);
   const pageNumbers = getPageNumbers(totalPages);
   useEffect(() => {
@@ -143,21 +143,24 @@ export default function MyEvents() {
       </div>
 
       <div className="pt-40 pb-200">
-        {displayedEvents.map((event, index) => (
-          <MyEvent
-            key={index}
-            title={event.title}
-            time={formatDateRange(event.startDate, event.endDate)}
-            address={event.location}
-            price={event.isFree ? 'Miễn phí' : `${event.price} VND`}
-            imageSrc={event.imagePath}
-            buttonText={event.isFree ? "Đặt ngay" : "Mua vé"}
-            isSuccess={selectedTab === 'completed' ? "completed" : event.status === 1 ? "success" : "pending"}
-            mode="review"
-            tab={selectedTab}
-            workshopId={event.workshopId}
-          />
-        ))}
+        {displayedEvents.map((event, index) => {
+          return (
+            <MyEvent
+              key={index}
+              title={event.title}
+              time={formatDateRange(event.startDate, event.endDate)}
+              address={event.location}
+              price={event.isFree ? 'Miễn phí' : `${event.price} VND`}
+              imageSrc={event.imagePath}
+              buttonText={event.isFree ? "Đặt ngay" : "Mua vé"}
+              isSuccess={selectedTab === 'completed' ? "completed" : event.status === 1 ? "success" : "pending"}
+              mode="review"
+              tab={selectedTab}
+              workshopId={event.workshopId}
+              accountNumber={event.accountNumber}
+            />
+          )
+        })}
 
         <nav aria-label="Page navigation example">
           <ul className="pagination">

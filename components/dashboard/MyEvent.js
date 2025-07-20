@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react"
 import styles from "./MyEvent.module.css"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { fetchDeclineWorkshop } from "@/app/api/manage-workshop"
 import { toast } from "react-toastify"
 import { queryClient } from "@/app/util/providers"
 import Link from "next/link"
+import PaymentPopup from "../popup/PaymentPopup"
+import { fetchWorkshopDetail } from "@/app/api/workshop"
 
 export default function MyEvent({
     title,
@@ -19,10 +21,21 @@ export default function MyEvent({
     mode = "manage",
     tab = "",
     workshopId = 0,
-    hideEditButton = false
+    hideEditButton = false,
+    accountNumber = ""
 }) {
     const [tabText, setTabText] = useState('Quản lý')
     const [showModal, setShowModal] = useState(false)
+    const [showPaymentPopup, setShowPaymentPopup] = useState(false)
+    const [currentAccountNumber, setCurrentAccountNumber] = useState(accountNumber)
+
+    const { data: workshopData } = useQuery({
+        queryKey: ['workshop-detail', workshopId],
+        queryFn: ({ signal }) => fetchWorkshopDetail({ signal, workshopId })
+    })
+    useEffect(() => {
+        setCurrentAccountNumber(workshopData?.accountNumber)
+    }, [workshopData])
 
     useEffect(() => {
         if (mode === "review") {
@@ -31,7 +44,7 @@ export default function MyEvent({
             } else if (tab === "past") {
                 setTabText("Đã duyệt")
             } else if (tab === "completed") {
-                setTabText("Đã duyệt")
+                setTabText("Thanh toán")
             }
         }
     }, [mode, tab])
@@ -56,13 +69,29 @@ export default function MyEvent({
     const handleDecline = () => {
         mutate(workshopId)
     }
+
+    const handleCheckout = () => {
+        setShowPaymentPopup(true)
+    }
+
+    const handleClosePaymentPopup = () => {
+        setShowPaymentPopup(false)
+    }
+
+    const handleConfirmPayment = (workshopInfo, revenue) => {
+        setCurrentAccountNumber(workshopInfo.accountNumber)
+        toast.success(`Thanh toán đã được xác nhận cho workshop: ${workshopInfo.title}`)
+        setShowPaymentPopup(false)
+    }
+
+    console.log(currentAccountNumber)
     return (
         <div className="box-content-main-detail pb-0 pt-20">
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">
                 <div className="card-flight card-hotel main-background border-1px">
                     <div className={`card-image ${styles.cardImage} ${smallImage ? styles.smallImage : styles.largeImage}`}>
                         <Link href={link ? link.toString() : ""}>
-                            <img src={imageSrc} alt="Travila" className="object-cover"/>
+                            <img src={imageSrc} alt="Travila" className="object-cover" />
                         </Link>
                     </div>
                     <div className={`card-info main-background row border-none ${styles.cardInfoEvent}`}>
@@ -88,9 +117,22 @@ export default function MyEvent({
                         </div>
                         {isButtonVisible &&
                             <div className={`tour-rate col-lg-4 d-flex ${styles.tourRate}`}>
-                                <Link href={(mode === "review" && tab === "upcoming") ? `/user/review/${workshopId}` : ""}
-                                    className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}>
-                                    {tabText}</Link>
+                                {tab === "completed" ? (
+                                    <button
+                                        onClick={handleCheckout}
+                                        className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}
+                                        disabled={currentAccountNumber.includes('paid')}
+                                    >
+                                        {currentAccountNumber.includes('paid') ? 'Đã thanh toán' : tabText}
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href={(mode === "review" && tab === "upcoming") ? `/user/review/${workshopId}` : ""}
+                                        className={`btn btn-default primary-background white-color hover-opacity mb-20 ${styles.buttonManage}`}
+                                    >
+                                        {tabText}
+                                    </Link>
+                                )}
                                 {(!hideEditButton && tab !== "past" && tab !== "completed") &&
                                     <Link
                                         href={mode !== "review" ? `/dashboard/edit/${workshopId}` : "#"}
@@ -120,6 +162,14 @@ export default function MyEvent({
                     </div>
                 </div>
             )}
+
+            {/* Payment Popup */}
+            <PaymentPopup
+                open={showPaymentPopup}
+                onClose={handleClosePaymentPopup}
+                workshopId={workshopId}
+                onConfirmPayment={handleConfirmPayment}
+            />
         </div>
     )
 }

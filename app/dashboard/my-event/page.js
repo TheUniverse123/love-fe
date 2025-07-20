@@ -163,6 +163,8 @@ export default function MyEvents() {
 
     return pages;
   };
+
+  console.log(currentEvents)
   return (
     <div className={styles.myEvent}>
       <div className="flex-space pb-20 border-1px-bottom">
@@ -202,6 +204,8 @@ export default function MyEvents() {
                 : (new Date(event.startDate).getTime() < Date.now() ? 'success' : undefined)
             }
             hideEditButton={selectedTab !== 'pending'}
+            tab={selectedTab === 'completed' ? 'completed' : selectedTab === 'approved' ? 'upcoming' : ''}
+            accountNumber={event.accountNumber || ""}
           />
         ))}
 

@@ -2,7 +2,7 @@
 
 import { fetchLogout, fetchUserInfo } from "@/app/api/account"
 import styles from "./SidebarCanvas.module.css"
-import { quickLinks } from "@/data"
+import { quickLinks, quickLinksAdmin } from "@/data"
 import Image from "next/image"
 import { getUserInfo } from "@/app/util/auth"
 import { useQuery } from "@tanstack/react-query"
@@ -86,7 +86,7 @@ export default function SidebarCanvas() {
                     </div>
                     <div className="box-quicklinks">
                         <div className="box-list-quicklinks mb-20">
-                            {quickLinks.map((item, index) => (
+                            {data?.result?.roles.includes("Admin") ? quickLinksAdmin.map((item, index) => (
                                 <div className="item-quicklinks" key={index}>
                                     <div className="item-icon border-background border-1px-3">
                                         <Image src={item.icon} alt={item.title} width={24} height={24} />
@@ -98,6 +98,12 @@ export default function SidebarCanvas() {
                                         <p className={`text-xs neutral-500 ${item.status || ''}`}>
                                             {item.description}
                                         </p>
+                                    </div>
+                                </div>
+                            )) : quickLinks.map((item, index) => (
+                                <div className="item-quicklinks" key={index}>
+                                    <div className="item-icon border-background border-1px-3">
+                                        <Image src={item.icon} alt={item.title} width={24} height={24} />
                                     </div>
                                 </div>
                             ))}

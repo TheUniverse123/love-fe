@@ -492,3 +492,18 @@ export const quickLinks = [
     }
 ];
 
+export const quickLinksAdmin = [
+    {
+        icon: '/assets/icon/sidebar-canvas/report.svg',
+        title: 'Quản lý báo cáo',
+        link: '/dashboard/admin/overview-report',
+        type: "detailReport",
+    },
+    {
+        icon: '/assets/icon/sidebar-canvas/user.svg',
+        title: 'Cài đặt',
+        description: 'Tài khoản của bạn',
+        link: '/dashboard/profile',
+        type: "user",
+    }
+];

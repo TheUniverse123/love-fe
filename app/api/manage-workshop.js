@@ -51,7 +51,7 @@ export const fetchOrderedTickets = async ({ signal, pageNumber, pageSize, userId
 }
 
 export const fetchAllBookings = async ({ signal, pageNumber, pageSize }) => {
-    const data = await axiosInstanceJson.get(`/api/UserBookings/getAll-user?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+    const data = await axiosInstanceJson.get(`/api/UserBookings/getAll-UserBooking?pageNumber=${pageNumber}&pageSize=${pageSize}`)
         .then((response) => {
             return response.data.result
         }

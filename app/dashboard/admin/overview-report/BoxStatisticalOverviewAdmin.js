@@ -16,7 +16,6 @@ export default function BoxStatisticalOverviewAdmin() {
         queryKey: ['all-bookings-statistics'],
         queryFn: ({ signal }) => fetchAllBookings({ signal, pageNumber: 1, pageSize: 1000 }),
     })
-    console.log(allBookings)
 
     const paidTicketsCount = allBookings
         ?.filter(booking => {
