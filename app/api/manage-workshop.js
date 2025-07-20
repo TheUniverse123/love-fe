@@ -50,6 +50,18 @@ export const fetchOrderedTickets = async ({ signal, pageNumber, pageSize, userId
     return data
 }
 
+export const fetchAllBookings = async ({ signal, pageNumber, pageSize }) => {
+    const data = await axiosInstanceJson.get(`/api/UserBookings/getAll-user?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+        .then((response) => {
+            return response.data.result
+        }
+        ).catch((error) => {
+            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
+            return errors
+        })
+    return data
+}
+
 export const fetchCreateWorkshop = async (workshopInfo) => {
     const data = await axiosInstanceJson.post("/api/Workshops/create-json", workshopInfo)
         .then((response) => {
