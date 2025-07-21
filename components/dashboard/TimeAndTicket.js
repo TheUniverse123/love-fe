@@ -244,8 +244,6 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
         }
         clearError('ticketSaleEndDate');
     };
-
-
     const validateTimeRange = (start, end) => {
         if (start && end) {
             if (end < start) return "Thời gian kết thúc phải sau thời gian bắt đầu";
@@ -274,16 +272,6 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
             const timeValidationError = validateTimeRange(eventStartDate, eventEndDate);
             if (timeValidationError) newErrors.eventEndDate = timeValidationError;
         }
-
-        // Kiểm tra thời gian bắt đầu sự kiện phải ít nhất 1 tuần so với hiện tại
-        const currentDate = new Date();
-        const minStartDate = new Date(currentDate.setDate(currentDate.getDate() + 7)); // Thời gian hiện tại cộng thêm 7 ngày
-
-        if (eventStartDate && eventStartDate < minStartDate) {
-            newErrors.eventStartDate = "Thời gian bắt đầu sự kiện phải ít nhất 1 tuần sau thời gian hiện tại";
-        }
-
-        // Kiểm tra thời gian bắt đầu bán vé phải trước thời gian bắt đầu sự kiện
         if (ticketSaleStartDate && eventStartDate) {
             const saleStartBeforeEventStart = ticketSaleStartDate > eventStartDate;
             if (saleStartBeforeEventStart) {
@@ -291,7 +279,6 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
             }
         }
 
-        // Kiểm tra thời gian kết thúc bán vé phải trước thời gian kết thúc sự kiện
         if (ticketSaleEndDate && eventEndDate) {
             const saleEndBeforeEventEnd = ticketSaleEndDate > eventEndDate;
             if (saleEndBeforeEventEnd) {
