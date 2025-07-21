@@ -248,9 +248,7 @@ export default function TimeAndTicket({ onContinue, onBack, formRef }) {
 
     const validateTimeRange = (start, end) => {
         if (start && end) {
-            const diff = (end - start) / (1000 * 60 * 60); // Khoảng cách giờ
-            if (diff < 0) return "Thời gian kết thúc phải sau thời gian bắt đầu";
-            if (diff > 4) return "Khoảng cách giữa thời gian bắt đầu và kết thúc không được quá 4 giờ";
+            if (end < start) return "Thời gian kết thúc phải sau thời gian bắt đầu";
         }
         return null;
     };
