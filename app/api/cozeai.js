@@ -1,7 +1,7 @@
 import { CozeAPI, ChatStatus, RoleType } from '@coze/api';
 
 const client = new CozeAPI({
-    token: 'pat_KhsINLIJpmBm4BgG5GUxCsQcmPQOxn6fZqjwgdN6p1HGfX3uwCbXLUyHpxZItOJm',
+    token: 'pat_TX6gLOa3zVM2wNHUbZH8QBQbbGXnaSVKXVs19q6mC6JgWRt9SL3pajKB39LWKVe5',
     baseURL: 'https://api.coze.com',
     allowPersonalAccessTokenInBrowser: true
 });

@@ -512,8 +512,8 @@ export default function DetailReport() {
                                                                                             <th style={{ textAlign: 'left', padding: 8 }}>Thể loại</th>
                                                                                             <th style={{ textAlign: 'left', padding: 8 }}>Địa điểm</th>
                                                                                             <th style={{ textAlign: 'left', padding: 8 }}>Nhà tổ chức</th>
-                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Ngày bắt đầu</th>
-                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Ngày kết thúc</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Thời gian diễn ra</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Giá</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>
@@ -523,8 +523,8 @@ export default function DetailReport() {
                                                                                                 <td style={{ padding: 8 }}>{w.categoryName}</td>
                                                                                                 <td style={{ padding: 8 }}>{w.location}</td>
                                                                                                 <td style={{ padding: 8 }}>{w.organizationName}</td>
-                                                                                                <td style={{ padding: 8 }}>{w.startDate?.slice(0, 10)}</td>
-                                                                                                <td style={{ padding: 8 }}>{w.endDate?.slice(0, 10)}</td>
+                                                                                                <td style={{ padding: 8 }}>{formatWorkshopDateTime(w.startDate, w.endDate)}</td>
+                                                                                                <td style={{ padding: 8 }}>{formatPrice(w.price)}</td>
                                                                                             </tr>
                                                                                         ))}
                                                                                     </tbody>
