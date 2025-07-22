@@ -51,7 +51,7 @@ export default function DetailReport() {
     const tableClass = isMediumScreen ? styles.tableTopRevenueMedium : styles.tableTopRevenue;
     // Tab labels
     const tabs = [
-        { key: 'organizer', label: 'Nhà tổ chức' },
+        { key: 'organizer', label: 'Tài khoản' },
         { key: 'workshop', label: 'Workshop' },
         { key: 'participant', label: 'Người tham gia' },
     ];
@@ -227,6 +227,28 @@ export default function DetailReport() {
         }
     };
 
+    const formatWorkshopDateTime = (start, end) => {
+        if (!start) return "N/A";
+
+        const startDate = new Date(start);
+        const startTime = `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}`;
+        const startDateStr = `${String(startDate.getDate()).padStart(2, '0')}/${String(startDate.getMonth() + 1).padStart(2, '0')}/${startDate.getFullYear()}`;
+
+        if (!end) {
+            return `${startDateStr} lúc ${startTime}`;
+        }
+
+        const endDate = new Date(end);
+        const endTime = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
+        const endDateStr = `${String(endDate.getDate()).padStart(2, '0')}/${String(endDate.getMonth() + 1).padStart(2, '0')}/${endDate.getFullYear()}`;
+
+        if (startDateStr === endDateStr) {
+            return `${startDateStr}, ${startTime} - ${endTime}`;
+        } else {
+            return `${startTime} ${startDateStr} - ${endTime} ${endDateStr}`;
+        }
+    };
+
     return (
         <div style={{ paddingLeft: "35px", paddingTop: "20px", paddingRight: "36px" }}>
             <div className="flex-space pb-20 border-1px-bottom">
@@ -372,8 +394,8 @@ export default function DetailReport() {
                                                             <th className={styles['detail-tableHeader']}>Thể loại</th>
                                                             <th className={styles['detail-tableHeader']}>Địa điểm</th>
                                                             <th className={styles['detail-tableHeader']}>Nhà tổ chức</th>
-                                                            <th className={styles['detail-tableHeader']}>Ngày bắt đầu</th>
-                                                            <th className={styles['detail-tableHeader']}>Ngày kết thúc</th>
+                                                            <th className={styles['detail-tableHeader']}>Thời gian diễn ra</th>
+                                                            <th className={styles['detail-tableHeader']}>Doanh thu</th>
                                                         </>
                                                     )}
                                                     {activeTab === 'participant' && (
@@ -445,8 +467,8 @@ export default function DetailReport() {
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellType']}`}>{categoryMap[item.categoryId] || ''}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{item.location}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.organizationName}</td>
-                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.startDate?.slice(0, 10)}</td>
-                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.endDate?.slice(0, 10)}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{formatWorkshopDateTime(item.startDate, item.endDate)}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.totalPriceWorkshop}</td>
                                                             </tr>
                                                         ))
                                                     )
@@ -461,7 +483,7 @@ export default function DetailReport() {
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.fullName}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellEmail']}`}>{item.email}</td>
                                                                 <td className={styles['detail-tableCell']}>{item.phoneNumber || "N/A"}</td>
-                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.createdDate?.slice(0,10)}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.createdDate?.slice(0, 10)}</td>
                                                                 <td className={styles['detail-tableCell']}
                                                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
                                                                     onClick={() => handleExpandParticipant(item.userId)}
@@ -501,8 +523,8 @@ export default function DetailReport() {
                                                                                                 <td style={{ padding: 8 }}>{w.categoryName}</td>
                                                                                                 <td style={{ padding: 8 }}>{w.location}</td>
                                                                                                 <td style={{ padding: 8 }}>{w.organizationName}</td>
-                                                                                                <td style={{ padding: 8 }}>{w.startDate?.slice(0,10)}</td>
-                                                                                                <td style={{ padding: 8 }}>{w.endDate?.slice(0,10)}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.startDate?.slice(0, 10)}</td>
+                                                                                                <td style={{ padding: 8 }}>{w.endDate?.slice(0, 10)}</td>
                                                                                             </tr>
                                                                                         ))}
                                                                                     </tbody>

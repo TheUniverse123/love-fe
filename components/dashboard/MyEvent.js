@@ -39,6 +39,8 @@ export default function MyEvent({
         }
     }, [workshopData])
 
+    console.log(tab, mode)
+
     useEffect(() => {
         if (mode === "review") {
             if (tab === "upcoming") {
