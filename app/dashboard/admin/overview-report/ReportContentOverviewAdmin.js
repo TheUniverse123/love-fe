@@ -184,7 +184,6 @@ export default function ReportContentOverviewAdmin() {
                                                     <td className={styles.rank}>{idx + 1}</td>
                                                     <td className={styles.organizer}>
                                                         <div className={styles.organizerInfo}>
-                                                            <img className={styles.image} src={item.organizerAvatar || "/assets/icon/user.svg"} alt="icon" />
                                                             <div>
                                                                 <div className={styles.organizerName}>{item.organizationName}</div>
                                                             </div>
@@ -215,7 +214,7 @@ export default function ReportContentOverviewAdmin() {
                         <div className="container p-0">
                             <div className="panel-white">
                                 <div className={`panel-head flex-space border-1px-bottom ${styles.sectionStyle}`}>
-                                    <h6 className="text-xl-bold white-color">Top 3 workshop doanh thu thấp nhất</h6>
+                                    <h6 className="text-xl-bold white-color">Top 5 workshop doanh thu thấp nhất</h6>
                                 </div>
                                 <div className={`panel-body ${styles.panelBody}`}>
                                     <table className={tableClass}>
@@ -233,7 +232,6 @@ export default function ReportContentOverviewAdmin() {
                                                     <td className={styles.rank}>{idx + 1}</td>
                                                     <td className={styles.organizer}>
                                                         <div className={styles.organizerInfo}>
-                                                            <img className={styles.image} src={item.organizerAvatar || "/assets/icon/user.svg"} alt="icon" />
                                                             <div>
                                                                 <div className={styles.organizerName}>{item.organizationName}</div>
                                                             </div>
