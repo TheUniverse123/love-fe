@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchWorkshopTopRevenue } from "@/app/api/admin-dashboard";
 import { useEffect, useState } from "react";
 import { fetchListParticipants, fetchListUsers, fetchListWorkshops } from "@/app/api/admin-dashboard-detail";
-import { formatDate } from "@/app/util/convert";
+import { formatDate, formatPrice } from "@/app/util/convert";
 import { fetchRegisteredWorkshopsByUser } from "@/app/api/workshop";
 import Link from "next/link";
 
@@ -176,7 +176,7 @@ export default function DetailReport() {
 
     // Xử lý participant
     let participants = Array.isArray(listParticipants?.items)
-        ? listParticipants.items
+        ? listParticipants.items.filter(p => p.workshopCount > 0)
         : [];
     // Lấy danh sách ngày đăng ký duy nhất
     const participantDates = Array.from(new Set(participants.map(p => p.createdDate?.slice(0, 10)).filter(Boolean)));
@@ -395,7 +395,7 @@ export default function DetailReport() {
                                                             <th className={styles['detail-tableHeader']}>Địa điểm</th>
                                                             <th className={styles['detail-tableHeader']}>Nhà tổ chức</th>
                                                             <th className={styles['detail-tableHeader']}>Thời gian diễn ra</th>
-                                                            <th className={styles['detail-tableHeader']}>Doanh thu</th>
+                                                            <th className={styles['detail-tableHeader']}>Doanh thu (VNĐ)</th>
                                                         </>
                                                     )}
                                                     {activeTab === 'participant' && (
@@ -468,7 +468,7 @@ export default function DetailReport() {
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellAddress']}`}>{item.location}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.organizationName}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{formatWorkshopDateTime(item.startDate, item.endDate)}</td>
-                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.totalPriceWorkshop}</td>
+                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']} font-15`} style={{ fontWeight: 600 }}>{formatPrice(item.totalPriceWorkshop)}</td>
                                                             </tr>
                                                         ))
                                                     )
