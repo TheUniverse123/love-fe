@@ -49,7 +49,7 @@ export const fetchWorkshopParticipant = async () => {
 }
 
 export const fetchWorkshopTopRevenue = async () => {
-    const data = await axiosInstanceJson.get(`/api/admin-dashboard/top-workshops-revenue?top=3`)
+    const data = await axiosInstanceJson.get(`/api/admin-dashboard/top-workshops-revenue`)
         .then((response) => {
             return response.data.result.workshops
         })
@@ -61,7 +61,7 @@ export const fetchWorkshopTopRevenue = async () => {
 }
 
 export const fetchWorkshopBottomRevenue = async () => {
-    const data = await axiosInstanceJson.get(`/api/admin-dashboard/bottom-workshops-revenue?top=3`)
+    const data = await axiosInstanceJson.get(`/api/admin-dashboard/bottom-workshops-revenue`)
         .then((response) => {
             return response.data.result.workshops
         })

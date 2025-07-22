@@ -1,20 +1,15 @@
 'use client'
 import styles from "@/components/dashboard/ReportContent.module.css"
 
+import { fetchRecentCreatedWorkshops, fetchWorkshopBottomRevenue, fetchWorkshopOrganizer, fetchWorkshopParticipant, fetchWorkshopRevenue, fetchWorkshopTopRevenue } from "@/app/api/admin-dashboard"
 import { fetchWorkshopRecentRegisterUser } from "@/app/api/dashboard"
-import { fetchWorkshopByUsers } from "@/app/api/manage-workshop"
-import { fetchWorkshopOfUsers } from "@/app/api/workshop"
-import { getUserInfo } from "@/app/util/auth"
 import { formatDateRange, formatPrice } from "@/app/util/convert"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
+import { Spinner } from "react-bootstrap"
 import ChartOrganizer from "./ChartOrganizer"
 import ChartRevenueExample from "./ChartRevenue"
 import RecentCreatedEvents from './RecentCreatedEvents'
-import { Spinner } from "react-bootstrap"
-import { fetchWorkshopBottomRevenue, fetchWorkshopOrganizer, fetchWorkshopParticipant, fetchWorkshopRevenue, fetchWorkshopTopRevenue, fetchRecentCreatedWorkshops } from "@/app/api/admin-dashboard"
-const userInfo = getUserInfo()
-
 export default function ReportContentOverviewAdmin() {
     const [currentPage, setCurrentPage] = useState(1); // Trạng thái trang hiện tại
     const [dataDates, setDataDates] = useState([])
@@ -171,7 +166,7 @@ export default function ReportContentOverviewAdmin() {
                         <div className="container p-0">
                             <div className="panel-white">
                                 <div className={`panel-head flex-space border-1px-bottom ${styles.sectionStyle}`}>
-                                    <h6 className="text-xl-bold white-color">Top 3 workshop doanh thu cao nhất</h6>
+                                    <h6 className="text-xl-bold white-color">Top 5 workshop doanh thu cao nhất</h6>
                                 </div>
                                 <div className={`panel-body ${styles.panelBody}`}>
                                     <table className={tableClass}>
@@ -191,7 +186,7 @@ export default function ReportContentOverviewAdmin() {
                                                         <div className={styles.organizerInfo}>
                                                             <img className={styles.image} src={item.organizerAvatar || "/assets/icon/user.svg"} alt="icon" />
                                                             <div>
-                                                                <div className={styles.organizerName}>{item.organizerName}</div>
+                                                                <div className={styles.organizerName}>{item.organizationName}</div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -240,7 +235,7 @@ export default function ReportContentOverviewAdmin() {
                                                         <div className={styles.organizerInfo}>
                                                             <img className={styles.image} src={item.organizerAvatar || "/assets/icon/user.svg"} alt="icon" />
                                                             <div>
-                                                                <div className={styles.organizerName}>{item.organizerName}</div>
+                                                                <div className={styles.organizerName}>{item.organizationName}</div>
                                                             </div>
                                                         </div>
                                                     </td>

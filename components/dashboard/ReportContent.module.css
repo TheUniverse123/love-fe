@@ -105,12 +105,10 @@
 }
 
 .organizerName {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     max-width: 120px;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .organizerCountry {

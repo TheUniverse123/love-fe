@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react';
+import * as XLSX from 'xlsx';
 import { fetchDashboardWidget } from "@/app/api/dashboard";
 import { fetchWorkshopRecentRegisterUser } from "@/app/api/dashboard";
 import { fetchWorkshopByUsers } from "@/app/api/manage-workshop";
 import { fetchWorkshopOfUsers } from "@/app/api/workshop";
 import { getUserInfo } from "@/app/util/auth";
-import { formatDateRange } from "@/app/util/convert";
+import { formatDateRange, formatPrice } from "@/app/util/convert";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from 'react-toastify';
 import styles from './ExportReport.module.css';
@@ -38,29 +39,28 @@ export default function ExportReport() {
         queryFn: fetchWorkshopRecentRegisterUser,
     });
 
-    const exportToCSV = async () => {
+    const exportToXLSX = async () => {
         setIsExporting(true);
         try {
-            // Tạo dữ liệu cho CSV
-            const csvData = [];
+            // Tạo dữ liệu cho báo cáo
+            const reportData = [];
             
             // Thêm thống kê tổng quan
-            csvData.push(['BÁO CÁO TỔNG QUAN']);
-            csvData.push(['']);
-            csvData.push(['Thống kê', 'Giá trị']);
-            csvData.push(['Tổng số vé đã bán', statisticsData?.totalTicketsSold || 0]);
-            csvData.push(['Doanh thu', statisticsData?.totalRevenue || 0]);
-            csvData.push(['Số lượng khách hàng mới', statisticsData?.newCustomersThisWeek || 0]);
-            csvData.push(['Số lượng workshop mới', statisticsData?.newWorkshopsThisWeek || 0]);
-            csvData.push(['']);
+            reportData.push(['BÁO CÁO TỔNG QUAN']);
+            reportData.push(['']);
+            reportData.push(['Thống kê', 'Giá trị']);
+            reportData.push(['Tổng số vé đã bán', statisticsData?.totalTicketsSold || 0]);
+            reportData.push(['Doanh thu', formatPrice(statisticsData?.totalRevenue) || 0]);
+            reportData.push(['Số lượng khách hàng mới', statisticsData?.newCustomersThisWeek || 0]);
+            reportData.push(['Số lượng workshop mới', statisticsData?.newWorkshopsThisWeek || 0]);
+            reportData.push(['']);
             
             // Thêm thông tin về lịch sự kiện
             if (workshopDates?.result && workshopDates.result.length > 0) {
-                csvData.push(['LỊCH SỰ KIỆN THEO THÁNG']);
-                csvData.push(['']);
-                csvData.push(['Tháng', 'Số lượng sự kiện']);
+                reportData.push(['LỊCH SỰ KIỆN THEO THÁNG']);
+                reportData.push(['']);
+                reportData.push(['Tháng', 'Số lượng sự kiện']);
                 
-                // Nhóm sự kiện theo tháng
                 const monthlyStats = {};
                 workshopDates.result.forEach(date => {
                     const month = new Date(date).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
@@ -68,42 +68,41 @@ export default function ExportReport() {
                 });
                 
                 Object.entries(monthlyStats).forEach(([month, count]) => {
-                    csvData.push([month, count]);
+                    reportData.push([month, count]);
                 });
-                csvData.push(['']);
+                reportData.push(['']);
             }
             
             // Thêm danh sách tất cả sự kiện
-            csvData.push(['DANH SÁCH TẤT CẢ SỰ KIỆN']);
-            csvData.push(['']);
-            csvData.push(['Tiêu đề', 'Thời gian', 'Địa điểm', 'Giá', 'Trạng thái', 'Mô tả', 'Số lượng vé', 'Doanh thu sự kiện']);
+            reportData.push(['DANH SÁCH TẤT CẢ SỰ KIỆN']);
+            reportData.push(['']);
+            reportData.push(['Tiêu đề', 'Thời gian', 'Địa điểm', 'Giá', 'Trạng thái', 'Mô tả', 'Số lượng vé đã bán', 'Doanh thu sự kiện']);
             
             if (allWorkshopsData?.workshops) {
                 allWorkshopsData.workshops.forEach(event => {
                     const status = event.status === 0 ? 'Chờ duyệt' : 
                                  (new Date(event.startDate).getTime() < Date.now() ? 'Đã kết thúc' : 'Đang diễn ra');
                     
-                    // Tính doanh thu sự kiện
                     const eventRevenue = event.isFree ? 0 : (event.price * (event.totalTickets || 0));
                     
-                    csvData.push([
+                    reportData.push([
                         event.title,
                         formatDateRange(event.startDate, event.endDate),
                         event.location.replace("(credit-card-payment)", "").trim(),
                         event.isFree ? 'Miễn phí' : `${event.price.toLocaleString()} VNĐ`,
                         status,
                         event.description || 'Không có mô tả',
-                        event.totalTickets || 0,
+                        event.soldOutTickets || 0,
                         eventRevenue.toLocaleString() + ' VNĐ'
                     ]);
                 });
             }
-            csvData.push(['']);
+            reportData.push(['']);
             
             // Thêm thống kê chi tiết sự kiện
             if (allWorkshopsData?.workshops) {
-                csvData.push(['THỐNG KÊ CHI TIẾT SỰ KIỆN']);
-                csvData.push(['']);
+                reportData.push(['THỐNG KÊ CHI TIẾT SỰ KIỆN']);
+                reportData.push(['']);
                 
                 const totalEvents = allWorkshopsData.workshops.length;
                 const freeEvents = allWorkshopsData.workshops.filter(e => e.isFree).length;
@@ -116,23 +115,23 @@ export default function ExportReport() {
                 ).length;
                 const pendingEvents = allWorkshopsData.workshops.filter(e => e.status === 0).length;
                 
-                csvData.push(['Tổng số sự kiện', totalEvents]);
-                csvData.push(['Sự kiện miễn phí', freeEvents]);
-                csvData.push(['Sự kiện có phí', paidEvents]);
-                csvData.push(['Sự kiện đã kết thúc', completedEvents]);
-                csvData.push(['Sự kiện sắp diễn ra', upcomingEvents]);
-                csvData.push(['Sự kiện chờ duyệt', pendingEvents]);
-                csvData.push(['']);
+                reportData.push(['Tổng số sự kiện', totalEvents]);
+                reportData.push(['Sự kiện miễn phí', freeEvents]);
+                reportData.push(['Sự kiện có phí', paidEvents]);
+                reportData.push(['Sự kiện đã kết thúc', completedEvents]);
+                reportData.push(['Sự kiện sắp diễn ra', upcomingEvents]);
+                reportData.push(['Sự kiện chờ duyệt', pendingEvents]);
+                reportData.push(['']);
             }
             
             // Thêm danh sách người dùng mới đăng ký
-            csvData.push(['NGƯỜI DÙNG MỚI ĐĂNG KÝ']);
-            csvData.push(['']);
-            csvData.push(['Tên', 'Email', 'Số điện thoại', 'Avatar URL', 'Ngày đăng ký']);
+            reportData.push(['NGƯỜI DÙNG MỚI ĐĂNG KÝ']);
+            reportData.push(['']);
+            reportData.push(['Tên', 'Email', 'Số điện thoại', 'Avatar URL', 'Ngày đăng ký']);
             
             if (registerUsersData?.result) {
                 registerUsersData.result.forEach(user => {
-                    csvData.push([
+                    reportData.push([
                         user.userName,
                         user.userEmail,
                         user.userPhone || 'Không có',
@@ -143,36 +142,43 @@ export default function ExportReport() {
             }
             
             // Thêm thông tin tổng kết
-            csvData.push(['']);
-            csvData.push(['TỔNG KẾT']);
-            csvData.push(['']);
-            csvData.push(['Tổng số sự kiện', allWorkshopsData?.workshops?.length || 0]);
-            csvData.push(['Tổng số người dùng mới', registerUsersData?.result?.length || 0]);
-            csvData.push(['Tổng doanh thu', `${(statisticsData?.totalRevenue || 0).toLocaleString()} VNĐ`]);
-            csvData.push(['Ngày xuất báo cáo', new Date().toLocaleDateString('vi-VN')]);
+            reportData.push(['']);
+            reportData.push(['TỔNG KẾT']);
+            reportData.push(['']);
+            reportData.push(['Tổng số sự kiện', allWorkshopsData?.workshops?.length || 0]);
+            reportData.push(['Tổng số người dùng mới', registerUsersData?.result?.length || 0]);
+            reportData.push(['Tổng doanh thu', `${(statisticsData?.totalRevenue || 0).toLocaleString()} VNĐ`]);
+            reportData.push(['Ngày xuất báo cáo', new Date().toLocaleDateString('vi-VN')]);
 
-            // Tạo file CSV
-            const csvContent = csvData.map(row => 
-                row.map(cell => `"${cell}"`).join(',')
-            ).join('\n');
+            // Tạo worksheet từ dữ liệu
+            const ws = XLSX.utils.aoa_to_sheet(reportData);
+
+            // Tự động điều chỉnh độ rộng cột
+            const maxColLengths = {};
+            reportData.forEach(row => {
+                row.forEach((cell, i) => {
+                    const cellLength = cell ? String(cell).length : 0;
+                    if (!maxColLengths[i] || cellLength > maxColLengths[i]) {
+                        maxColLengths[i] = cellLength;
+                    }
+                });
+            });
+
+            ws['!cols'] = Object.keys(maxColLengths).map(i => ({
+                wch: maxColLengths[i] + 2 // Thêm padding
+            }));
             
-            // Thêm BOM để hỗ trợ tiếng Việt
-            const BOM = '\uFEFF';
-            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `bao-cao-day-du-${new Date().toISOString().split('T')[0]}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Tạo workbook và thêm worksheet vào
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'BaoCaoDayDu');
             
-            // Thông báo thành công
+            // Xuất file
+            XLSX.writeFile(wb, `bao-cao-day-du-${new Date().toISOString().split('T')[0]}.xlsx`);
+            
             toast.success('Xuất báo cáo đầy đủ thành công!');
         } catch (error) {
-            console.error('Lỗi khi xuất CSV:', error);
-            toast.error('Có lỗi xảy ra khi xuất file CSV: ' + error.message);
+            console.error('Lỗi khi xuất XLSX:', error);
+            toast.error('Có lỗi xảy ra khi xuất file XLSX: ' + error.message);
         } finally {
             setIsExporting(false);
         }
@@ -181,7 +187,7 @@ export default function ExportReport() {
     return (
         <div className={styles.exportContainer}>
             <button
-                onClick={exportToCSV}
+                onClick={exportToXLSX}
                 disabled={isExporting}
                 className={`${styles.exportButton} ${styles.csvButton}`}
             >
