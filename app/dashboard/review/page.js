@@ -39,7 +39,7 @@ export default function MyEvents() {
       const endDate = new Date(event.endDate);
       const currentDate = new Date();
       return endDate < currentDate;
-    }) : [],
+    }).sort((a, b) => new Date(b.endDate) - new Date(a.endDate)) : [],
   };
 
   const handlePageChange = (pageNumber) => {
