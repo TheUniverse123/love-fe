@@ -163,8 +163,6 @@ export default function MyEvents() {
 
     return pages;
   };
-
-  console.log(currentEvents)
   return (
     <div className={styles.myEvent}>
       <div className="flex-space pb-20 border-1px-bottom">

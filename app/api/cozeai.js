@@ -15,16 +15,12 @@ export async function quickChat(message) {
             content_type: 'text',
         }],
     });
-    console.log(v)
-
     if (v.chat.status === ChatStatus.COMPLETED) {
         let answer = '';
         let suggestions = [];
 
         for (let i = 0; i < v.messages.length; i++) {
             const item = v.messages[i];
-            console.log(item)
-
             if (i === v.messages.length - 5) {
                 // Item thứ 5 từ cuối là câu trả lời
                 answer = item.content;

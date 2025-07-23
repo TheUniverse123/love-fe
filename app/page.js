@@ -52,7 +52,6 @@ export default function Home() {
         const workshopsToSend = (workshops || []).slice(0, 20);
         const prompt = `Dựa vào lịch sử đặt vé: ${JSON.stringify(ticketsToSend)} và danh sách workshop: ${JSON.stringify(workshopsToSend)}, hãy gợi ý ra ít nhất 5 workshopId phù hợp nhất cho tôi (nếu không đủ thì lặp lại id cho đủ 5 phần tử). Chỉ trả về mảng id số, ví dụ: [12, 45, 78, 99, 12]. Không giải thích, không markdown, không text thừa, chỉ trả về mảng số.`;
         const aiResult = await generateBotResponse(prompt);
-        console.log("AI raw result:", aiResult);
         let aiIds = [];
         try {
           const match = aiResult.match(/\[.*\]/s);
@@ -64,7 +63,6 @@ export default function Home() {
         } catch {
           aiIds = [];
         }
-        console.log("AI id list:", aiIds);
         // Lọc ra các workshop phù hợp từ danh sách đã fetch
         let aiWorkshopList = (workshopsToSend || []).filter(item => aiIds.includes(item.workshopId));
         // Đảm bảo luôn có đúng 5 workshop (nếu thiếu thì lặp lại id cuối cùng)
@@ -76,7 +74,6 @@ export default function Home() {
         } else if (aiWorkshopList.length > 5) {
           aiWorkshopList = aiWorkshopList.slice(0, 5);
         }
-        console.log("AI workshop list:", aiWorkshopList);
         setAiWorkshops(aiWorkshopList);
       } catch (e) {
         setAiWorkshops([]);

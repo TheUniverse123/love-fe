@@ -6,6 +6,7 @@ import { fetchUserInfo } from "@/app/api/account";
 import { useQuery } from "@tanstack/react-query";
 import BoxStatisticalOverviewAdmin from "./BoxStatisticalOverviewAdmin";
 import ReportContentOverviewAdmin from "./ReportContentOverviewAdmin";
+import ExportOverviewReport from "./ExportOverviewReport";
 
 export default function OverviewReportPage() {
     const router = useRouter();
@@ -47,6 +48,7 @@ export default function OverviewReportPage() {
         <div style={{ paddingLeft: "35px", paddingTop: "20px", marginRight: "36px" }}>
             <div className="flex-space pb-20 border-1px-bottom">
                 <h4 className="white-color">Quản lí báo cáo</h4>
+                <ExportOverviewReport />
             </div>
             <div>
                 <BoxStatisticalOverviewAdmin />

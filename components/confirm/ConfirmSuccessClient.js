@@ -15,12 +15,9 @@ export default function ConfirmSuccessClient() {
             const emailParam = params.get('email')
             if (token && emailParam) {
                 const decodedEmail = decodeURIComponent(emailParam)
-                console.log(decodedEmail, token)
                 async function fetchToken() {
                     const response = await fetchConfirmEmail(decodedEmail, token)
-                    console.log(response)
                 }
-
                 fetchToken()
             }
         }

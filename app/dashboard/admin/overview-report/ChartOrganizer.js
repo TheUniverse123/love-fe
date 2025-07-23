@@ -50,17 +50,19 @@ function ChartOrganizer({
   labels = defaultLabels,
   organizerData = defaultOrganizerData,
   workshopData = defaultWorkshopData,
+  thirdData = [],
   min = 0,
   max = 250,
   title = 'Bên nhà tổ chức',
   organizerLabel = 'Số người tổ chức workshop',
   workshopLabel = 'Số workshop đã tạo',
+  thirdLabel = 'Người tham dự',
 }) {
   // Calculate dynamic min/max for better scale
   const maxOrganizer = Math.max(...organizerData, 1);
   const maxWorkshop = Math.max(...workshopData, 1);
-  const maxData = Math.max(maxOrganizer, maxWorkshop);
-  
+  const maxThird = thirdData && thirdData.length > 0 ? Math.max(...thirdData, 1) : 1;
+  const maxData = Math.max(maxOrganizer, maxWorkshop, maxThird);
   // Use consistent scale calculation
   const stepSize = getNiceStepSize(maxData);
   const finalMax = stepSize * 6;
@@ -84,7 +86,15 @@ function ChartOrganizer({
         barPercentage: 0.8,
         categoryPercentage: 0.8,
       },
-    ],
+      thirdData && thirdData.length > 0 ? {
+        label: thirdLabel,
+        data: thirdData,
+        backgroundColor: '#FBA018',
+        borderRadius: 5,
+        barPercentage: 0.8,
+        categoryPercentage: 0.8,
+      } : null,
+    ].filter(Boolean),
   };
 
   const options = {
@@ -154,6 +164,7 @@ function ChartOrganizer({
           ctx.font = 'bold 12px Inter, Roboto, Arial, sans-serif';
           let color = '#A5ACFF';
           if (datasetIndex === 1) color = '#7E55F9';
+          if (datasetIndex === 2) color = '#FBA018';
           ctx.fillStyle = color;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
@@ -174,7 +185,7 @@ function ChartOrganizer({
           <Chart type='bar' data={data} options={options} plugins={[renderValuePlugin]} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-          <span style={{ color: '#8E8E8E', fontSize: 13, fontWeight: 400 }}>THEO TUẦN</span>
+          <span style={{ color: '#8E8E8E', fontSize: 13, fontWeight: 400 }}>THEO THÁNG</span>
           <div className={styles.legend}>
             <div className={styles.legendItem}>
               <span style={{ background: '#5462F5' }} className={styles.dotTicket}></span>
@@ -184,6 +195,12 @@ function ChartOrganizer({
               <span style={{ background: '#471ACD' }} className={styles.dotRevenue}></span>
               {workshopLabel}
             </div>
+            {thirdData && thirdData.length > 0 && (
+              <div className={styles.legendItem}>
+                <span style={{ background: '#FBA018', width: 10, height: 10, borderRadius: '50%', display: 'inline-block' }}></span>
+                {thirdLabel}
+              </div>
+            )}
           </div>
         </div>
       </div>

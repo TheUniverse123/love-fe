@@ -37,7 +37,6 @@ export default function ResetPasswordForm({ onBack, onClose }) {
 
         async function fetchToken() {
             const response = await fetchResetPassword(submitData)
-            console.log(response)
             if (response.statusCode === 200) {
                 setError({});
                 toast.success("Đặt lại mật khẩu thành công");

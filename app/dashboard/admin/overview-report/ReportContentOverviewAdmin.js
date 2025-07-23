@@ -2,7 +2,6 @@
 import styles from "@/components/dashboard/ReportContent.module.css"
 
 import { fetchRecentCreatedWorkshops, fetchWorkshopBottomRevenue, fetchWorkshopOrganizer, fetchWorkshopParticipant, fetchWorkshopRevenue, fetchWorkshopTopRevenue } from "@/app/api/admin-dashboard"
-import { fetchWorkshopRecentRegisterUser } from "@/app/api/dashboard"
 import { formatDateRange, formatPrice } from "@/app/util/convert"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
@@ -11,9 +10,7 @@ import ChartOrganizer from "./ChartOrganizer"
 import ChartRevenueExample from "./ChartRevenue"
 import RecentCreatedEvents from './RecentCreatedEvents'
 export default function ReportContentOverviewAdmin() {
-    const [currentPage, setCurrentPage] = useState(1); // Trạng thái trang hiện tại
-    const [dataDates, setDataDates] = useState([])
-    const [registerUsers, setRegisterUsers] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
     const [isMediumScreen, setIsMediumScreen] = useState(false)
 
     // Check screen size for 1400px-1600px
@@ -78,27 +75,6 @@ export default function ReportContentOverviewAdmin() {
             setCurrentPage(currentPage - 1);
         }
     };
-
-    async function handleFetchNewRegisterUsers() {
-        const response = await fetchWorkshopRecentRegisterUser()
-        if (response.statusCode === 200) {
-            setRegisterUsers(response.result)
-        }
-    }
-
-    useEffect(() => {
-        handleFetchNewRegisterUsers()
-    }, [])
-
-    useEffect(() => {
-        if (recentCreatedWorkshops) {
-            if (recentCreatedWorkshops.statusCode === 200) {
-                setDataDates(recentCreatedWorkshops.result)
-            }
-        }
-    }, [recentCreatedWorkshops])
-
-    console.log(recentCreatedWorkshops)
 
     const { data: revenueWeekly, isPending: isPendingRevenue } = useQuery({
         queryKey: ['revenue-data'],

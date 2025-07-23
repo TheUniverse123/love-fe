@@ -38,9 +38,6 @@ export default function MyEvent({
             setCurrentAccountNumber(workshopData?.accountNumber)
         }
     }, [workshopData])
-
-    console.log(tab, mode)
-
     useEffect(() => {
         if (mode === "review") {
             if (tab === "upcoming") {
@@ -87,8 +84,6 @@ export default function MyEvent({
         toast.success(`Thanh toán đã được xác nhận cho workshop: ${workshopInfo.title}`)
         setShowPaymentPopup(false)
     }
-
-    console.log(currentAccountNumber)
     return (
         <div className="box-content-main-detail pb-0 pt-20">
             <div className="box-grid-hotels box-list-hotels-detail wow fadeIn">

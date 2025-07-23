@@ -15,7 +15,6 @@ export async function generateBotResponse(userMessage) {
         });
         return response.text;
     } catch (error) {
-        console.log(error)
         return "Có lỗi xảy ra, vui lòng thử lại sau ⚠";
     }
 }

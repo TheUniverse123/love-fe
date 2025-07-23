@@ -16,7 +16,7 @@ export default function BoxStatistical() {
                 <StatisticsItem number={data?.totalTicketsSold} text="Tổng số vé đã bán" />
                 <StatisticsItem number={formatPrice(data?.totalRevenue)} text="Doanh thu" />
                 <StatisticsItem number={data?.newCustomersThisWeek} text="Số lượng khách hàng mới" />
-                <StatisticsItem number={data?.newWorkshopsThisWeek} text="Số lượng workshop mới" />
+                <StatisticsItem number={data?.newWorkshopsThisWeek} text="Workshop đã tạo" />
             </div>}
         </div>
     )

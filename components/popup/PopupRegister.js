@@ -78,7 +78,6 @@ export default function PopupRegister({ onClose, onNext }) {
             }
         },
         onError: (error) => {
-            console.log(error)
             toast.error("Email hoặc password không hợp lệ");
         },
     });

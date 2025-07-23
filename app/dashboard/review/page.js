@@ -28,8 +28,6 @@ export default function MyEvents() {
     queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 1000 }),
   });
 
-  console.log(data)
-
   const events = {
     upcoming: data ? data.filter(event => event.status === 0) : [],
     past: data ? data.filter(event => event.status === 1) : [],

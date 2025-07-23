@@ -46,7 +46,6 @@ export default function BookingForm({ workshopDetail, mode, ref }) {
             
     useEffect(() => {
         if (workshopDetail && workshopDetail.startDate) {
-            console.log(workshopDetail?.startDate)
             setWorkshopStartDate(formatDate(workshopDetail.startDate))
         }
     }, [workshopDetail])

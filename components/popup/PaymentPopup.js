@@ -35,15 +35,12 @@ export default function PaymentPopup({ open, onClose, workshopId, onConfirmPayme
             ) || [];
 
             setBookings(workshopBookings);
-            console.log(workshopBookings)
-
             // Calculate total revenue from confirmed/completed bookings only
             const totalRevenue = workshopBookings.reduce((sum, booking) =>
                 sum + (booking.totalPrice || 0), 0);
 
             setRevenue(totalRevenue);
         } catch (error) {
-            console.error("Error fetching workshop data:", error);
         } finally {
             setLoading(false);
         }

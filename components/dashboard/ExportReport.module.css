@@ -29,13 +29,14 @@
 }
 
 .csvButton {
-    border-color: #007bff;
-    color: #007bff;
+    border-color: var(--bg-primary-color);
+    color: var(--bg-primary-color);
+    background-color: var(--bg-primary-color);
+    color: white;
 }
 
 .csvButton:hover:not(:disabled) {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--bg-primary-color-2);
 }
 
 .icon {

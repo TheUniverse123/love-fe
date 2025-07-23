@@ -63,7 +63,6 @@ export default function Chatbot() {
                 setChatValue(prevValue => [...prevValue, { type: 'error', message: "Có lỗi xảy ra, vui lòng thử lại sau ⚠", time: getCurrentTime() }])
             }
         } catch (error) {
-            console.log(error)
             setChatValue(prevValue => [...prevValue, { type: 'error', message: "Có lỗi xảy ra, vui lòng thử lại sau ⚠", time: getCurrentTime() }])
         } finally {
             setChatValue(prevValue => prevValue.filter(item => item.type !== 'delay'))
@@ -72,7 +71,6 @@ export default function Chatbot() {
 
     function handleSuggestionClick(suggestion) {
         handleAddDelayMessage()
-        console.log(`User clicked suggestion: ${suggestion}`);
         setChatValue(prevValue => [...prevValue, { type: 'user', message: suggestion, time: getCurrentTime() }]);
         generateBotResponse(suggestion);
         setSuggestions([]);

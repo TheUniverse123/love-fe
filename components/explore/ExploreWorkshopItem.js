@@ -25,7 +25,6 @@ const ExploreWorkshopItem = ({ label, imgSrc, rating, title, date, price, link, 
     }
     async function handleToggleSaved() {
         if (userId && workshopId) {
-            console.log(isSaved)
             if (!isSaved) {
                 const response = await fetchSaveFavouriteWorkshops(userId, workshopId)
                 if (response.statusCode === 200) {

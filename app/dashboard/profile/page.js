@@ -29,8 +29,6 @@ export default function ProfilePage() {
         queryKey: ['user-info'],
         queryFn: ({ signal }) => fetchUserInfo({ signal, userId: userInfo.id }),
     })
-
-    console.log(data)
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {

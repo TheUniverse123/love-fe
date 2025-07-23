@@ -101,9 +101,6 @@ export default function ReportContent() {
                 <div className="section-box main-background border-1px border-radius-10 mb-25">
                     <div className="container p-0">
                         <div className="panel-white">
-                            <div className={`panel-head flex-space border-1px-bottom ${styles.sectionStyle}`}>
-                                <h6 className="text-xl-bold white-color">Thống kê doanh thu & bán vé</h6>
-                            </div>
                             <div className="panel-body">
                                 <ChartComponent />
                             </div>
@@ -199,9 +196,6 @@ export default function ReportContent() {
                                 {registerUsers?.map(item => (
                                     <div className="card-style-3 row pb-20 pt-20 border-1px-bottom" key={item.userEmail}>
                                         <div className="col-lg-5 flex-center-align pr-0">
-                                            <div className="mr-10 flex-center">
-                                                <img className={styles.image} src={item.avatarUrl || "/assets/icon/user.svg"} alt="icon" />
-                                            </div>
                                             <div className="card-title">
                                                 <p className="text-sm-bold white-color">
                                                     {item.userName}

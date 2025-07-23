@@ -148,8 +148,6 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                     uploadImageToFirebase(ticketData.ticketPath, 'ticketImagePath') :
                     initialWorkshop.ticketImagePath,
             ]);
-            console.log(eventData.onlineMettingUrl)
-
             // Xác định location phù hợp
             const isOnline = eventData.paymentMethod === 'credit-card-payment';
             const location = isOnline
@@ -192,8 +190,6 @@ export default function CreateEventPage({ mode = 'create', initialWorkshop = nul
                 onlineMettingUrl: eventData.onlineMettingUrl
             };
             await fetchUpdateWorkshop(initialWorkshop.workshopId, updatedWorkshop);
-
-            console.log(ticketData)
             const updatedTicket = {
                 workshopId: initialWorkshop.workshopId,
                 ticketName: ticketData.ticketName,

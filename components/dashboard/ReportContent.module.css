@@ -815,3 +815,10 @@
     padding: 0 !important;
     margin-bottom: 0;
 }
+
+.detailTableHeaderBold {
+    font-weight: 700;
+    color: #fff;
+    font-size: 16px;
+    background: transparent;
+}

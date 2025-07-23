@@ -29,7 +29,7 @@ export default function BoxStatisticalOverviewAdmin() {
                 <StatisticsItem number={data?.totalTicketsSold} text="Vé có phí / tổng vé" isUp={Math.round(data?.ticketsSoldChangePercent)} isAdditional={paidTicketsCount} />
                 <StatisticsItem number={formatPrice(data?.totalRevenue)} text="Doanh thu" isUp={Math.round(data?.revenueChangePercent)} />
                 <StatisticsItem number={data?.totalOrganizers} text="Nhà tổ chức workshop" isUp={Math.round(data?.organizersChangePercent)} />
-                <StatisticsItem number={data?.ongoingWorkshops} text="Workshop đang diễn ra" isUp={Math.round(data?.ongoingWorkshopsChangePercent)} />
+                <StatisticsItem number={data?.ongoingWorkshops} text="Workshop đã tạo" isUp={Math.round(data?.ongoingWorkshopsChangePercent)} />
             </div>}
         </div>
     )

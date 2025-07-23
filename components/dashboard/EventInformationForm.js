@@ -63,7 +63,6 @@ export default function EventInformationForm({ onContinue, formRef }) {
                     onlineMettingUrl
                 }),
                 prefillData: (data) => {
-                    console.log(data)
                     setEventName(data.title || '');
                     if (data.eventType === 'online') {
                         setPaymentMethod('credit-card-payment');

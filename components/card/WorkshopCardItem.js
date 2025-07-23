@@ -42,7 +42,6 @@ export default function WorkshopCardItem({ item = {
 
     async function handleToggleSaved() {
         if (userId && item.id) {
-            console.log(isSaved)
             if (!isSaved) {
                 const response = await fetchSaveFavouriteWorkshops(userId, item.id)
                 if (response.statusCode === 200) {

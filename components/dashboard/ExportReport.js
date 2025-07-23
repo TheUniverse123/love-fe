@@ -27,7 +27,6 @@ export default function ExportReport() {
         refetchInterval: 1000 * 60 * 5,
     });
 
-    // Lấy tất cả sự kiện (không phân trang)
     const { data: allWorkshopsData } = useQuery({
         queryKey: ['all-workshops'],
         queryFn: ({ signal }) => fetchWorkshopByUsers(
@@ -52,7 +51,7 @@ export default function ExportReport() {
             reportData.push(['Tổng số vé đã bán', statisticsData?.totalTicketsSold || 0]);
             reportData.push(['Doanh thu', formatPrice(statisticsData?.totalRevenue) || 0]);
             reportData.push(['Số lượng khách hàng mới', statisticsData?.newCustomersThisWeek || 0]);
-            reportData.push(['Số lượng workshop mới', statisticsData?.newWorkshopsThisWeek || 0]);
+            reportData.push(['Workshop đã tạo', statisticsData?.newWorkshopsThisWeek || 0]);
             reportData.push(['']);
             
             // Thêm thông tin về lịch sự kiện
@@ -83,7 +82,7 @@ export default function ExportReport() {
                     const status = event.status === 0 ? 'Chờ duyệt' : 
                                  (new Date(event.startDate).getTime() < Date.now() ? 'Đã kết thúc' : 'Đang diễn ra');
                     
-                    const eventRevenue = event.isFree ? 0 : (event.price * (event.totalTickets || 0));
+                    const eventRevenue = event.isFree ? 0 : (event.price * (event.soldOutTickets || 0));
                     
                     reportData.push([
                         event.title,
@@ -177,7 +176,6 @@ export default function ExportReport() {
             
             toast.success('Xuất báo cáo đầy đủ thành công!');
         } catch (error) {
-            console.error('Lỗi khi xuất XLSX:', error);
             toast.error('Có lỗi xảy ra khi xuất file XLSX: ' + error.message);
         } finally {
             setIsExporting(false);

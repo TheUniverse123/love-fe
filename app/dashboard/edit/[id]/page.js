@@ -14,7 +14,6 @@ export default function EditWorkshopPage() {
             const ticket = await fetchTicketDetail
                 ({ workshopId: workshop?.workshopTicketInfo.workshopTicketInfoId });
             setWorkshopData(workshop);
-            console.log(ticket)
             setTicketData(ticket);
         };
 

@@ -302,7 +302,7 @@ export default function DetailReport() {
                                                     type="text"
                                                     value={organizerSearch}
                                                     onChange={e => { setOrganizerSearch(e.target.value); setOrganizerPage(1); }}
-                                                    placeholder="Tìm kiếm tên, email, SĐT"
+                                                    placeholder="Tìm kiếm tên, SĐT"
                                                 />
                                                 <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" stroke="#A1A1A1" strokeWidth="2" /><path d="M15 15L18 18" stroke="#A1A1A1" strokeWidth="2" strokeLinecap="round" /></svg>
                                             </div>
@@ -366,7 +366,7 @@ export default function DetailReport() {
                                                     type="text"
                                                     value={participantSearch}
                                                     onChange={e => { setParticipantSearch(e.target.value); setParticipantPage(1); }}
-                                                    placeholder="Tìm kiếm tên, email, SĐT, ID"
+                                                    placeholder="Tìm kiếm tên, SĐT, ID"
                                                 />
                                                 <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" stroke="#A1A1A1" strokeWidth="2" /><path d="M15 15L18 18" stroke="#A1A1A1" strokeWidth="2" strokeLinecap="round" /></svg>
                                             </div>
@@ -402,7 +402,6 @@ export default function DetailReport() {
                                                         <>
                                                             <th className={`${styles['detail-tableHeader']} ${styles['detail-colId']}`}>ID</th>
                                                             <th className={styles['detail-tableHeader']}>Họ và tên</th>
-                                                            <th className={styles['detail-tableHeader']}>Email</th>
                                                             <th className={styles['detail-tableHeader']}>Số điện thoại</th>
                                                             <th className={styles['detail-tableHeader']}>Ngày đăng ký</th>
                                                             <th className={styles['detail-tableHeader']}>Số workshop</th>
@@ -481,7 +480,6 @@ export default function DetailReport() {
                                                             <tr key={item.userId}>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-colId']}`}>{item.userId}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellName']}`}>{item.fullName}</td>
-                                                                <td className={`${styles['detail-tableCell']} ${styles['detail-cellEmail']}`}>{item.email}</td>
                                                                 <td className={styles['detail-tableCell']}>{item.phoneNumber || "N/A"}</td>
                                                                 <td className={`${styles['detail-tableCell']} ${styles['detail-cellDate']}`}>{item.createdDate?.slice(0, 10)}</td>
                                                                 <td className={styles['detail-tableCell']}
@@ -508,8 +506,8 @@ export default function DetailReport() {
                                                                                 <table style={{ width: '100%', background: 'transparent', color: '#fff', margin: 0 }}>
                                                                                     <thead>
                                                                                         <tr>
-                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Tên workshop</th>
-                                                                                            <th style={{ textAlign: 'left', padding: 8 }}>Thể loại</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }} className={styles.detailTableHeaderBold}>Tên workshop</th>
+                                                                                            <th style={{ textAlign: 'left', padding: 8 }} className={styles.detailTableHeaderBold}>Thể loại</th>
                                                                                             <th style={{ textAlign: 'left', padding: 8 }}>Địa điểm</th>
                                                                                             <th style={{ textAlign: 'left', padding: 8 }}>Nhà tổ chức</th>
                                                                                             <th style={{ textAlign: 'left', padding: 8 }}>Thời gian diễn ra</th>
@@ -519,8 +517,8 @@ export default function DetailReport() {
                                                                                     <tbody>
                                                                                         {registeredWorkshops[item.userId].map((w, widx) => (
                                                                                             <tr key={w.workshopId || widx} style={{ background: 'transparent' }}>
-                                                                                                <td style={{ padding: 8 }}>{w.title}</td>
-                                                                                                <td style={{ padding: 8 }}>{w.categoryName}</td>
+                                                                                                <td style={{ padding: 8 }}><span style={{ fontWeight: 700 }}>{w.title}</span></td>
+                                                                                                <td style={{ padding: 8 }}><span style={{ fontWeight: 700 }}>{w.categoryName}</span></td>
                                                                                                 <td style={{ padding: 8 }}>{w.location}</td>
                                                                                                 <td style={{ padding: 8 }}>{w.organizationName}</td>
                                                                                                 <td style={{ padding: 8 }}>{formatWorkshopDateTime(w.startDate, w.endDate)}</td>
