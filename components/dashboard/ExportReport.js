@@ -43,7 +43,7 @@ export default function ExportReport() {
         try {
             // Tạo dữ liệu cho báo cáo
             const reportData = [];
-            
+
             // Thêm thống kê tổng quan
             reportData.push(['BÁO CÁO TỔNG QUAN']);
             reportData.push(['']);
@@ -53,37 +53,37 @@ export default function ExportReport() {
             reportData.push(['Số lượng khách hàng mới', statisticsData?.newCustomersThisWeek || 0]);
             reportData.push(['Workshop đã tạo', statisticsData?.newWorkshopsThisWeek || 0]);
             reportData.push(['']);
-            
+
             // Thêm thông tin về lịch sự kiện
             if (workshopDates && workshopDates.length > 0) {
                 reportData.push(['LỊCH SỰ KIỆN THEO THÁNG']);
                 reportData.push(['']);
                 reportData.push(['Tháng', 'Số lượng sự kiện']);
-                
+
                 const monthlyStats = {};
                 workshopDates.forEach(date => {
                     const month = new Date(date).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
                     monthlyStats[month] = (monthlyStats[month] || 0) + 1;
                 });
-                
+
                 Object.entries(monthlyStats).forEach(([month, count]) => {
                     reportData.push([month, count]);
                 });
                 reportData.push(['']);
             }
-            
+
             // Thêm danh sách tất cả sự kiện
             reportData.push(['DANH SÁCH TẤT CẢ SỰ KIỆN']);
             reportData.push(['']);
             reportData.push(['Tiêu đề', 'Thời gian', 'Địa điểm', 'Giá', 'Trạng thái', 'Mô tả', 'Số lượng vé đã bán', 'Doanh thu sự kiện']);
-            
+
             if (allWorkshopsData?.workshops) {
                 allWorkshopsData.workshops.forEach(event => {
-                    const status = event.status === 0 ? 'Chờ duyệt' : 
-                                 (new Date(event.startDate).getTime() < Date.now() ? 'Đã kết thúc' : 'Đang diễn ra');
-                    
+                    const status = event.status === 0 ? 'Chờ duyệt' :
+                        (new Date(event.startDate).getTime() < Date.now() ? 'Đã kết thúc' : 'Đang diễn ra');
+
                     const eventRevenue = event.isFree ? 0 : (event.price * (event.soldOutTickets || 0));
-                    
+
                     reportData.push([
                         event.title,
                         formatDateRange(event.startDate, event.endDate),
@@ -97,23 +97,23 @@ export default function ExportReport() {
                 });
             }
             reportData.push(['']);
-            
+
             // Thêm thống kê chi tiết sự kiện
             if (allWorkshopsData?.workshops) {
                 reportData.push(['THỐNG KÊ CHI TIẾT SỰ KIỆN']);
                 reportData.push(['']);
-                
+
                 const totalEvents = allWorkshopsData.workshops.length;
                 const freeEvents = allWorkshopsData.workshops.filter(e => e.isFree).length;
                 const paidEvents = totalEvents - freeEvents;
-                const completedEvents = allWorkshopsData.workshops.filter(e => 
+                const completedEvents = allWorkshopsData.workshops.filter(e =>
                     new Date(e.startDate).getTime() < Date.now()
                 ).length;
-                const upcomingEvents = allWorkshopsData.workshops.filter(e => 
+                const upcomingEvents = allWorkshopsData.workshops.filter(e =>
                     new Date(e.startDate).getTime() >= Date.now()
                 ).length;
                 const pendingEvents = allWorkshopsData.workshops.filter(e => e.status === 0).length;
-                
+
                 reportData.push(['Tổng số sự kiện', totalEvents]);
                 reportData.push(['Sự kiện miễn phí', freeEvents]);
                 reportData.push(['Sự kiện có phí', paidEvents]);
@@ -122,12 +122,12 @@ export default function ExportReport() {
                 reportData.push(['Sự kiện chờ duyệt', pendingEvents]);
                 reportData.push(['']);
             }
-            
+
             // Thêm danh sách người dùng mới đăng ký
             reportData.push(['NGƯỜI DÙNG MỚI ĐĂNG KÝ']);
             reportData.push(['']);
             reportData.push(['Tên', 'Email', 'Số điện thoại', 'Avatar URL', 'Ngày đăng ký']);
-            
+
             if (registerUsersData?.result) {
                 registerUsersData.result.forEach(user => {
                     reportData.push([
@@ -139,7 +139,7 @@ export default function ExportReport() {
                     ]);
                 });
             }
-            
+
             // Thêm thông tin tổng kết
             reportData.push(['']);
             reportData.push(['TỔNG KẾT']);
@@ -163,17 +163,21 @@ export default function ExportReport() {
                 });
             });
 
-            ws['!cols'] = Object.keys(maxColLengths).map(i => ({
-                wch: maxColLengths[i] + 2 // Thêm padding
-            }));
-            
+            ws['!cols'] = Object.keys(maxColLengths).map(i => {
+                const index = parseInt(i);
+                if (index === 2) return { wch: 30 }; // Giới hạn cột "Địa điểm"
+                if (index === 5) return { wch: 40 }; // Giới hạn cột "Mô tả"
+                return { wch: maxColLengths[i] + 2 }; // Các cột khác tự động
+            });
+
+
             // Tạo workbook và thêm worksheet vào
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'BaoCaoDayDu');
-            
+
             // Xuất file
             XLSX.writeFile(wb, `bao-cao-day-du-${new Date().toISOString().split('T')[0]}.xlsx`);
-            
+
             toast.success('Xuất báo cáo đầy đủ thành công!');
         } catch (error) {
             toast.error('Có lỗi xảy ra khi xuất file XLSX: ' + error.message);
@@ -195,11 +199,11 @@ export default function ExportReport() {
                     </div>
                 ) : (
                     <svg className={styles.icon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M10 9H9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M10 9H9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 )}
                 Xuất báo cáo đầy đủ

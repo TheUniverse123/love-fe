@@ -97,9 +97,6 @@ export default function Home() {
         <Banner />
         <WorkshopListType />
         <WorkshopTrendList items={convertTrendWorkshop(trendWorkshops)} title="Workshop xu hướng" />
-
-        {/* <div className="pt-50"></div> */}
-
         <WorkshopTrendList items={convertTrendWorkshop(randomWorkshop)}
           title="Workshop nổi bật"
           background="secondary"

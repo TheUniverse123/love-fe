@@ -142,9 +142,14 @@ export default function ExportOverviewReport() {
                     }
                 });
             });
-            ws['!cols'] = Object.keys(maxColLengths).map(i => ({
-                wch: maxColLengths[i] + 2
-            }));
+            ws['!cols'] = Object.keys(maxColLengths).map(i => {
+                const index = parseInt(i);
+                if (index === 2) { // Cột Địa điểm
+                    return { wch: 60 }; // Hoặc chỉnh xuống 25, 20 tùy bạn
+                }
+                return { wch: maxColLengths[i] + 2 };
+            });
+
             // Tạo workbook và thêm worksheet vào
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'BaoCaoTongQuanAdmin');
