@@ -63,7 +63,7 @@ export default function WorkshopTrendList({ sectionType = "default",
     };
 
     return (
-        <section className={`section-box box-recent-lauched-car ${sectionStyle} ${styles.sectionTrendList}`}>
+        <section className={`section-box box-recent-lauched-car pt-50 ${sectionStyle} ${styles.sectionTrendList}`}>
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-md-9">

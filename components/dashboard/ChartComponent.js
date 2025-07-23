@@ -1,9 +1,8 @@
 'use client';
-import styles from './ChartComponent.module.css';
-import { useQuery } from '@tanstack/react-query';
 import { fetchMonthlyStats } from '@/app/api/dashboard';
-import { Spinner } from 'react-bootstrap';
 import { ChartOrganizer } from '@/app/dashboard/admin/overview-report/ChartOrganizer';
+import { useQuery } from '@tanstack/react-query';
+import { Spinner } from 'react-bootstrap';
 
 const ChartComponent = () => {
     const { data, isPending } = useQuery({

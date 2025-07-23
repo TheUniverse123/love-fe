@@ -22,7 +22,7 @@ export default function SidebarCanvas() {
         refetchInterval: 1000 * 60 * 5,
     })
 
-    const { data: workshopDates } = useQuery({
+    const { data: workshopDates = [] } = useQuery({
         queryKey: ['workshop-dates'],
         queryFn: ({ signal }) => fetchWorkshopOfUsers({ signal, userId: userInfo.id }),
         staleTime: 1000 * 60 * 5,
@@ -31,8 +31,8 @@ export default function SidebarCanvas() {
 
     useEffect(() => {
         if (workshopDates) {
-            if (workshopDates.statusCode === 200) {
-                setDataDates(workshopDates.result)
+            if (workshopDates?.statusCode === 200) {
+                setDataDates(workshopDates?.result)
             }
         }
     }, [workshopDates])

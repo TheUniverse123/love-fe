@@ -20,7 +20,7 @@ export default function ReportContent() {
     const [dataDates, setDataDates] = useState([])
     const [registerUsers, setRegisterUsers] = useState([])
 
-    const { data: workshopDates } = useQuery({
+    const { data: workshopDates = [] } = useQuery({
         queryKey: ['workshop-dates'],
         queryFn: ({ signal }) => fetchWorkshopOfUsers({ signal, userId: userInfo.id }),
         staleTime: 1000 * 60 * 5,
@@ -88,12 +88,20 @@ export default function ReportContent() {
     }, [])
 
     useEffect(() => {
-        if (workshopDates) {
-            if (workshopDates.statusCode === 200) {
-                setDataDates(workshopDates.result)
-            }
+        if (workshopDates && workshopDates.statusCode === 200) {
+            setDataDates(workshopDates.result)
+        } else if (Array.isArray(workshopDates)) {
+            setDataDates(workshopDates);
         }
     }, [workshopDates])
+
+    // Tính trạng thái sự kiện một lần để tránh hydration mismatch
+    const now = Date.now();
+    const getEventStatus = (event) => {
+        if (event.status === 0) return 'waiting';
+        if (new Date(event.startDate).getTime() < now) return 'success';
+        return undefined;
+    };
 
     return (
         <div className="row">
@@ -126,9 +134,7 @@ export default function ReportContent() {
                                             imageSrc={event.imagePath}
                                             buttonText="Chi tiết"
                                             isButtonVisible={false}
-                                            isSuccess={event.status === 0
-                                                ? 'waiting'
-                                                : (new Date(event.startDate).getTime() < Date.now() ? 'success' : undefined)}
+                                            isSuccess={getEventStatus(event)}
                                         />
                                     ))}
                                 </div>

@@ -3,10 +3,10 @@ import { fetchLogout, fetchUserInfo } from '@/app/api/account';
 import { getUserInfo } from '@/app/util/auth';
 import TicketIcon from '@/public/assets/icon/TicketIcon';
 import { useQuery } from '@tanstack/react-query';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import styles from './DashboardSidebar.module.css';
 import UserAvatar from './UserAvatar';
+import Link from 'next/link';
 const userInfo = getUserInfo()
 export default function DashboardSidebar() {
     const [activeItem, setActiveItem] = useState();

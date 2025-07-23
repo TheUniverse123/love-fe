@@ -32,6 +32,11 @@ export default function Home() {
     queryFn: ({ signal }) => fetchMostBookedWorkshops({ signal, pageNumber: 1, pageSize: 15 }),
   });
 
+  const { data: randomWorkshop } = useQuery({
+    queryKey: ['random-workshops'],
+    queryFn: ({ signal }) => fetchWorkshops({ signal, pageNumber: 1, pageSize: 10 }),
+  });
+
   useEffect(() => {
     async function fetchAIWorkshops() {
       if (!userInfo) return;
@@ -92,7 +97,14 @@ export default function Home() {
         <Banner />
         <WorkshopListType />
         <WorkshopTrendList items={convertTrendWorkshop(trendWorkshops)} title="Workshop xu hướng" />
-        <WorkshopBanner />
+
+        {/* <div className="pt-50"></div> */}
+
+        <WorkshopTrendList items={convertTrendWorkshop(randomWorkshop)}
+          title="Workshop nổi bật"
+          background="secondary"
+          sectionType="style1"
+        />
         <WorkshopTrendList
           background="secondary"
           sectionType="style1"

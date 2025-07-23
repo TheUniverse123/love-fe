@@ -86,16 +86,18 @@ export const fetchSearchWorkshops = async ({ signal, pageNumber, pageSize, searc
 }
 
 export const fetchWorkshopOfUsers = async ({ signal, userId }) => {
-    const data = await axiosInstanceJson.get(`/api/Workshops/user/${userId}/workshop-startdates`)
-        .then((response) => {
-            return response.data
+    try {
+        const response = await axiosInstanceJson.get(`/api/Workshops/user/${userId}/workshop-startdates`, { signal });
+        return response.data;
+    } catch (error) {
+        if (error?.response?.status === 404) {
+            return {
+                result: []
+            }
         }
-        ).catch((error) => {
-            const errors = error?.response?.data.errorMessages || error?.response?.data.errors || []
-            return errors
-        })
-    return data
-}
+        throw error;
+    }
+};
 
 export const fetchWorkshopDetail = async ({ signal, workshopId }) => {
     const data = await axiosInstanceJson.get(`/api/Workshops/get-by-id/${workshopId}`)

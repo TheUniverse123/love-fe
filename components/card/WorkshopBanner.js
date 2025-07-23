@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import CardImage from "./CardImage";
-import Slider from "react-slick";  // Import Slider from react-slick
+import Slider from "react-slick";
 import styles from "./WorkshopBanner.module.css";
 import { useQuery } from '@tanstack/react-query';
 import { fetchWorkshops } from '@/app/api/workshop';
@@ -15,9 +15,8 @@ export default function WorkshopBanner() {
     });
 
     const result = shuffleArray(randomWorkshop || [])?.filter(item => item.status === 1)
-    const sliderRef = useRef(null);  // Create a reference for the slider
+    const sliderRef = useRef(null);
 
-    // Slick slider settings
     const settings = {
         infinite: true,
         speed: 500,
@@ -48,16 +47,15 @@ export default function WorkshopBanner() {
         ]
     };
 
-    // Handle prev and next actions
     const goToPrev = () => {
         if (sliderRef.current) {
-            sliderRef.current.slickPrev(); // Use slickPrev() to go to the previous slide
+            sliderRef.current.slickPrev();
         }
     };
 
     const goToNext = () => {
         if (sliderRef.current) {
-            sliderRef.current.slickNext(); // Use slickNext() to go to the next slide
+            sliderRef.current.slickNext();
         }
     };
 
@@ -89,10 +87,9 @@ export default function WorkshopBanner() {
                 <div className={`mb-40 mt-100 ${styles.titleWrapper}`}>
                     <h2 className={`neutral100-color ${styles.title}`}>Workshop nổi bật</h2>
                     <div className="box-button-slider box-button-slider-team text-end">
-                        {/* Custom Prev and Next buttons */}
                         <div
                             className={`${styles.swiperButtonPrev} swiper-button-prev swiper-button-prev-style-1 swiper-button-prev-animate arrow-button-background`}
-                            onClick={goToPrev} // Attach the custom prev function
+                            onClick={goToPrev}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 16 16" fill="none">
                                 <path d="M7.99992 3.33325L3.33325 7.99992M3.33325 7.99992L7.99992 12.6666M3.33325 7.99992H12.6666" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
@@ -100,7 +97,7 @@ export default function WorkshopBanner() {
                         </div>
                         <div
                             className={`${styles.swiperButtonNext} swiper-button-next swiper-button-next-style-1 swiper-button-next-animate arrow-button-background`}
-                            onClick={goToNext} // Attach the custom next function
+                            onClick={goToNext}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 16 16" fill="none">
                                 <path d="M7.99992 12.6666L12.6666 7.99992L7.99992 3.33325M12.6666 7.99992L3.33325 7.99992" stroke="white" strokeLinecap="round" strokeLinejoin="round" />

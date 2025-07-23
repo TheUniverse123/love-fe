@@ -1,9 +1,9 @@
 import React from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Legend, Tooltip } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Legend, Tooltip, LineController, BarController } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import styles from './ChartRevenue.module.css';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Legend, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Legend, Tooltip, LineController, BarController);
 
 const getXTicksFontSize = () => {
   if (typeof window !== 'undefined') {
@@ -12,13 +12,12 @@ const getXTicksFontSize = () => {
   }
   return 13;
 };
-
 // Hàm tính bước nhảy đẹp
 const getNiceStepSize = (max) => {
   const niceNumbers = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500, 1000, 2000, 5000];
   const targetSteps = 10;
   const roughStep = max / targetSteps;
-  
+
   // Tìm số đẹp gần nhất nhưng không quá lớn
   let niceStep = niceNumbers[0];
   for (let i = 0; i < niceNumbers.length; i++) {
@@ -32,7 +31,7 @@ const getNiceStepSize = (max) => {
       break;
     }
   }
-  
+
   return niceStep;
 };
 
@@ -45,15 +44,15 @@ function ChartRevenue({
 }) {
   // Convert revenue to thousands of VND for better display
   const normalizedRevenueData = revenueData.map(revenue => Math.round(revenue / 1000));
-  
+
   // Calculate dynamic min/max for better scale
   const maxRevenue = Math.max(...normalizedRevenueData, 1);
   const maxTickets = Math.max(...ticketData, 1);
-  
+
   // Use separate scales for better visualization - ensure 10 steps
   const revenueStepSize = getNiceStepSize(maxRevenue);
   const ticketStepSize = getNiceStepSize(maxTickets);
-  
+
   // Tính max value dựa trên step size và số bước mong muốn
   const finalRevenueMax = revenueStepSize * 10;
   const finalTicketMax = ticketStepSize * 10;
@@ -112,7 +111,7 @@ function ChartRevenue({
         caretSize: 6,
         cornerRadius: 8,
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             if (context.datasetIndex === 1) {
               // Revenue data (bar chart) - show in thousands VND
               return `Doanh thu: ${context.parsed.y.toLocaleString()} nghìn VND`;
@@ -149,7 +148,7 @@ function ChartRevenue({
           color: '#F2F2F2',
           font: { size: 12, weight: 400 },
           padding: 8,
-          callback: function(value) {
+          callback: function (value) {
             return value.toLocaleString();
           },
         },
@@ -166,7 +165,7 @@ function ChartRevenue({
           color: '#F2F2F2',
           font: { size: 12, weight: 400 },
           padding: 8,
-          callback: function(value) {
+          callback: function (value) {
             return value;
           },
         },
@@ -205,13 +204,13 @@ function ChartRevenue({
 }
 
 // Ví dụ sử dụng component ChartRevenue
-function ChartRevenueExample({labels = [
+function ChartRevenueExample({ labels = [
   '01/07 - 06/07',
   '07/07 - 12/07',
   '13/07 - 18/07',
   '19/07 - 24/07',
   '25/07 - 31/07',
-], revenueData = [120, 210, 350, 420, 390], ticketData = [180, 250, 300, 470, 410], min = 50, max = 500}) {
+], revenueData = [120, 210, 350, 420, 390], ticketData = [180, 250, 300, 470, 410], min = 50, max = 500 }) {
   return (
     <ChartRevenue
       labels={labels}

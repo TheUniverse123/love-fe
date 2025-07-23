@@ -1,29 +1,31 @@
-import React from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
+'use client'
+
+import React, { useEffect, useState } from 'react';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, LineController, BarController } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import styles from './ChartRevenue.module.css';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
-
-const getXTicksFontSize = () => {
-  if (typeof window !== 'undefined') {
-    if (window.innerWidth < 900) return 10;
-    if (window.innerWidth < 1500) return 11;
-  }
-  return 13;
-};
-
-// Hàm tính bước nhảy đẹp
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, LineController, BarController);
+function useXTicksFontSize() {
+  const [fontSize, setFontSize] = useState(13);
+  useEffect(() => {
+    const updateFontSize = () => {
+      if (window.innerWidth < 900) setFontSize(10);
+      else if (window.innerWidth < 1500) setFontSize(11);
+      else setFontSize(13);
+    };
+    updateFontSize();
+    window.addEventListener('resize', updateFontSize);
+    return () => window.removeEventListener('resize', updateFontSize);
+  }, []);
+  return fontSize;
+}
 const getNiceStepSize = (max) => {
   const niceNumbers = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500, 1000, 2000, 5000];
   const targetSteps = 6;
   const roughStep = max / targetSteps;
-  
-  // Tìm số đẹp gần nhất nhưng không quá lớn
   let niceStep = niceNumbers[0];
   for (let i = 0; i < niceNumbers.length; i++) {
     if (niceNumbers[i] >= roughStep) {
-      // Nếu số này tạo ra quá ít bước, thử số nhỏ hơn
       if (i > 0 && niceNumbers[i] > roughStep * 2) {
         niceStep = niceNumbers[i - 1];
       } else {
@@ -32,7 +34,6 @@ const getNiceStepSize = (max) => {
       break;
     }
   }
-  
   return niceStep;
 };
 
@@ -51,19 +52,17 @@ function ChartOrganizer({
   organizerData = defaultOrganizerData,
   workshopData = defaultWorkshopData,
   thirdData = [],
-  min = 0,
-  max = 250,
   title = 'Bên nhà tổ chức',
   organizerLabel = 'Số người tổ chức workshop',
   workshopLabel = 'Số workshop đã tạo',
   thirdLabel = 'Người tham dự',
 }) {
-  // Calculate dynamic min/max for better scale
+  const fontSize = useXTicksFontSize();
+
   const maxOrganizer = Math.max(...organizerData, 1);
   const maxWorkshop = Math.max(...workshopData, 1);
   const maxThird = thirdData && thirdData.length > 0 ? Math.max(...thirdData, 1) : 1;
   const maxData = Math.max(maxOrganizer, maxWorkshop, maxThird);
-  // Use consistent scale calculation
   const stepSize = getNiceStepSize(maxData);
   const finalMax = stepSize * 6;
 
@@ -130,7 +129,7 @@ function ChartOrganizer({
         stacked: false,
         ticks: {
           color: '#F2F2F2',
-          font: context => ({ size: getXTicksFontSize(), weight: 400 }),
+          font: { size: fontSize, weight: 400 },
           padding: 8,
         },
       },
@@ -207,8 +206,6 @@ function ChartOrganizer({
     </div>
   );
 }
-
-
 function ChartOrganizerExample({ labels = [
   '01/07/2025',
   '08/07/2025',
@@ -216,7 +213,7 @@ function ChartOrganizerExample({ labels = [
   '22/07/2025',
   '29/07/2025',
 ], organizerData = [220, 200, 230, 220, 220], workshopData = [180, 160, 160, 130, 150], min = 0, max = 250, title = 'Bên nhà tổ chức', organizerLabel = 'Số người tổ chức workshop', workshopLabel = 'Số workshop đã tạo' }) {
-  return (
+  return organizerData && workshopData && organizerData.length > 0 && workshopData.length > 0 && (
     <ChartOrganizer
       labels={labels}
       organizerData={organizerData}
@@ -227,8 +224,7 @@ function ChartOrganizerExample({ labels = [
       organizerLabel={organizerLabel}
       workshopLabel={workshopLabel}
     />
-  );
+  )
 }
-
 export default ChartOrganizerExample;
 export { ChartOrganizer }; 

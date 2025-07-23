@@ -20,7 +20,7 @@ export default function ExportReport() {
         queryFn: fetchDashboardWidget,
     });
 
-    const { data: workshopDates } = useQuery({
+    const { data: workshopDates = [] } = useQuery({
         queryKey: ['workshop-dates'],
         queryFn: ({ signal }) => fetchWorkshopOfUsers({ signal, userId: userInfo.id }),
         staleTime: 1000 * 60 * 5,
@@ -55,13 +55,13 @@ export default function ExportReport() {
             reportData.push(['']);
             
             // Thêm thông tin về lịch sự kiện
-            if (workshopDates?.result && workshopDates.result.length > 0) {
+            if (workshopDates && workshopDates.length > 0) {
                 reportData.push(['LỊCH SỰ KIỆN THEO THÁNG']);
                 reportData.push(['']);
                 reportData.push(['Tháng', 'Số lượng sự kiện']);
                 
                 const monthlyStats = {};
-                workshopDates.result.forEach(date => {
+                workshopDates.forEach(date => {
                     const month = new Date(date).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
                     monthlyStats[month] = (monthlyStats[month] || 0) + 1;
                 });
