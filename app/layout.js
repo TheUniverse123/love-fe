@@ -8,7 +8,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import Providers from "./util/providers";
 import { PopupProvider } from "@/contexts/PopupContext";
@@ -26,13 +26,14 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Lové - Nền tảng đặt workshop chất lượng",
-  description: "Love, nơi tụ họp của những workshop chất lượng và đặt vé siêu đơn giản",
+  description:
+    "Love, nơi tụ họp của những workshop chất lượng và đặt vé siêu đơn giản",
   charset: "UTF-8",
 };
 
 export default async function RootLayout({ children }) {
   return (
-   <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en" data-scroll-behavior="smooth">
       <Head>
         <meta charSet="UTF-8" />
         <meta
@@ -142,8 +143,7 @@ export default async function RootLayout({ children }) {
           src="/assets/lib/user/js/main.js?v=1.0.0"
           strategy="afterInteractive"
         />
-
       </body>
-    </html >
+    </html>
   );
 }
